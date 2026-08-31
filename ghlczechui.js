@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v9 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v10 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -26,8 +26,16 @@
 (function () {
   'use strict';
 
+  /* ===== BUMP THIS WHENEVER YOU CHANGE THE FILE =====================
+     It is the fastest way to tell whether GitHub Pages has finished
+     deploying your edit. After committing, refresh HighLevel and check
+     the browser console, or just type   __ghlCzechVersion   there.
+     If it still shows the old value, the Pages build has not landed yet. */
+  var VERSION = 'v10';
+
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
+  window.__ghlCzechVersion = VERSION;
 
   /* ---------- which sub-accounts get Czech --------------------------------
      HighLevel's Custom JS box lives at the AGENCY level, so without this gate
@@ -1296,8 +1304,8 @@
       attributeFilter: ATTRS
     });
 
-    console.info('[cs-CZ] HighLevel Czech UI layer active (' +
-      Object.keys(DICT).length + ' terms). Disable with ?nocs=1');
+    console.info('[cs-CZ] Czech UI layer ' + VERSION + ' active — ' +
+      Object.keys(DICT).length + ' terms. Disable with ?nocs=1');
   }
 
   if (document.readyState === 'loading') {
