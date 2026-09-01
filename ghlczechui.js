@@ -13,9 +13,34 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v10 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v12 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
+
+   KNOWN LIMITATION - IFRAMED SCREENS  (investigated, closed, do not re-dig)
+   Some Settings screens - Settings > Business Profile (/settings/company) is
+   the confirmed example - render inside a CROSS-ORIGIN iframe (id
+   "settings-app"). This script runs in the parent page, and the browser
+   forbids a page from reading or modifying a cross-origin frame's DOM. Those
+   screens therefore CANNOT be translated by this script. Adding terms for
+   them produces a bigger file and zero visible change. This is a browser
+   security boundary, not a bug and not a missing feature.
+
+   Being a Settings page does NOT predict this either way: Settings > Custom
+   fields (/settings/fields) renders in the main document and translates
+   fully. Before investigating any "missing translation", check first:
+
+       document.querySelectorAll('iframe')
+
+   If the content sits in a cross-origin iframe, stop - nothing here can fix
+   it. The only workaround is a userscript manager (e.g. Tampermonkey) with
+   @match on the iframe's own origin and all-frames enabled, which trades
+   account-wide coverage for a per-browser install. Deliberately not done.
+
+   If that route is ever taken: allowedHere() below gates on
+   location.pathname containing /location/<id>. Inside the iframe the path
+   differs, so the gate would silently disable the script there - relax it
+   first, or you will debug a script that is working exactly as written.
 
    KILL SWITCH  (use this first if anything looks wrong)
      Add  ?nocs=1  to the URL  -> disables the layer permanently for that browser
@@ -31,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v10';
+  var VERSION = 'v12';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -954,6 +979,21 @@
     'Select folder': 'Vyberte složku',
     'Due date and time': 'Termín a čas',
 
+
+    /* ===================================================================
+       v11 -- triple-dot menus, their dialogs, the Folders tab and tooltips
+       on Settings > Custom fields. Opened read-only; nothing was saved.
+       =================================================================== */
+    'Edit searchable fields': 'Upravit prohledávatelná pole',
+    'Changes to searchable fields will affect search functionality for all users and apply globally': 'Změny prohledávatelných polí ovlivní vyhledávání pro všechny uživatele a projeví se globálně',
+    'Edit unique fields': 'Upravit jedinečná pole',
+    'Choose a custom object to manage its unique fields. Changes will apply to all records': 'Vyberte vlastní objekt pro správu jeho jedinečných polí. Změny se projeví u všech záznamů',
+    'Learn more': 'Zjistit více',
+    'Search folders': 'Hledat složky',
+    'Number of fields': 'Počet polí',
+    'Folders per page': 'Složek na stránku',
+    'Default folders cannot be edited or deleted': 'Výchozí složky nelze upravovat ani mazat',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1072,6 +1112,7 @@
   var COUNT_ITEMS = /^(\d+)\s+items?$/i;              /* "0 items"         */
   var ABBR_PAREN  = /^(.+?)\s*\(([A-Z]{2,6})\)$/;      /* "Created (PDT)"   */
   var COLS_RATIO  = /^(\d+)\/(\d+)\s+columns?$/i;      /* "6/7 columns"     */
+  var PLUS_MORE   = /^\+(\d+)\s+more$/i;               /* "+99 more"        */
   var RANGE_OF    = /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i; /* "21 - 25 of 25" */
   /* "Aug 31, 2026 03:28 AM" -> "31. srp 2026 03:28" (Czech uses a 24h clock) */
   var STAMP = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
@@ -1140,6 +1181,9 @@
 
     var m5 = COLS_RATIO.exec(key);
     if (m5) return m5[1] + '/' + m5[2] + ' sloupců';
+
+    var m9 = PLUS_MORE.exec(key);
+    if (m9) return '+' + m9[1] + ' dalších';
 
     var m7 = RANGE_OF.exec(key);
     if (m7) return m7[1] + ' – ' + m7[2] + ' z ' + m7[3];
