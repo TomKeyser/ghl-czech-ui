@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v20';
+  var VERSION = 'v21';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -818,6 +818,7 @@
     'Customizer Icon': 'Ikona přizpůsobení',
     'No file icon': 'Ikona bez souboru',
     'agency logo': 'logo agentury',
+    'Customizer': 'Přizpůsobení',
     'Fingerprint Image': 'Obrázek otisku prstu',
 
     /* --- opportunities empty state --- */
@@ -1537,9 +1538,75 @@
     'You don\'t have any unread Team inbox conversations right now.': 'Momentálně nemáte žádné nepřečtené konverzace v týmové schránce.',
     'View All Team inbox Conversations': 'Zobrazit všechny konverzace týmové schránky',
 
+    /* --- OPPORTUNITIES: pipelines list ------------------------------- */
+    'Use pipelines to track opportunities and sales progress across stages.': 'Pomocí obchodních kanálů sledujte příležitosti a průběh prodeje napříč fázemi.',
+    'Create pipeline': 'Vytvořit obchodní kanál',
+    'Pipeline name': 'Název obchodního kanálu',
+    'Total stages': 'Počet fází',
+    'No pipelines yet': 'Zatím žádné obchodní kanály',
+    'Create a pipeline to manage your opportunities, measure progress, and close more deals efficiently.': 'Vytvořte obchodní kanál pro správu příležitostí, měření pokroku a efektivnější uzavírání obchodů.',
+    'Learn more about pipelines': 'Více o obchodních kanálech',
+    'Pipeline actions': 'Akce obchodního kanálu',
+
+    /* --- OPPORTUNITIES: create/edit pipeline modal -------------------- */
+    'Use a unique, descriptive name so you can find this pipeline later': 'Použijte jedinečný a výstižný název, abyste tento obchodní kanál později snadno našli',
+    'Pipeline name is required': 'Název obchodního kanálu je povinný',
+    'Use opportunity-level probability': 'Používat pravděpodobnost na úrovni příležitosti',
+    'When enabled, each opportunity uses its own probability. When disabled, probability is based on the stage.': 'Když je zapnuto, každá příležitost používá vlastní pravděpodobnost. Když je vypnuto, pravděpodobnost se určuje podle fáze.',
+    'Set pipeline display colors': 'Nastavit barvy zobrazení obchodního kanálu',
+    'Choose how stage colors appear across your pipeline views': 'Zvolte, jak se barvy fází zobrazují v pohledech na obchodní kanál',
+    'Stage name': 'Název fáze',
+    'Default (no color)': 'Výchozí (bez barvy)',
+    'Colored dot': 'Barevná tečka',
+    'Background tint': 'Barevné pozadí',
+    'Pipeline stages': 'Fáze obchodního kanálu',
+    'Add stage': 'Přidat fázi',
+    'Show in reports': 'Zobrazit v reportech',
+    'Probability (%)': 'Pravděpodobnost (%)',
+    'Funnel chart': 'Trychtýřový graf',
+    'Select whether each stage should appear in your default dashboard. Disabling all stages hides the pipeline from the dashboard.': 'Zvolte, které fáze se mají zobrazovat na výchozí nástěnce. Vypnutím všech fází skryjete obchodní kanál z nástěnky.',
+    /* HighLevel's own typo ("a opportunity") kept verbatim as the lookup key */
+    'Probability is the likelihood that a opportunity will be marked as won.': 'Pravděpodobnost vyjadřuje, s jakou šancí bude příležitost označena jako vyhraná.',
+    'Enter stage name': 'Zadejte název fáze',
+    'Please Input': 'Zadejte hodnotu',
+    /* placeholder example on the pipeline-name field (not a real record) */
+    'Marketing pipeline': 'Marketingový kanál',
+    /* default stage names pre-filled into the new-pipeline form */
+    'New Lead': 'Nový zájemce',
+    'Contacted': 'Kontaktováno',
+    'Proposal Sent': 'Nabídka odeslána',
+    'Closed': 'Uzavřeno',
+
+    /* --- OPPORTUNITIES: bulk actions status filter -------------------- */
+    'Processing': 'Zpracovává se',
+    'Complete': 'Dokončeno',
+    'Paused': 'Pozastaveno',
+    'Queued': 'Ve frontě',
+
+    /* --- date picker (global: bulk actions, reporting, filters) -------
+       Two-letter weekday headers. These are whole-string matches, so a
+       stray "We"/"Mo" text node elsewhere would also be rewritten -- in
+       practice HighLevel never renders a bare two-letter word anywhere
+       else, but that is the trade-off of a whole-string translator. */
+    'Su': 'Ne', 'Mo': 'Po', 'Tu': 'Þt', 'We': 'St',
+    'Th': 'Čt', 'Fr': 'Pá', 'Sa': 'So',
+    /* Three-letter month abbreviations used by the month/year picker.
+       NOTE: 'May' can only have ONE mapping. The picker shows abbreviated
+       months, so it wins; the full-name reading of "May" is handled by the
+       DATE_RE / STAMP date patterns, which match before the dictionary. */
+    'Jan': 'led', 'Feb': 'úno', 'Mar': 'bře', 'Apr': 'dub',
+    'Jun': 'čvn', 'Jul': 'čvc', 'Aug': 'srp', 'Sep': 'zář',
+    'Oct': 'říj', 'Nov': 'lis', 'Dec': 'pro',
+    'Month': 'Měsíc',
+    'Year': 'Rok',
+
+    /* --- landmark / decorative image labels (screen readers) ---------- */
+    'header': 'záhlaví',
+    'footer': 'zápatí',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
-    'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
+    'May': 'kvě', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
     'September': 'září', 'October': 'říjen', 'November': 'listopad', 'December': 'prosinec'
   };
 
@@ -1640,7 +1707,7 @@
     return !!el.closest(DATA_PICKERS);
   }
 
-  var ATTRS = ['placeholder', 'title', 'aria-label'];
+  var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
 
   /* ---------- prefilled input values -------------------------------------
      OFF by default everywhere else in this script's history: a field's value
@@ -1696,6 +1763,13 @@
   var RANGE_OF    = /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i; /* "21 - 25 of 25" */
   /* "Aug 31, 2026 03:28 AM" -> "31. srp 2026 03:28" (Czech uses a 24h clock) */
   var STAMP = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
+  /* "Sep 2026" -- the month/year header inside date pickers */
+  var MON_YEAR = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/;
+  var MON_FULL_CZ = {
+    jan: 'leden', feb: 'únor', mar: 'březen', apr: 'duben',
+    may: 'květen', jun: 'červen', jul: 'červenec', aug: 'srpen',
+    sep: 'září', oct: 'říjen', nov: 'listopad', dec: 'prosinec'
+  };
   var MONTH_ABBR = {
     jan: 'led', feb: 'úno', mar: 'bře', apr: 'dub', may: 'kvě', jun: 'čvn',
     jul: 'čvc', aug: 'srp', sep: 'zář', oct: 'říj', nov: 'lis', dec: 'pro'
@@ -1841,6 +1915,9 @@
       return m8[2] + '. ' + MONTH_ABBR[m8[1].toLowerCase()] + ' ' + m8[3] +
              ' ' + (hh < 10 ? '0' + hh : hh) + ':' + m8[5];
     }
+
+    var my = MON_YEAR.exec(key);
+    if (my) return MON_FULL_CZ[my[1].toLowerCase()] + ' ' + my[2];
 
     /* "Created (PDT)" -- translate the label, keep the timezone abbreviation */
     var m6 = ABBR_PAREN.exec(key);
