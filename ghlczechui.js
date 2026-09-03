@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v17 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v18 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v17';
+  var VERSION = 'v18';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1290,6 +1290,169 @@
     'Payment settings navigation': 'Navigace nastavení plateb',
     'Receipts settings': 'Nastavení účtenek',
     'Tax settings': 'Nastavení daní',
+
+
+    /* ===================================================================
+       v18 -- Sites, deep pass: Funnels, Websites, Stores, Webinars, Forms,
+       Surveys, Quizzes, Chat widget, QR codes, Client portal.
+       Template gallery names (e.g. "Flooring Quote - Classic") are content,
+       not chrome, and are left alone.
+       =================================================================== */
+
+    /* --- funnels --- */
+    'Create and manage funnels to generate leads, appointments and receive payments.': 'Vytvářejte a spravujte trychtýře pro získávání leadů, schůzek a plateb.',
+    'Start by creating a funnel': 'Začněte vytvořením trychtýře',
+    'All your funnels and folders will live here.': 'Zde najdete všechny své trychtýře a složky.',
+
+    /* --- websites --- */
+    'Build websites to showcase your products and build a trusted brand.': 'Vytvářejte weby pro prezentaci produktů a budování důvěryhodné značky.',
+    'New website': 'Nový web',
+    'Search for websites': 'Hledat weby',
+    'Website pages': 'Stránky webu',
+    'Start by creating a website': 'Začněte vytvořením webu',
+    'All your websites and folders will live here.': 'Zde najdete všechny své weby a složky.',
+
+    /* --- stores --- */
+    'Build an online store to showcase your products and sell across the globe.': 'Vytvořte online obchod pro prezentaci a prodej produktů po celém světě.',
+    'New store': 'Nový obchod',
+    'Build your store and sell globally in just 6 easy steps!': 'Vytvořte obchod a prodávejte celosvětově v 6 jednoduchých krocích!',
+    'Use this personalized guide to get your store up and running.': 'Podle tohoto průvodce svůj obchod snadno spustíte.',
+    'Complete setup': 'Dokončit nastavení',
+    'Search for stores': 'Hledat obchody',
+    'Store pages': 'Stránky obchodu',
+    'Start by creating a store': 'Začněte vytvořením obchodu',
+    'All your stores and folders will live here.': 'Zde najdete všechny své obchody a složky.',
+    'Welcome to Stores!': 'Vítejte v Obchodech!',
+    'Quick Store Setup:': 'Rychlé nastavení obchodu:',
+    'Secure Payments:': 'Bezpečné platby:',
+    'Accept payments securely with multiple gateways, integrated seamlessly into your store.': 'Přijímejte platby bezpečně přes několik bran integrovaných přímo v obchodě.',
+    'Flexible Shipping & Tax Setup:': 'Flexibilní doprava a daně:',
+    'Configure shipping rates, taxes, and delivery options based on your needs.': 'Nastavte sazby dopravy, daně a možnosti doručení podle svých potřeb.',
+    'Ecommerce Automations:': 'E-commerce automatizace:',
+    'Automate actions like order updates, abandoned cart reminders, and nurture customer.': 'Automatizujte aktualizace objednávek, připomínky opuštěných košíků a péči o zákazníky.',
+    'Start Onboarding': 'Zahájit onboarding',
+
+    /* --- webinars --- */
+    'Webinar funnels': 'Webinářové trychtýře',
+    'Create and manage webinar funnels': 'Vytvářejte a spravujte webinářové trychtýře',
+    'New webinar funnel': 'Nový webinářový trychtýř',
+    'Search for webinars': 'Hledat webináře',
+    'Webinar pages': 'Stránky webináře',
+    'Start by creating a webinar': 'Začněte vytvořením webináře',
+    'Create and manage webinar funnels to register prospects and customers for your webinars!': 'Vytvářejte trychtýře pro registraci zájemců a zákazníků na vaše webináře!',
+
+    /* --- forms --- */
+    'Easy-peasy powerful forms': 'Snadné a výkonné formuláře',
+    'Transform website visitors into valuable leads': 'Proměňte návštěvníky webu v cenné leady',
+    'Easily build forms with our drag-and-drop interface': 'Snadno tvořte formuláře přetažením prvků',
+    'Set up workflows to instantly engage users once they submit their forms': 'Nastavte postupy, které osloví uživatele hned po odeslání formuláře',
+    'Access real-time analytics to measure and improve your forms\' performance': 'Sledujte analytiku v reálném čase a zlepšujte výkon formulářů',
+    'Create form': 'Vytvořit formulář',
+    'Try form preview': 'Vyzkoušet náhled formuláře',
+    'Form features': 'Funkce formulářů',
+    'Sell products': 'Prodávejte produkty',
+    'Allow customers to make purchases directly through forms': 'Umožněte zákazníkům nakupovat přímo ve formuláři',
+    'Extensive elements': 'Široká nabídka prvků',
+    'Include dropdowns, checkboxes, radio buttons, image selectors, and more to cater to diverse input requirements': 'Rozbalovací seznamy, zaškrtávací pole, přepínače, výběr obrázků a další pro různé typy vstupů',
+    'Math & scoring': 'Výpočty a skórování',
+    'Utilize dynamic scoring to perform calculations based on user inputs': 'Využijte dynamické skórování pro výpočty podle vstupů uživatelů',
+    'Use template': 'Použít šablonu',
+
+    /* --- surveys --- */
+    'Easy-peasy powerful surveys': 'Snadné a výkonné dotazníky',
+    'Unlock insights and drive smarter decisions with surveys': 'Získejte poznatky a rozhodujte se chytřeji díky dotazníkům',
+    'Easily build surveys with our drag-and-drop interface': 'Snadno tvořte dotazníky přetažením prvků',
+    'Set up workflows to instantly engage both completed and abandoned survey users': 'Nastavte postupy pro dokončené i nedokončené dotazníky',
+    'Access real-time analytics to measure and improve your surveys\' performance': 'Sledujte analytiku v reálném čase a zlepšujte výkon dotazníků',
+    'Create survey': 'Vytvořit dotazník',
+    'Try survey preview': 'Vyzkoušet náhled dotazníku',
+    'Survey features': 'Funkce dotazníků',
+    'Multi & one-question-at-a-time surveys': 'Dotazníky s více otázkami i po jedné',
+    'Design surveys with flexibility: display several questions per slide or reveal one question at a time for a more engaging experience': 'Zobrazte více otázek najednou, nebo je odkrývejte po jedné pro poutavější průchod',
+
+    /* --- quizzes --- */
+    'Quizzes that do the thinking': 'Kvízy, které myslí za vás',
+    'Turn curious visitors into qualified, scored leads': 'Proměňte zvědavé návštěvníky v kvalifikované leady se skóre',
+    'Build interactive quizzes with drag-and-drop questions': 'Tvořte interaktivní kvízy přetažením otázek',
+    'Show personalized results the instant a quiz is submitted': 'Zobrazte personalizované výsledky ihned po odeslání kvízu',
+    'Trigger workflows automatically from every score and category': 'Spouštějte postupy automaticky podle skóre a kategorie',
+    'Create quiz': 'Vytvořit kvíz',
+    'Try quiz preview': 'Vyzkoušet náhled kvízu',
+    'What\'s your main goal?': 'Jaký je váš hlavní cíl?',
+    'Grow my email list': 'Rozšířit e-mailový seznam',
+    'Book more sales calls': 'Domluvit více obchodních hovorů',
+    'Qualify inbound leads': 'Kvalifikovat příchozí leady',
+    'Category': 'Kategorie',
+    'Growth': 'Růst',
+    'Score': 'Skóre',
+    'Overall only': 'Pouze celkové',
+    'Configure score tiers': 'Nastavit úrovně skóre',
+    'Edit or add score tiers': 'Upravit nebo přidat úrovně skóre',
+    'Low': 'Nízké',
+    'Medium': 'Střední',
+    'High': 'Vysoké',
+    '+ Add tier': '+ Přidat úroveň',
+    'Default quiz': 'Výchozí kvíz',
+    'Overall score': 'Celkové skóre',
+    'Want to talk about your results?': 'Chcete probrat své výsledky?',
+    'If you\'d like to learn more about your score and what it means for your business, let\'s jump on a call.': 'Chcete-li se dozvědět více o svém skóre a co znamená pro vaši firmu, domluvme si hovor.',
+    'Book a call': 'Domluvit hovor',
+    'Tiers': 'Úrovně',
+    'Tier': 'Úroveň',
+    'Range': 'Rozsah',
+    'Quiz features': 'Funkce kvízů',
+    'Scoring & categories': 'Skórování a kategorie',
+    'Assign points to every answer and roll them into categories, so each response maps to a clear, qualified outcome': 'Přidělte body každé odpovědi a seskupte je do kategorií pro jasný a kvalifikovaný výsledek',
+    'Subscribe': 'Odebírat',
+    'Dynamic result pages': 'Dynamické stránky s výsledky',
+    'Show personalized messages and a call-to-action for every category, based on every tier': 'Zobrazte personalizované zprávy a výzvu k akci pro každou kategorii a úroveň',
+    'Question types': 'Typy otázek',
+    'Single Choice': 'Jedna možnost',
+    'Multiple Choice': 'Více možností',
+    'Single Dropdown': 'Jeden rozbalovací seznam',
+    'Extensive question types': 'Široká nabídka typů otázek',
+    'Single & multiple choice, dropdowns, rating, file upload and more': 'Jedna i více možností, rozbalovací seznamy, hodnocení, nahrání souboru a další',
+
+    /* --- chat widget --- */
+    'Webchat for your website': 'Webový chat pro váš web',
+    'Configure a chat widget to convert your website visitors to leads': 'Nastavte chatovací widget a proměňte návštěvníky webu v leady',
+    'Updated on': 'Aktualizováno',
+    'Chat type': 'Typ chatu',
+    'Create your first chat widget': 'Vytvořte svůj první chatovací widget',
+    'Give your chat widget a bold new look to enhance engagement!': 'Dejte svému chatovacímu widgetu nový vzhled a zvyšte zapojení!',
+
+    /* --- QR codes --- */
+    'Create effortless QRs': 'Snadno tvořte QR kódy',
+    'Create custom and dynamic QR codes easily': 'Snadno vytvářejte vlastní a dynamické QR kódy',
+    'Get detailed scan analytics and insights': 'Získejte podrobnou analytiku skenů',
+    'Customize your QR code design and appearance': 'Přizpůsobte design a vzhled QR kódu',
+    'Track who scans your QR codes in real-time': 'Sledujte v reálném čase, kdo skenuje vaše QR kódy',
+    'Create QR code': 'Vytvořit QR kód',
+    'QR types': 'Typy QR kódů',
+    'Bulk QR codes': 'Hromadné QR kódy',
+    'Create hundreds of QR codes in seconds with a single CSV upload. Perfect for handling large campaigns, teams, or projects at scale': 'Vytvořte stovky QR kódů během chvilky jedním CSV souborem. Ideální pro velké kampaně, týmy i projekty',
+    'Track total and unique QR scans over time, view performance by QR type, and filter data by date - all in real-time': 'Sledujte celkové i unikátní skeny v čase, výkon podle typu QR a filtrujte podle data – vše v reálném čase',
+
+    /* --- client portal --- */
+    'Manage your client portal activities': 'Spravujte aktivity klientského portálu',
+    'Live': 'Živě',
+    'New client portal': 'Nový klientský portál',
+    'Your clients can log in anytime to access courses and manage affiliate payouts.': 'Klienti se mohou kdykoli přihlásit ke kurzům a spravovat partnerské výplaty.',
+
+    /* --- rich-text editor toolbar (aria labels) --- */
+    'Font size': 'Velikost písma',
+    'Font family': 'Rodina písma',
+    'Add Line Height': 'Řádkování',
+    'Font Color': 'Barva písma',
+    'Format selected': 'Formátovat výběr',
+    'Format all document': 'Formátovat celý dokument',
+    'Align text to Left': 'Zarovnat vlevo',
+    'Align text to Center': 'Zarovnat na střed',
+    'Align text to Right': 'Zarovnat vpravo',
+    'Justify': 'Do bloku',
+    'Insert Table': 'Vložit tabulku',
+    'toggle': 'přepnout',
+    'carousel image': 'obrázek karuselu',
 
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
