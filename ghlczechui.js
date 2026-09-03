@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v16 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v17 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v16';
+  var VERSION = 'v17';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1171,6 +1171,126 @@
     'Sharing & permissions': 'Sdílení a oprávnění',
     'Delete list': 'Smazat seznam',
 
+
+    /* ===================================================================
+       v17 -- Payments, deep pass. Nine sub-screens plus the settings area:
+       Invoices, Orders, Subscriptions, Transactions, Products, Coupons,
+       Gift Cards, Payment Links, Documents & Contracts, and Settings.
+       =================================================================== */
+
+    /* --- section nav --- */
+    'Get Started': 'Začínáme',
+    'Invoices & Estimates': 'Faktury a cenové nabídky',
+    'All Invoices': 'Všechny faktury',
+    'Recurring Invoices': 'Opakované faktury',
+    'Accounting Sync': 'Synchronizace účetnictví',
+    'Documents & Contracts': 'Dokumenty a smlouvy',
+    'All Documents & Contracts': 'Všechny dokumenty a smlouvy',
+    'Abandoned Checkouts': 'Opuštěné košíky',
+    'Payment Links': 'Platební odkazy',
+    'Collections': 'Kolekce',
+    'Inventory': 'Sklad',
+    'Gift Cards': 'Dárkové poukazy',
+
+    /* --- invoices --- */
+    'Create and manage all invoices generated for your business': 'Vytvářejte a spravujte všechny faktury vaší firmy',
+    'Connect at least one payment gateway to start receiving payments': 'Připojte alespoň jednu platební bránu, abyste mohli přijímat platby',
+    'Integrate Payment Gateway': 'Připojit platební bránu',
+    'Invoice Name': 'Název faktury',
+    'Invoice Number': 'Číslo faktury',
+    'Customer': 'Zákazník',
+    'Issue Date': 'Datum vystavení',
+    'No invoices to show yet': 'Zatím žádné faktury k zobrazení',
+    'Export as CSV': 'Exportovat jako CSV',
+    'Import as CSV': 'Importovat jako CSV',
+
+    /* --- orders --- */
+    'Track all order submissions in a single place': 'Sledujte všechny objednávky na jednom místě',
+    'Items': 'Položky',
+    'Order Date': 'Datum objednávky',
+    'No orders to show yet': 'Zatím žádné objednávky k zobrazení',
+
+    /* --- subscriptions --- */
+    'Keep track of customer subscriptions created via order forms': 'Sledujte předplatná zákazníků z objednávkových formulářů',
+    'Add Subscription': 'Přidat předplatné',
+    'Provider': 'Poskytovatel',
+    'No subscriptions to show yet': 'Zatím žádná předplatná k zobrazení',
+
+    /* --- transactions --- */
+    'Track customer payments at a single place': 'Sledujte platby zákazníků na jednom místě',
+    'Transaction Date': 'Datum transakce',
+    'No transactions to show yet': 'Zatím žádné transakce k zobrazení',
+
+    /* --- products --- */
+    'Create and Manage products for your business.': 'Vytvářejte a spravujte produkty své firmy.',
+    'Import from Stripe': 'Importovat ze Stripe',
+    'Create Product': 'Vytvořit produkt',
+    'Image': 'Obrázek',
+    'Product name': 'Název produktu',
+    'Product Type': 'Typ produktu',
+    'No products to show yet': 'Zatím žádné produkty k zobrazení',
+
+    /* --- coupons --- */
+    'Manage coupon discounts to increase conversion': 'Spravujte slevové kupóny pro vyšší konverzi',
+    'Create Coupon': 'Vytvořit kupón',
+    'Active': 'Aktivní',
+    'Scheduled': 'Naplánováno',
+    'Expired': 'Vypršelo',
+    'Coupon name': 'Název kupónu',
+    'Coupon code': 'Kód kupónu',
+    'Discount': 'Sleva',
+    'Redemption Count': 'Počet uplatnění',
+    'No coupons found': 'Nebyly nalezeny žádné kupóny',
+
+    /* --- gift cards --- */
+    'Your all-in-one gift card hub for creation, distribution, and redemption.': 'Centrum pro tvorbu, distribuci a uplatnění dárkových poukazů.',
+    'View Documentation': 'Zobrazit dokumentaci',
+    'Create Gift Card': 'Vytvořit dárkový poukaz',
+    'Looks Like Your Gift Card Shelf is Totally Empty.': 'Vypadá to, že nemáte žádné dárkové poukazy.',
+    'Click Create Gift Card and start slingin\' digital delights!': 'Klikněte na Vytvořit dárkový poukaz a začněte.',
+
+    /* --- payment links --- */
+    'Create and Manage your Payment Links': 'Vytvářejte a spravujte platební odkazy',
+    'Create New Payment Link': 'Vytvořit nový platební odkaz',
+    'Link Url': 'URL odkazu',
+    'Price': 'Cena',
+    'Create Link': 'Vytvořit odkaz',
+
+    /* --- documents & contracts --- */
+    '(Proposals, Estimates & Contracts)': '(Nabídky, cenové nabídky a smlouvy)',
+    'Manage and oversee all documents & contracts created for your business.': 'Spravujte všechny dokumenty a smlouvy vytvořené pro vaši firmu.',
+    'Draft': 'Koncept',
+    'Waiting for others': 'Čeká na ostatní',
+    'Archived': 'Archivováno',
+    'Date modified': 'Datum úpravy',
+    'Value': 'Hodnota',
+    'Time to close a deal!': 'Čas uzavřít obchod!',
+    'No drafts in sight! Ready to create a fresh proposal?': 'Žádné koncepty! Chcete vytvořit novou nabídku?',
+
+    /* --- payment settings --- */
+    'Receipts': 'Účtenky',
+    'Taxes': 'Daně',
+    'Customer Notifications': 'Oznámení pro zákazníky',
+    'Team Notifications': 'Oznámení pro tým',
+    'Shipping & Delivery': 'Doprava a doručení',
+    'Shipping and Delivery': 'Doprava a doručení',
+    'Shipping Origin': 'Místo odeslání',
+    'Shipping origin': 'Místo odeslání',
+    'Miscellaneous Charges': 'Ostatní poplatky',
+    'Payment Link Customization': 'Přizpůsobení platebního odkazu',
+    'Enable automatic sales receipts for payments': 'Zapnout automatické účtenky k platbám',
+    'Receipt prefix': 'Předpona účtenky',
+    'Prefix to be used while generating all receipts': 'Předpona použitá při generování všech účtenek',
+    'Receipt start number': 'Počáteční číslo účtenky',
+    'From Name': 'Jméno odesílatele',
+    'From Email': 'E-mail odesílatele',
+    'Email Template': 'E-mailová šablona',
+    'Add Notes / Terms': 'Přidat poznámky / podmínky',
+    'Paragraph': 'Odstavec',
+    'Payment settings navigation': 'Navigace nastavení plateb',
+    'Receipts settings': 'Nastavení účtenek',
+    'Tax settings': 'Nastavení daní',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1317,6 +1437,11 @@
   var N_COMP      = /^(\d+)\s+Companies$/i;
   var PAGE_N      = /^Page\s+(\d+)$/i;                 /* "Page 1"          */
   var N_SELECTED  = /^(\d+)\s+selected$/i;             /* "7 selected"      */
+  var N_PRODUCTS  = /^(\d+)\s+Products?$/i;
+  /* "0 Invoice(s) in Draft" / "in Due" / "received" / "Overdue" */
+  var N_INVOICES  = /^(\d+)\s+Invoice\(s\)\s+(in Draft|in Due|received|Overdue)$/i;
+  var INVOICE_STATE = { 'in draft':'v konceptu', 'in due':'k úhradě',
+                        'received':'přijato', 'overdue':'po splatnosti' };
   var REMOVE_FILT = /^Remove filter:\s*(.+)$/i;         /* "Remove filter: Date" */
   var RANGE_OF    = /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i; /* "21 - 25 of 25" */
   /* "Aug 31, 2026 03:28 AM" -> "31. srp 2026 03:28" (Czech uses a 24h clock) */
@@ -1430,6 +1555,15 @@
 
     var ns = N_SELECTED.exec(key);
     if (ns) return 'Vybráno ' + ns[1];
+
+    var np = N_PRODUCTS.exec(key);
+    if (np) return np[1] + ' ' +
+      czPlural(parseInt(np[1], 10), 'produkt', 'produkty', 'produktů');
+
+    var ni = N_INVOICES.exec(key);
+    if (ni) return ni[1] + ' ' +
+      czPlural(parseInt(ni[1], 10), 'faktura', 'faktury', 'faktur') + ' ' +
+      INVOICE_STATE[ni[2].toLowerCase()];
 
     /* "Remove filter: Date" -- translate the filter name too when known */
     var rf = REMOVE_FILT.exec(key);
