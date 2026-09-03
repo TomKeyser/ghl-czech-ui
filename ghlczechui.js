@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v18 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v20 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v18';
+  var VERSION = 'v20';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1454,6 +1454,89 @@
     'toggle': 'přepnout',
     'carousel image': 'obrázek karuselu',
 
+
+    /* ===================================================================
+       v19 -- Calendars, deep pass on the two reachable screens.
+       Settings > Calendars (/settings/calendars) is a CROSS-ORIGIN IFRAME,
+       so the whole calendar configuration area - Calendars, Service
+       calendars, Preferences, My availability, create-calendar, Rentals,
+       Connections - cannot be translated. See the header note on iframes.
+       =================================================================== */
+
+    /* --- setup assistant --- */
+    'Start by telling me what you do in the chat -- I\'ll build your calendar page in real time.': 'Začněte tím, že v chatu popíšete, co děláte – vaši rezervační stránku vytvořím v reálném čase.',
+    'Start by telling me what you do in the chat — I\'ll build your calendar page in real time.': 'Začněte tím, že v chatu popíšete, co děláte – vaši rezervační stránku vytvořím v reálném čase.',
+    'Guided setup — takes 2 min': 'Průvodce nastavením — 2 minuty',
+    'Guided setup -- takes 2 min': 'Průvodce nastavením — 2 minuty',
+    'Ask anything about calendars.': 'Zeptejte se na cokoli o kalendářích.',
+
+    /* --- appointment list --- */
+    'Meetings': 'Schůzky',
+    'New appointment': 'Nová schůzka',
+    'Cancelled': 'Zrušené',
+    'Smart list': 'Chytrý seznam',
+    'Customize list': 'Přizpůsobit seznam',
+    'Manage columns': 'Spravovat sloupce',
+    'Manage columns for the appointment list view': 'Spravovat sloupce seznamu schůzek',
+    'Appointment time': 'Čas schůzky',
+    'Appointment owner': 'Vlastník schůzky',
+    'Invitees': 'Pozvaní',
+    'Date added': 'Datum přidání',
+    'Columns': 'Sloupce',
+    'Discard changes': 'Zahodit změny',
+    'Save as new': 'Uložit jako nový',
+    'Enter list name': 'Zadejte název seznamu',
+    'No upcoming appointments': 'Žádné nadcházející schůzky',
+    'You don\'t have any upcoming appointments right now.': 'Momentálně nemáte žádné nadcházející schůzky.',
+    'See all appointments': 'Zobrazit všechny schůzky',
+    'No appointments yet – see how it works': 'Zatím žádné schůzky – podívejte se, jak to funguje',
+    'No appointments yet - see how it works': 'Zatím žádné schůzky – podívejte se, jak to funguje',
+    'Book a test appointment now to experience the booking process for yourself.': 'Vyzkoušejte si rezervační proces objednáním testovací schůzky.',
+    'Book a test appointment': 'Objednat testovací schůzku',
+    'No cancelled appointments': 'Žádné zrušené schůzky',
+    'You don\'t have any cancelled appointments at the moment.': 'Momentálně nemáte žádné zrušené schůzky.',
+    'Nothing to see here': 'Není co zobrazit',
+    'There are no appointments matching your selected filters. Try updating or clearing the filters to see available data.': 'Vybraným filtrům neodpovídají žádné schůzky. Zkuste filtry upravit nebo vymazat.',
+    'Modify filters': 'Upravit filtry',
+
+    /* --- new appointment modal (calendars context) --- */
+    'Appointment': 'Schůzka',
+    'Blocked off time': 'Blokovaný čas',
+    'No calendars found in the location.': 'V této lokalitě nebyly nalezeny žádné kalendáře.',
+    '(eg) Appointment with Bob': '(např.) Schůzka s Bobem',
+    'Showing slots in this timezone: (Account timezone)': 'Termíny v tomto časovém pásmu: (časové pásmo účtu)',
+    'No slots available. Switch to Custom to book outside your availability.': 'Nejsou dostupné žádné termíny. Přepněte na Vlastní pro rezervaci mimo dostupnost.',
+    'Select Contact': 'Vyberte kontakt',
+    'No Contact found': 'Nebyl nalezen žádný kontakt',
+    'Add new Contact': 'Přidat nový kontakt',
+    'Search by name, email, or phone': 'Hledat podle jména, e-mailu nebo telefonu',
+
+
+    /* ===================================================================
+       v20 -- recovered by re-running every completed section through a
+       CORRECTED harvest filter.
+
+       The old filter tested "is pure ASCII" as a proxy for "still English",
+       which silently skipped any English string containing an em/en dash,
+       a curly quote, an arrow or an emoji. The filter now tests for the
+       ABSENCE of Czech diacritics instead. These are the strings that
+       oversight hid.
+       =================================================================== */
+    'Start with a template 🎬': 'Začněte se šablonou 🎬',
+    'Our awesome features 🔥': 'Naše skvělé funkce 🔥',
+    'Submit →': 'Odeslat →',
+    'Create QR codes for websites, forms, SMS, calls, email, payments, and more — all in one place': 'Vytvářejte QR kódy pro weby, formuláře, SMS, hovory, e-maily, platby a další — vše na jednom místě',
+    'Start selling online —easy setup, secure payments, flexible shipping, and powerful automations to grow your business.': 'Začněte prodávat online — snadné nastavení, bezpečné platby, flexibilní doprava a výkonné automatizace pro růst podnikání.',
+    'Build and customize your store in minutes with easy-to-use builder — no coding required.': 'Vytvořte a přizpůsobte obchod během minut ve snadno ovladatelném editoru — bez programování.',
+    'Company Info': 'Informace o firmě',
+
+    /* --- conversations empty states --- */
+    'No conversation selected': 'Není vybrána žádná konverzace',
+    'Select a conversation from the list to view contact details.': 'Vyberte konverzaci ze seznamu pro zobrazení detailů kontaktu.',
+    'View all conversations': 'Zobrazit všechny konverzace',
+    'You don\'t have any unread Team inbox conversations right now.': 'Momentálně nemáte žádné nepřečtené konverzace v týmové schránce.',
+    'View All Team inbox Conversations': 'Zobrazit všechny konverzace týmové schránky',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1600,6 +1683,10 @@
   var N_COMP      = /^(\d+)\s+Companies$/i;
   var PAGE_N      = /^Page\s+(\d+)$/i;                 /* "Page 1"          */
   var N_SELECTED  = /^(\d+)\s+selected$/i;             /* "7 selected"      */
+  /* "Hi Tom! I'm your calendar setup assistant..." - the name is interpolated,
+     so this can only be matched as a pattern, never as a literal. */
+  var CAL_GREETING = /^Hi\s+(.+?)!\s*I'm your calendar setup assistant\.\s*What would you like to do\?$/i;
+  var LAST_PERIOD  = /^\(Last\s+(\d+)\s+(month|months|day|days)\)$/i;  /* "(Last 30 days)" */
   var N_PRODUCTS  = /^(\d+)\s+Products?$/i;
   /* "0 Invoice(s) in Draft" / "in Due" / "received" / "Overdue" */
   var N_INVOICES  = /^(\d+)\s+Invoice\(s\)\s+(in Draft|in Due|received|Overdue)$/i;
@@ -1718,6 +1805,18 @@
 
     var ns = N_SELECTED.exec(key);
     if (ns) return 'Vybráno ' + ns[1];
+
+    var cg = CAL_GREETING.exec(key);
+    if (cg) return 'Ahoj ' + cg[1] + '! Jsem váš asistent nastavení kalendáře. Co byste chtěli udělat?';
+
+    var lp = LAST_PERIOD.exec(key);
+    if (lp) {
+      var n = parseInt(lp[1], 10);
+      var unit = /month/i.test(lp[2])
+        ? czPlural(n, 'měsíc', 'měsíce', 'měsíců')
+        : czPlural(n, 'den', 'dny', 'dní');
+      return '(Posledních ' + n + ' ' + unit + ')';
+    }
 
     var np = N_PRODUCTS.exec(key);
     if (np) return np[1] + ' ' +
