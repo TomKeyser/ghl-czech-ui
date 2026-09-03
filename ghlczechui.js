@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v13 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v16 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v13';
+  var VERSION = 'v16';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1085,6 +1085,92 @@
     'First attribution': 'První atribuce',
     'Last attribution': 'Poslední atribuce',
 
+
+    /* ===================================================================
+       v14 -- deep pass on Contacts: Tasks tab, Companies tab, Bulk actions
+       tab, the Add contact form and the Import screen.
+       =================================================================== */
+
+    /* --- tasks tab --- */
+    'Due today': 'Termín dnes',
+    'Overdue': 'Po termínu',
+    'Assignee': 'Řešitel',
+    'Assignee: Any': 'Řešitel: Libovolný',
+    'Status: All': 'Stav: Vše',
+    'Due Date: Any': 'Termín: Libovolný',
+    'Due Date': 'Termín',
+    'Mark as done': 'Označit jako hotové',
+    'Mark as pending': 'Označit jako čekající',
+    'Associated Contacts': 'Přiřazené kontakty',
+    'No Tasks in sight! Ready to create a fresh one?': 'Žádné úkoly! Chcete vytvořit nový?',
+    'Search for task title': 'Hledat název úkolu',
+    'Select all visible rows': 'Vybrat všechny viditelné řádky',
+
+    /* --- companies tab --- */
+    'Add Company': 'Přidat společnost',
+    'Created At': 'Vytvořeno',
+    'Updated At': 'Aktualizováno',
+    'No Companies found': 'Nebyly nalezeny žádné společnosti',
+
+    /* --- bulk actions tab --- */
+    'Track progress and results for bulk actions.': 'Sledujte průběh a výsledky hromadných akcí.',
+    'All statuses': 'Všechny stavy',
+    'All actions': 'Všechny akce',
+    'Action label': 'Označení akce',
+    'Operation': 'Operace',
+    'User': 'Uživatel',
+    'Completed': 'Dokončeno',
+    'No bulk actions found': 'Nebyly nalezeny žádné hromadné akce',
+    'There are no bulk actions matching your current filters.': 'Žádné hromadné akce neodpovídají aktuálním filtrům.',
+    'From date': 'Datum od',
+    'To date': 'Datum do',
+
+    /* --- add contact form --- */
+    'Contact image': 'Obrázek kontaktu',
+    'Customize form': 'Přizpůsobit formulář',
+    'Enter First name': 'Zadejte jméno',
+    'Enter Last name': 'Zadejte příjmení',
+    'Please enter email address': 'Zadejte e-mailovou adresu',
+    '+ Add email': '+ Přidat e-mail',
+    'Enter phone number': 'Zadejte telefonní číslo',
+    '+ Add phone': '+ Přidat telefon',
+    'Select Contact type': 'Vyberte typ kontaktu',
+    'Time zone': 'Časové pásmo',
+    'Select Time zone': 'Vyberte časové pásmo',
+    'DND all channels': 'Nerušit – všechny kanály',
+    'Channels': 'Kanály',
+    'Text messages': 'Textové zprávy',
+    'Calls & voicemail': 'Hovory a hlasová schránka',
+    'Inbound calls and SMS': 'Příchozí hovory a SMS',
+    'Save and add another': 'Uložit a přidat další',
+
+    /* --- import screen --- */
+    'Choose an import method': 'Vyberte způsob importu',
+    'Import records from CSV': 'Importovat záznamy z CSV',
+    'Upload a CSV file, map fields, review your data, and import records.': 'Nahrajte CSV soubor, namapujte pole, zkontrolujte data a importujte záznamy.',
+    'Start CSV import': 'Zahájit import CSV',
+    'Import from HubSpot': 'Importovat z HubSpotu',
+    'Connect your HubSpot account to import data, including records, custom fields, and associations.': 'Připojte účet HubSpot pro import dat včetně záznamů, vlastních polí a vazeb.',
+    'Connect HubSpot': 'Připojit HubSpot',
+    'Import history': 'Historie importů',
+    'Track import progress, results, and errors.': 'Sledujte průběh, výsledky a chyby importů.',
+    'Imported by': 'Importoval',
+    'Records found': 'Nalezené záznamy',
+    'Errors': 'Chyby',
+    'Started': 'Zahájeno',
+    'No imports yet': 'Zatím žádné importy',
+    'All imports, including CSV uploads and HubSpot imports, will show up here.': 'Zde se zobrazí všechny importy, včetně nahrání CSV a importů z HubSpotu.',
+
+
+    /* --- v15: sort panel + add smart list panel --- */
+    'Select field': 'Vyberte pole',
+    'Clear': 'Vymazat',
+    'Sort by': 'Řadit podle',
+    'List name': 'Název seznamu',
+    'New smart list': 'Nový chytrý seznam',
+    'Sharing & permissions': 'Sdílení a oprávnění',
+    'Delete list': 'Smazat seznam',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1190,6 +1276,22 @@
 
   var ATTRS = ['placeholder', 'title', 'aria-label'];
 
+  /* ---------- prefilled input values -------------------------------------
+     OFF by default everywhere else in this script's history: a field's value
+     is normally customer data. Tom asked for prefills (e.g. the smart-list
+     name defaulting to "New smart list") to be translated too, accepting the
+     risk. Flip this to false to switch the behaviour off in one move.
+
+     Three guards remain, and they matter:
+       1. Only plain text/search inputs -- never email, tel, number, password,
+          date, hidden or checkbox values.
+       2. Never the focused element, so a value is never rewritten mid-typing.
+       3. Whole-string glossary match only, and each element is rewritten once.
+
+     Residual risk Tom accepted: a real record whose value happens to equal a
+     glossary term exactly (a list literally named "New") would be rewritten. */
+  var TRANSLATE_PREFILLS = true;
+
   var MAX_LEN = 160;
 
   /* Labels that carry a live count are one text node whose content changes:
@@ -1201,7 +1303,7 @@
   var COUNT_COLON = /^(.+?):\s*(\d+)$/;              /* "Pending SMS: 0"   */
   var COUNT_PAREN = /^(.+?)\s*\((\d+(?:\/\d+)?)\)$/; /* "Contacts (1/10)" */
   var COUNT_ITEMS = /^(\d+)\s+items?$/i;              /* "0 items"         */
-  var ABBR_PAREN  = /^(.+?)\s*\(([A-Z]{2,6})\)$/;      /* "Created (PDT)"   */
+  var ABBR_PAREN  = /^(.+?)\s*\(\s*([A-Z]{2,6})\s*\)$/; /* "Created (PDT)", "Due Date ( CEST )" */
   var COLS_RATIO  = /^(\d+)\/(\d+)\s+columns?$/i;      /* "6/7 columns"     */
   var PLUS_MORE   = /^\+(\d+)\s+more$/i;               /* "+99 more"        */
   var PAGE_OF     = /^Page\s+(\d+)\s+of\s+(\d+)$/i;    /* "Page 1 of 1"     */
@@ -1209,6 +1311,13 @@
   var SELECT_ALL_N= /^Select\s+all\s+(\d+)$/i;         /* "Select all 0"    */
   var N_CONTACTS_SEL = /^(\d+)\s+Contacts?\s+Selected$/i;  /* "0 Contacts Selected" */
   var N_CONTACTS  = /^(\d+)\s+Contacts?$/i;            /* "0 Contacts"      */
+  var N_TASKS_SEL = /^(\d+)\s+Tasks?\s+Selected$/i;
+  var N_TASKS     = /^(\d+)\s+Tasks?$/i;
+  var N_COMP_SEL  = /^(\d+)\s+Companies\s+Selected$/i;
+  var N_COMP      = /^(\d+)\s+Companies$/i;
+  var PAGE_N      = /^Page\s+(\d+)$/i;                 /* "Page 1"          */
+  var N_SELECTED  = /^(\d+)\s+selected$/i;             /* "7 selected"      */
+  var REMOVE_FILT = /^Remove filter:\s*(.+)$/i;         /* "Remove filter: Date" */
   var RANGE_OF    = /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i; /* "21 - 25 of 25" */
   /* "Aug 31, 2026 03:28 AM" -> "31. srp 2026 03:28" (Czech uses a 24h clock) */
   var STAMP = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
@@ -1300,6 +1409,32 @@
     if (p5) return p5[1] + ' ' +
       czPlural(parseInt(p5[1], 10), 'kontakt', 'kontakty', 'kontaktů');
 
+    var t1 = N_TASKS_SEL.exec(key);
+    if (t1) return 'Vybráno ' + t1[1] + ' ' +
+      czPlural(parseInt(t1[1], 10), 'úkol', 'úkoly', 'úkolů');
+
+    var t2 = N_TASKS.exec(key);
+    if (t2) return t2[1] + ' ' +
+      czPlural(parseInt(t2[1], 10), 'úkol', 'úkoly', 'úkolů');
+
+    var c1 = N_COMP_SEL.exec(key);
+    if (c1) return 'Vybráno ' + c1[1] + ' ' +
+      czPlural(parseInt(c1[1], 10), 'společnost', 'společnosti', 'společností');
+
+    var c2 = N_COMP.exec(key);
+    if (c2) return c2[1] + ' ' +
+      czPlural(parseInt(c2[1], 10), 'společnost', 'společnosti', 'společností');
+
+    var pn = PAGE_N.exec(key);
+    if (pn) return 'Stránka ' + pn[1];
+
+    var ns = N_SELECTED.exec(key);
+    if (ns) return 'Vybráno ' + ns[1];
+
+    /* "Remove filter: Date" -- translate the filter name too when known */
+    var rf = REMOVE_FILT.exec(key);
+    if (rf) { var inner = plain(rf[1]); return 'Odebrat filtr: ' + (inner !== null ? inner : rf[1]); }
+
     var m7 = RANGE_OF.exec(key);
     if (m7) return m7[1] + ' – ' + m7[2] + ' z ' + m7[3];
 
@@ -1373,6 +1508,25 @@
     }
   }
 
+  function doValues(el) {
+    if (!TRANSLATE_PREFILLS) return;
+    if (el.tagName === 'INPUT' && el.type && !/^(text|search)$/i.test(el.type)) return;
+    if (el === document.activeElement) return;          /* never mid-typing */
+    var v = el.value;
+    if (!v || v.length > MAX_LEN) return;
+    if (el.__csVal === v) return;                       /* already handled */
+    var out = translate(v);
+    if (out === null || out === v) return;
+    el.value = out;
+    el.__csVal = out;
+    /* Without these the framework's model keeps the English string: the user
+       would see Czech and save English, or the next render would revert it. */
+    try {
+      el.dispatchEvent(new Event('input',  { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    } catch (e) {}
+  }
+
   function walk(root) {
     if (!root) return;
     /* re-checked per pass so switching sub-accounts in-app takes effect at once */
@@ -1392,6 +1546,17 @@
     var withAttrs = root.querySelectorAll('[placeholder],[title],[aria-label]');
     for (var i = 0; i < withAttrs.length; i++) {
       if (!blockedAttr(withAttrs[i])) doAttrs(withAttrs[i]);
+    }
+
+    /* prefilled values (see TRANSLATE_PREFILLS above) */
+    if (TRANSLATE_PREFILLS) {
+      if (root.tagName === 'INPUT' || root.tagName === 'TEXTAREA') {
+        if (!blockedAttr(root)) doValues(root);
+      }
+      var fields = root.querySelectorAll('input,textarea');
+      for (var v = 0; v < fields.length; v++) {
+        if (!blockedAttr(fields[v])) doValues(fields[v]);
+      }
     }
 
     /* text nodes (form controls excluded -- their text is customer data) */
