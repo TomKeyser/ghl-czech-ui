@@ -13,7 +13,7 @@
      rich-text editors, message bodies, contenteditable regions.
    - No network calls. No CRM data leaves the browser. No API key, no cost.
 
-   v12 - based on Tom Keyser's edited file. His DICT additions are preserved
+   v13 - based on Tom Keyser's edited file. His DICT additions are preserved
    verbatim except for two corrections noted in CHANGES-v8.md.
    Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
 
@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v12';
+  var VERSION = 'v13';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -994,6 +994,97 @@
     'Folders per page': 'Složek na stránku',
     'Default folders cannot be edited or deleted': 'Výchozí složky nelze upravovat ani mazat',
 
+
+    /* ===================================================================
+       v13 -- Contacts smart list: bulk-action bar, empty state, grid
+       pagination, the Filters panel taxonomy and the Manage fields panel.
+       All HighLevel defaults; the sub-account holds no contact records.
+       =================================================================== */
+
+    /* --- bulk action bar --- */
+    'Trigger automation': 'Spustit automatizaci',
+    'Send email': 'Odeslat e-mail',
+    'Add tags': 'Přidat štítky',
+    'More': 'Více',
+    'Select Row': 'Vybrat řádek',
+
+    /* --- empty state --- */
+    'It\'s so lonely in here!': 'Je tu prázdno!',
+    'No Contacts in sight! Ready to create a fresh one?': 'Žádné kontakty! Chcete vytvořit nový?',
+
+    /* --- grid pagination --- */
+    'Page Size': 'Velikost stránky',
+    'First': 'První',
+    'Prev': 'Předchozí',
+    'Last': 'Poslední',
+    'First Page': 'První stránka',
+    'Prev Page': 'Předchozí stránka',
+    'Next Page': 'Další stránka',
+    'Last Page': 'Poslední stránka',
+
+    /* --- manage fields panel --- */
+    'Fields in table': 'Pole v tabulce',
+    'Add fields': 'Přidat pole',
+    'Add custom field': 'Přidat vlastní pole',
+    'Search field': 'Hledat pole',
+
+    /* --- filters: contact information --- */
+    'Contact information': 'Informace o kontaktu',
+    'Age': 'Věk',
+    'Created by': 'Vytvořil',
+    'Email status': 'Stav e-mailu',
+    'Last email clicked date': 'Datum posledního kliknutí na e-mail',
+    'Last email opened date': 'Datum posledního otevření e-mailu',
+    'Last updated by': 'Naposledy upravil',
+    'Postal zip code': 'PSČ',
+    'Source type': 'Typ zdroje',
+    'Tag': 'Štítek',
+    'Whatsapp status': 'Stav WhatsApp',
+    'Wildcard name': 'Zástupný název',
+
+    /* --- filters: DND (kept as the established abbreviation) --- */
+    'Calls & Voicemails DND': 'Nerušit – hovory a hlasové zprávy',
+    'DND all': 'Nerušit vše',
+    'Email DND': 'Nerušit – e-mail',
+    'FB messenger DND': 'Nerušit – FB Messenger',
+    'GMB messenger DND': 'Nerušit – GMB Messenger',
+    'Inbound DND': 'Nerušit – příchozí',
+    'SMS DND': 'Nerušit – SMS',
+    'WhatsApp DND': 'Nerušit – WhatsApp',
+
+    /* --- filters: contact activity --- */
+    'Contact activity': 'Aktivita kontaktu',
+    'Last activity type': 'Typ poslední aktivity',
+    'Last appointment': 'Poslední schůzka',
+    'Workflow (active)': 'Pracovní postup (aktivní)',
+    'Workflow (finished)': 'Pracovní postup (dokončený)',
+
+    /* --- filters: opportunity --- */
+    'Opportunity information': 'Informace o příležitosti',
+    'Opportunity pipeline': 'Obchodní kanál příležitosti',
+    'Opportunity stage': 'Fáze příležitosti',
+    'Offer': 'Nabídka',
+    'Product': 'Produkt',
+
+    /* --- filters: attribution --- */
+    'Attribution': 'Atribuce',
+    'Attribution FB click ID': 'Atribuce – FB click ID',
+    'Attribution google click ID': 'Atribuce – Google click ID',
+    'Attribution medium': 'Atribuce – médium',
+    'Attribution source': 'Atribuce – zdroj',
+    'Attribution UTM ad group ID': 'Atribuce – UTM ad group ID',
+    'Attribution UTM ad ID': 'Atribuce – UTM ad ID',
+    'Attribution UTM campaign': 'Atribuce – UTM kampaň',
+    'Attribution UTM campaign ID': 'Atribuce – UTM campaign ID',
+    'Attribution UTM content': 'Atribuce – UTM obsah',
+    'Attribution UTM keyword': 'Atribuce – UTM klíčové slovo',
+    'Attribution UTM match type': 'Atribuce – UTM typ shody',
+    'Attribution UTM medium': 'Atribuce – UTM médium',
+    'Attribution UTM source': 'Atribuce – UTM zdroj',
+    'Attribution UTM term': 'Atribuce – UTM termín',
+    'First attribution': 'První atribuce',
+    'Last attribution': 'Poslední atribuce',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'květen', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1113,6 +1204,11 @@
   var ABBR_PAREN  = /^(.+?)\s*\(([A-Z]{2,6})\)$/;      /* "Created (PDT)"   */
   var COLS_RATIO  = /^(\d+)\/(\d+)\s+columns?$/i;      /* "6/7 columns"     */
   var PLUS_MORE   = /^\+(\d+)\s+more$/i;               /* "+99 more"        */
+  var PAGE_OF     = /^Page\s+(\d+)\s+of\s+(\d+)$/i;    /* "Page 1 of 1"     */
+  var SHOW_PAGE   = /^Show\s+Page\s+(\d+)$/i;          /* "Show Page 1"     */
+  var SELECT_ALL_N= /^Select\s+all\s+(\d+)$/i;         /* "Select all 0"    */
+  var N_CONTACTS_SEL = /^(\d+)\s+Contacts?\s+Selected$/i;  /* "0 Contacts Selected" */
+  var N_CONTACTS  = /^(\d+)\s+Contacts?$/i;            /* "0 Contacts"      */
   var RANGE_OF    = /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i; /* "21 - 25 of 25" */
   /* "Aug 31, 2026 03:28 AM" -> "31. srp 2026 03:28" (Czech uses a 24h clock) */
   var STAMP = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
@@ -1184,6 +1280,25 @@
 
     var m9 = PLUS_MORE.exec(key);
     if (m9) return '+' + m9[1] + ' dalších';
+
+    var p1 = PAGE_OF.exec(key);
+    if (p1) return 'Stránka ' + p1[1] + ' z ' + p1[2];
+
+    var p2 = SHOW_PAGE.exec(key);
+    if (p2) return 'Zobrazit stránku ' + p2[1];
+
+    var p3 = SELECT_ALL_N.exec(key);
+    if (p3) return 'Vybrat vše ' + p3[1];
+
+    /* "0 Contacts Selected" must be tested BEFORE "0 Contacts", or the
+       shorter pattern would never be reached for the longer string. */
+    var p4 = N_CONTACTS_SEL.exec(key);
+    if (p4) return 'Vybráno ' + p4[1] + ' ' +
+      czPlural(parseInt(p4[1], 10), 'kontakt', 'kontakty', 'kontaktů');
+
+    var p5 = N_CONTACTS.exec(key);
+    if (p5) return p5[1] + ' ' +
+      czPlural(parseInt(p5[1], 10), 'kontakt', 'kontakty', 'kontaktů');
 
     var m7 = RANGE_OF.exec(key);
     if (m7) return m7[1] + ' – ' + m7[2] + ' z ' + m7[3];
