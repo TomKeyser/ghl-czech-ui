@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v23';
+  var VERSION = 'v24';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -2102,6 +2102,193 @@
     'Easy scaling & management': 'Snadné škálování a správa',
     'Duplicate campaigns, manage multiple ad accounts and streamline workflows for all your clients.': 'Duplikujte kampaně, spravujte více reklamních účtů a zjednodušte procesy pro všechny své klienty.',
 
+    /* --- AUTOMATION (v24) -----------------------------------------------
+       NOT COVERABLE: every Automation route -- /automation, /workflows,
+       /overview and /workflows/settings -- renders inside one cross-origin
+       iframe at client-app-automation-workflows.leadconnectorhq.com.
+       Only the parent-document chrome below is reachable. ------------- */
+    'Automation updates': 'Novinky v automatizaci',
+    'automation': 'automatizace',
+
+    /* ===================================================================
+       MEMBERSHIPS -- deep pass (v24).
+       Mixed rendering, exactly like Settings: some routes are cross-origin
+       iframes, others render in the main document. "Is a Memberships page"
+       predicts nothing -- each route has to be probed.
+       NOT COVERABLE (backend.memberships.apisystem.tech):
+         /memberships/courses/dashboard  and  /courses/dashboard-v2
+       =================================================================== */
+
+    /* --- shared chrome / loading states -------------------------------- */
+    'Learn More': 'Zjistit více',
+    'Logo Image': 'Obrázek loga',
+    'Loading...': 'Načítání...',
+    'Loading ...': 'Načítání ...',
+    'Settings navigation': 'Navigace nastavení',
+    'Settings Options': 'Možnosti nastavení',
+
+    /* --- communities ---------------------------------------------------- */
+    'Community Groups': 'Skupiny komunity',
+    'You don’t have a community yet': 'Zatím nemáte žádnou komunitu',
+    "You don't have a community yet": 'Zatím nemáte žádnou komunitu',
+    'Connect with others by creating your own community space! Here, you can share insights, discuss ideas, and build connections with people who share your interests.': 'Spojte se s ostatními vytvořením vlastního komunitního prostoru! Můžete zde sdílet poznatky, diskutovat o nápadech a navazovat kontakty s lidmi, které zajímá totéž co vás.',
+    'Create a Community': 'Vytvořit komunitu',
+    'Create Group': 'Vytvořit skupinu',
+    'Create your new community group': 'Vytvořte novou skupinu komunity',
+    'Details': 'Podrobnosti',
+    'Group Name': 'Název skupiny',
+    'Provide a distinct identity to your group': 'Dejte své skupině jedinečnou identitu',
+    'Group URL': 'URL skupiny',
+    'You can distribute the URL of your group to others for easy sharing': 'URL své skupiny můžete rozeslat ostatním pro snadné sdílení',
+    'Group Slug': 'Slug skupiny',
+    'Group Description': 'Popis skupiny',
+    'Elaborate on the nature of discussions that will take place within the group': 'Popište, jaké diskuze budou ve skupině probíhat',
+    'Enter a brief description': 'Zadejte stručný popis',
+    'Discovery': 'Objevování',
+    'Get discovered by millions of active users. The group will be visible on the discover page once you have more than 10 members.': 'Nechte se objevit miliony aktivních uživatelů. Skupina se zobrazí na stránce objevování, jakmile budete mít více než 10 členů.',
+    'Recommended Aspect Ratio 1:1': 'Doporučený poměr stran 1:1',
+    'Recommended Aspect Ratio 16:9': 'Doporučený poměr stran 16:9',
+    'Click or drag a file to this area to upload': 'Klikněte sem nebo sem přetáhněte soubor k nahrání',
+    'SVG, PNG, JPG, JPEG, WEBP, ICO (Aspect Ratio 1:1)': 'SVG, PNG, JPG, JPEG, WEBP, ICO (poměr stran 1:1)',
+    'SVG, PNG, JPG, JPEG, WEBP, ICO (Aspect Ratio 16:9)': 'SVG, PNG, JPG, JPEG, WEBP, ICO (poměr stran 16:9)',
+
+    /* --- certificates ---------------------------------------------------- */
+    'Certificate AI': 'Certifikáty AI',
+    'Design certificates that': 'Navrhujte certifikáty, které',
+    'look official': 'vypadají oficiálně',
+    'e.g. Course completion certificate, navy and gold theme': 'např. certifikát o dokončení kurzu, tmavě modré a zlaté téma',
+    'Course completion': 'Dokončení kurzu',
+    'Milestone achieved': 'Dosažený milník',
+    'Event participation': 'Účast na akci',
+    'Training completed': 'Dokončené školení',
+    'Issued Certificates': 'Vydané certifikáty',
+    'Issued Badges': 'Vydané odznaky',
+    'Expiry Date': 'Datum vypršení',
+
+    /* --- offers ---------------------------------------------------------- */
+    'Create and manage offers for your courses': 'Vytvářejte a spravujte nabídky pro své kurzy',
+    '+ Create Offer': '+ Vytvořit nabídku',
+    'Create Offer': 'Vytvořit nabídku',
+    'Visibility': 'Viditelnost',
+    'Nothing here!': 'Zde nic není!',
+    'Create your first offer to get started': 'Začněte vytvořením první nabídky',
+
+    /* --- courses / products ---------------------------------------------- */
+    'Manage or create new courses': 'Spravujte nebo vytvářejte nové kurzy',
+    'Search Courses': 'Hledat kurzy',
+    'Sort: Newest': 'Řadit: nejnovější',
+    'Newest': 'Nejnovější',
+    'Oldest': 'Nejstarší',
+    'A-Z Title': 'Název A–Z',
+    'Z-A Title': 'Název Z–A',
+    'Most Members': 'Nejvíce členů',
+    'Least Members': 'Nejméně členů',
+    'Library Order': 'Pořadí v knihovně',
+    'Announcements': 'Oznámení',
+    'Start Creating Your First Course': 'Začněte vytvořením prvního kurzu',
+    'You haven’t created any courses yet. Click the ‘Create New’ button to get started with your first course.': 'Zatím jste nevytvořili žádné kurzy. Klikněte na tlačítko „Vytvořit nový“ a začněte se svým prvním kurzem.',
+    "You haven't created any courses yet. Click the 'Create New' button to get started with your first course.": 'Zatím jste nevytvořili žádné kurzy. Klikněte na tlačítko „Vytvořit nový“ a začněte se svým prvním kurzem.',
+    'Create New Course': 'Vytvořit nový kurz',
+    'Import from Kajabi': 'Importovat z Kajabi',
+    'Create using Ask AI': 'Vytvořit pomocí Zeptat se AI',
+    'Manage Comments': 'Spravovat komentáře',
+    'Library Sorting': 'Řazení knihovny',
+
+    /* --- course analytics ------------------------------------------------- */
+    'Course progress': 'Průběh kurzu',
+    'Assessment': 'Hodnocení',
+    'Assessments': 'Hodnocení',
+    'Member analytics': 'Analytika členů',
+    'Members Analytics': 'Analytika členů',
+    'Revenue analytics': 'Analytika tržeb',
+    'Track your course engagement and learner progress': 'Sledujte zapojení v kurzu a pokrok studentů',
+    'Courses: All courses': 'Kurzy: všechny kurzy',
+    'Enrollment date: Last 30 days': 'Datum zápisu: posledních 30 dní',
+    'You’re viewing sample data. Create your own courses to see real data': 'Prohlížíte si ukázková data. Vytvořte vlastní kurzy a uvidíte skutečná data',
+    "You're viewing sample data. Create your own courses to see real data": 'Prohlížíte si ukázková data. Vytvořte vlastní kurzy a uvidíte skutečná data',
+    'Create Course': 'Vytvořit kurz',
+    'Clear Sample Data': 'Vymazat ukázková data',
+    'Overall completion rate': 'Celková míra dokončení',
+    'vs previous 30 days': 'oproti předchozím 30 dnům',
+    'Average course progress': 'Průměrný průběh kurzu',
+    'Average time to complete': 'Průměrná doba dokončení',
+    'User conversion funnel': 'Konverzní trychtýř uživatelů',
+    'Track how users progress through their learning journey': 'Sledujte, jak uživatelé postupují svou cestou vzdělávání',
+    'Started learning': 'Začali se učit',
+    'Not started learning': 'Nezačali se učit',
+    'Completed course': 'Dokončili kurz',
+    'Haven’t completed course': 'Nedokončili kurz',
+    "Haven't completed course": 'Nedokončili kurz',
+    'New users': 'Noví uživatelé',
+    'Search name or email': 'Hledat jméno nebo e-mail',
+    'Search Name': 'Hledat jméno',
+    'Search by email': 'Hledat podle e-mailu',
+    'Members': 'Členové',
+    'Progress': 'Průběh',
+    'Last accessed': 'Naposledy otevřeno',
+    'Last Accessed': 'Naposledy otevřeno',
+    'Enrolment date': 'Datum zápisu',
+    'Enrollment date': 'Datum zápisu',
+    'Session count': 'Počet relací',
+    'All of this & more is now in Course progress analytics.': 'Toto vše a více je nyní v analytice Průběh kurzu.',
+    'Try it out': 'Vyzkoušet',
+    'Keep track of members and their progress': 'Sledujte členy a jejich pokrok',
+    'Member Since': 'Člen od',
+    'Logins': 'Přihlášení',
+    'Total Products': 'Celkem produktů',
+    'Member analytics deprecation notice': 'Upozornění na ukončení podpory analytiky členů',
+    'Net Revenue': 'Čisté tržby',
+    'Statistics of the onetime purchase revenue, excluding tax.': 'Statistiky tržeb z jednorázových nákupů bez daně.',
+    'Compare Products': 'Porovnat produkty',
+    'Line Chart': 'Spojnicový graf',
+    'Bar Chart': 'Sloupcový graf',
+    'Per Day Revenue': 'Tržby po dnech',
+    'No data found for Offer Revenue': 'Pro tržby z nabídek nebyla nalezena žádná data',
+    'Onetime purchase not happened in selected date range. Please try again with different filter.': 'Ve vybraném rozsahu dat neproběhl žádný jednorázový nákup. Zkuste to prosím znovu s jiným filtrem.',
+    'Revenue by product': 'Tržby podle produktu',
+    'Onetime revenue generated by individual product.': 'Jednorázové tržby vygenerované jednotlivým produktem.',
+    'Date Range': 'Rozsah dat',
+    'Net Revenue not found for selected date range.': 'Pro vybraný rozsah dat nebyly nalezeny žádné čisté tržby.',
+    'less than a minute ago': 'před méně než minutou',
+
+    /* --- course builder settings ------------------------------------------ */
+    'Control content creation options and builder behaviour for your courses.': 'Určete možnosti tvorby obsahu a chování editoru pro vaše kurzy.',
+    'Video download': 'Stahování videa',
+    'Show download option for uploaded video on the course builder.': 'Zobrazit v editoru kurzu možnost stažení nahraného videa.',
+
+    /* --- client portal settings ------------------------------------------- */
+    'Client Portal Settings': 'Nastavení klientského portálu',
+    'Configure your domain for client portal': 'Nastavte doménu pro klientský portál',
+    'Add your personal touch to the client portal': 'Dodejte klientskému portálu osobní nádech',
+    'App Permissions': 'Oprávnění aplikací',
+    'Enable/ disable an app for your client portal': 'Povolte nebo zakažte aplikaci pro klientský portál',
+    'Language Settings': 'Nastavení jazyka',
+    'Customize language for your client portal and child apps': 'Přizpůsobte jazyk klientského portálu a podřízených aplikací',
+    'Configure your chat widget for your client portal': 'Nastavte chatovací widget pro klientský portál',
+    'Customize email notifications for everyone': 'Přizpůsobte e-mailová oznámení pro všechny',
+
+    /* --- gokollab activation ---------------------------------------------- */
+    'Create Your First Course or Community': 'Vytvořte svůj první kurz nebo komunitu',
+    'Get started by creating your first course or community to engage with your audience': 'Začněte vytvořením prvního kurzu nebo komunity a zapojte své publikum',
+    'Why GoKollab Courses?': 'Proč kurzy GoKollab?',
+    'Create Courses Faster': 'Vytvářejte kurzy rychleji',
+    'Launch professional courses quickly with easy-to-use tools and templates.': 'Spusťte profesionální kurzy rychle díky snadno ovladatelným nástrojům a šablonám.',
+    'Customize Your Course Experience': 'Přizpůsobte zážitek ze svého kurzu',
+    'Add quizzes, certificates, and drip content—tailored to your teaching style.': 'Přidejte kvízy, certifikáty a postupně uvolňovaný obsah – na míru vašemu stylu výuky.',
+    'Earn on Your Terms': 'Vydělávejte podle svých pravidel',
+    'Set your own pricing and control your revenue streams.': 'Nastavte si vlastní ceny a mějte tržby pod kontrolou.',
+    'Track Performance Easily': 'Snadno sledujte výkon',
+    'Get insights with simple analytics to monitor sales, engagement, and student progress.': 'Získejte přehled díky jednoduché analytice sledující prodeje, zapojení a pokrok studentů.',
+
+    /* --- branded mobile app ----------------------------------------------- */
+    'Branded Mobile App Builder': 'Tvůrce značkové mobilní aplikace',
+    'Customize your mobile app’s icon, and onboarding experience for a fully branded user journey.': 'Přizpůsobte ikonu a úvodní zážitek své mobilní aplikace pro plně značkovou cestu uživatele.',
+    "Customize your mobile app's icon, and onboarding experience for a fully branded user journey.": 'Přizpůsobte ikonu a úvodní zážitek své mobilní aplikace pro plně značkovou cestu uživatele.',
+    'Branded App Get Started': 'Značková aplikace – začínáme',
+    'Branded App Helper': 'Značková aplikace – nápověda',
+    'Learn more about setting up a branded app': 'Více o nastavení značkové aplikace',
+    'Get started with branded app': 'Začít se značkovou aplikací',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'kvě', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -2326,6 +2513,28 @@
     return 'před ' + n + ' ' + unit;
   }
 
+  /* "Showing 1 to 1 of 1 results" -- the older table's pagination footer */
+  var SHOWING_OF  = /^Showing (\d+) to (\d+) of (\d+) results?$/i;
+
+  /* "18 Hrs" -- the analytics stat tile */
+  var N_HRS       = /^(\d+)\s*Hrs?$/i;
+  /* "3 total members" */
+  var TOTAL_MEM   = /^(\d+)\s+total members?$/i;
+  /* "Last updated: 3 minutes ago" -- the tail is translated recursively */
+  var LAST_UPD    = /^Last updated:\s*(.+)$/i;
+  /* "3 minutes ago" / "1 hour ago" -- long-form relative timestamps */
+  var REL_LONG    = /^(\d+)\s+(second|minute|hour|day|week|month)s?\s+ago$/i;
+  function relLongCz(n, u) {
+    u = u.toLowerCase();
+    var unit = u === 'second' ? czPlural(n, 'sekundou', 'sekundami', 'sekundami')
+             : u === 'minute' ? czPlural(n, 'minutou', 'minutami', 'minutami')
+             : u === 'hour'   ? czPlural(n, 'hodinou', 'hodinami', 'hodinami')
+             : u === 'day'    ? czPlural(n, 'dnem', 'dny', 'dny')
+             : u === 'week'   ? czPlural(n, 'týdnem', 'týdny', 'týdny')
+             :                  czPlural(n, 'měsícem', 'měsíci', 'měsíci');
+    return 'před ' + n + ' ' + unit;
+  }
+
   var MONTH_ABBR = {
     jan: 'led', feb: 'úno', mar: 'bře', apr: 'dub', may: 'kvě', jun: 'čvn',
     jul: 'čvc', aug: 'srp', sep: 'zář', oct: 'říj', nov: 'lis', dec: 'pro'
@@ -2538,6 +2747,25 @@
 
     var q7 = PER_PAGE.exec(key);
     if (q7) return q7[1] + ' / stránku';
+
+    var sw = SHOWING_OF.exec(key);
+    if (sw) return 'Zobrazeno ' + sw[1] + '–' + sw[2] + ' z celkem ' + sw[3];
+
+    var h1 = N_HRS.exec(key);
+    if (h1) return h1[1] + ' h';
+
+    var h2 = TOTAL_MEM.exec(key);
+    if (h2) return 'Celkem ' + h2[1] + ' ' +
+      czPlural(parseInt(h2[1], 10), 'člen', 'členové', 'členů');
+
+    var h3 = REL_LONG.exec(key);
+    if (h3) return relLongCz(parseInt(h3[1], 10), h3[2]);
+
+    var h4 = LAST_UPD.exec(key);
+    if (h4) {
+      var tail = translate(h4[1]);
+      return 'Naposledy aktualizováno: ' + (tail !== null ? tail : h4[1]);
+    }
 
     /* "Created (PDT)" -- translate the label, keep the timezone abbreviation */
     var m6 = ABBR_PAREN.exec(key);
