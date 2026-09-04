@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v21';
+  var VERSION = 'v22';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1604,6 +1604,210 @@
     'header': 'záhlaví',
     'footer': 'zápatí',
 
+    /* ===================================================================
+       OPPORTUNITIES -- deep pass (v22). Reached with a throwaway pipeline
+       in the DUMMY sub-account; everything below is default system copy.
+       =================================================================== */
+
+    /* --- pipeline row menu + its dialogs ------------------------------ */
+    'Copy to sub-accounts': 'Kopírovat do sub-účtů',
+    'Manage permissions': 'Spravovat oprávnění',
+    'Copy link': 'Kopírovat odkaz',
+    'Move to position': 'Přesunout na pozici',
+    'Link copied!': 'Odkaz zkopírován!',
+    'Edit Pipeline': 'Upravit obchodní kanál',
+    'Reorder pipeline': 'Změnit pořadí obchodních kanálů',
+    'Select a pipeline': 'Vyberte obchodní kanál',
+    'New pipeline': 'Nový obchodní kanál',
+
+    /* --- pipeline sharing & permissions panel ------------------------- */
+    /* HighLevel splits this sentence around the pipeline name, so it is two
+       separate text nodes; the Czech is worded to read correctly either way. */
+    'Set who can view or edit the': 'Nastavte, kdo může zobrazovat nebo upravovat obchodní kanál',
+    'pipeline. Admins always have full access.': '– správci mají vždy plný přístup.',
+    'Access settings': 'Nastavení přístupu',
+    'Share with all users': 'Sdílet se všemi uživateli',
+    'Share with selected users': 'Sdílet s vybranými uživateli',
+    'Exclude selected users': 'Vyloučit vybrané uživatele',
+    'View only': 'Pouze zobrazení',
+    'No access': 'Bez přístupu',
+    'Add users': 'Přidat uživatele',
+    'Select users': 'Vyberte uživatele',
+    'Permissions': 'Oprávnění',
+    'No users selected': 'Nejsou vybráni žádní uživatelé',
+    'Add users to control who can access and manage this pipeline and its opportunities.': 'Přidejte uživatele a určete, kdo má přístup k tomuto obchodnímu kanálu a jeho příležitostem a kdo je může spravovat.',
+    'No Data': 'Žádná data',
+
+    /* --- unsaved-changes dialogs (used across the whole app) ---------- */
+    'Do you want to discard change(s)?': 'Chcete změny zahodit?',
+    'Keep editing': 'Pokračovat v úpravách',
+    'If you discard changes, you will lose all the information you had entered.': 'Pokud změny zahodíte, přijdete o všechny zadané informace.',
+
+    /* --- copy pipeline to sub-accounts -------------------------------- */
+    'Stages and chart visibility will be copied.': 'Zkopírují se fáze a viditelnost grafů.',
+    'Records, custom fields, permissions, smart tags, and automations won’t be copied.': 'Záznamy, vlastní pole, oprávnění, chytré štítky a automatizace se nezkopírují.',
+    'Select sub-accounts': 'Vyberte sub-účty',
+    'Search sub-accounts': 'Hledat sub-účty',
+    'Copy': 'Kopírovat',
+    'You can select up to 25 sub-accounts': 'Můžete vybrat až 25 sub-účtů',
+
+    /* --- duplicate pipeline ------------------------------------------- */
+    'Duplicate pipeline': 'Duplikovat obchodní kanál',
+    'Stages, permissions, colored smart tags, and chart visibility will be copied.': 'Zkopírují se fáze, oprávnění, barevné chytré štítky a viditelnost grafů.',
+    'Records, automations, reports, and custom fields won’t be copied.': 'Záznamy, automatizace, reporty a vlastní pole se nezkopírují.',
+
+    /* --- delete pipeline ---------------------------------------------- */
+    'Delete pipeline': 'Smazat obchodní kanál',
+    'This action will remove the selected pipeline and:': 'Tato akce odstraní vybraný obchodní kanál a:',
+    'Permanently remove all opportunities and data inside this pipeline': 'Trvale odstraní všechny příležitosti a data v tomto obchodním kanálu',
+    'Stop any active campaigns and workflows linked to it': 'Zastaví všechny aktivní kampaně a workflow, které jsou s ním propojené',
+    /* the confirmation word must stay the literal English DELETE or the
+       form can never be submitted -- only the instruction is translated */
+    'Type “DELETE” to confirm': 'Pro potvrzení napište „DELETE“',
+    'Enter DELETE': 'Zadejte DELETE',
+    'This action cannot be undone.': 'Tuto akci nelze vrátit zpět.',
+
+    /* --- opportunities board ------------------------------------------ */
+    'Try updating or clearing your filters to find opportunities.': 'Zkuste upravit nebo vymazat filtry, abyste našli příležitosti.',
+    'Empty state illustration': 'Ilustrace prázdného stavu',
+    'Restore opportunities': 'Obnovit příležitosti',
+    'Manage smart lists': 'Spravovat chytré seznamy',
+    'Dashboard insights': 'Přehledy na nástěnce',
+    'Board view': 'Zobrazení tabule',
+    'Board': 'Tabule',
+    'View opportunities as cards in each stage.': 'Zobrazit příležitosti jako karty v jednotlivých fázích.',
+    'View opportunities in a table format.': 'Zobrazit příležitosti v tabulce.',
+
+    /* --- manage views -------------------------------------------------- */
+    'Manage views': 'Spravovat zobrazení',
+    'Manage where views appear and which views are set as default.': 'Spravujte, kde se zobrazení objevují a která jsou nastavena jako výchozí.',
+    'View': 'Zobrazení',
+    'Search views': 'Hledat zobrazení',
+    'No smart views have been created yet.': 'Zatím nebyla vytvořena žádná chytrá zobrazení.',
+    'Create a smart view to organize and manage your opportunities.': 'Vytvořte chytré zobrazení pro uspořádání a správu vašich příležitostí.',
+
+    /* --- dashboard insights modal ------------------------------------- */
+    'Add relevant insights to your dashboard': 'Přidejte na nástěnku relevantní přehledy',
+    'Select a dashboard and choose widgets tailored to your needs. Widgets will be added instantly for deeper insights.': 'Vyberte nástěnku a zvolte widgety podle svých potřeb. Widgety se přidají okamžitě a poskytnou hlubší přehled.',
+    'Select dashboard': 'Vyberte nástěnku',
+    'Selected widgets': 'Vybrané widgety',
+    'Opportunity count': 'Počet příležitostí',
+    'Opened Opportunities': 'Otevřené příležitosti',
+    'Won Opportunities': 'Vyhrané příležitosti',
+    'Lost Opportunities by reason': 'Prohrané příležitosti podle důvodu',
+    'Opportunity counts over time': 'Počet příležitostí v čase',
+    'Opportunity revenue over time': 'Tržby z příležitostí v čase',
+    'Won Opportunity value': 'Hodnota vyhraných příležitostí',
+    'Lost Opportunity value': 'Hodnota prohraných příležitostí',
+    'Won Opportunities value this month (for you)': 'Hodnota vyhraných příležitostí tento měsíc (vaše)',
+    'Won Opportunities value this month': 'Hodnota vyhraných příležitostí tento měsíc',
+    'Confirm & add': 'Potvrdit a přidat',
+
+    /* --- advanced filters --------------------------------------------- */
+    'Is any of': 'Je některé z',
+    'Is none of': 'Není žádné z',
+    'Add nested filter': 'Přidat vnořený filtr',
+    'Add filter': 'Přidat filtr',
+    'Remove filter': 'Odebrat filtr',
+    'Sort by Select field': 'Řadit podle – vyberte pole',
+
+    /* --- opportunity fields (filter picker, sort, card builder) -------- */
+    'Last stage change date': 'Datum poslední změny fáze',
+    'Last status change date': 'Datum poslední změny stavu',
+    'Created on': 'Vytvořeno dne',
+    'Expected Close Date': 'Očekávané datum uzavření',
+    'Forecast Slippage Count': 'Počet posunů prognózy',
+    'Forecast Slippage (Days)': 'Posun prognózy (dny)',
+    'Opportunity won on': 'Příležitost vyhrána dne',
+    'Opportunity lost on': 'Příležitost prohrána dne',
+    'Company (Associated Company)': 'Společnost (přiřazená společnost)',
+    'Company (Associated Companies)': 'Společnost (přiřazené společnosti)',
+    'Days since last stage change': 'Dní od poslední změny fáze',
+    'Days since last status change': 'Dní od poslední změny stavu',
+    'Days since last update': 'Dní od poslední aktualizace',
+    'Next task due date': 'Termín dalšího úkolu',
+    'Days until next task': 'Dní do dalšího úkolu',
+    'Engagement score': 'Skóre zapojení',
+    'Days until next appointment': 'Dní do další schůzky',
+    'Contact’s email': 'E-mail kontaktu',
+    'Contact’s phone': 'Telefon kontaktu',
+    "Contact's email": 'E-mail kontaktu',
+    "Contact's phone": 'Telefon kontaktu',
+    'Opportunity owner': 'Vlastník příležitosti',
+    'Smart tags': 'Chytré štítky',
+    'Other details': 'Další podrobnosti',
+    'Primary contact details': 'Údaje hlavního kontaktu',
+
+    /* --- customize card panel ----------------------------------------- */
+    'Customize card': 'Přizpůsobit kartu',
+    'Card preview': 'Náhled karty',
+    'Card layout': 'Rozvržení karty',
+    'Compact': 'Kompaktní',
+    'Unlabeled': 'Bez popisků',
+    'Stale': 'Zastaralé',
+    'Business name:': 'Název firmy:',
+    'Source:': 'Zdroj:',
+    'Value:': 'Hodnota:',
+    'Lost reason:': 'Důvod prohry:',
+    'Contact:': 'Kontakt:',
+    /* demo values inside the card preview (not customer data) */
+    'Referral': 'Doporučení',
+    'Budget Constraints': 'Rozpočtová omezení',
+    'You can only add up to 8 fields.': 'Můžete přidat maximálně 8 polí.',
+    'Count for each action will be shown in the card wherever applicable.': 'Počet u každé akce se zobrazí na kartě, kde to dává smysl.',
+    'Unread conversations': 'Nepřečtené konverzace',
+    'Next confirmed appointment': 'Další potvrzená schůzka',
+
+    /* --- add-opportunity modal ---------------------------------------- */
+    'Add new opportunity': 'Přidat novou příležitost',
+    'Create new opportunity by filling in details and selecting a contact': 'Vytvořte novou příležitost vyplněním údajů a výběrem kontaktu',
+    'Primary contact name': 'Jméno hlavního kontaktu',
+    'Primary email': 'Hlavní e-mail',
+    'Enter email': 'Zadejte e-mail',
+    'Primary phone': 'Hlavní telefon',
+    'Enter phone': 'Zadejte telefon',
+    'Enter opportunity name': 'Zadejte název příležitosti',
+    'Add followers': 'Přidat odběratele',
+    'Enter business name': 'Zadejte název firmy',
+    'Enter source': 'Zadejte zdroj',
+    'Abandon': 'Opuštěno',
+
+    /* --- smart-list side panel ---------------------------------------- */
+    'Show in': 'Zobrazit v',
+    'Default view': 'Výchozí zobrazení',
+    'None': 'Žádné',
+    'Selected pipelines': 'Vybrané obchodní kanály',
+    'Choose one or more pipelines.': 'Vyberte jeden nebo více obchodních kanálů.',
+    'This only controls where the view appears. Filters, fields, and sorting stay the same.': 'Toto určuje pouze, kde se zobrazení objeví. Filtry, pole a řazení zůstávají stejné.',
+
+    /* --- settings > audit logs (reached from "Restore opportunities";
+           the full Module dropdown is deferred to the Settings pass) ---- */
+    'Track and monitor all system activities, user actions, and data changes across your account': 'Sledujte a monitorujte veškerou aktivitu systému, akce uživatelů a změny dat napříč vaším účtem',
+    'Exports': 'Exporty',
+    'Search by Document ID': 'Hledat podle ID dokumentu',
+    'Module': 'Modul',
+    'Action': 'Akce',
+    'Done By': 'Provedl',
+    'No audit logs found': 'Nebyly nalezeny žádné protokoly auditu',
+    'No audit logs match your current filters': 'Žádné protokoly auditu neodpovídají aktuálním filtrům',
+    'Action - All': 'Akce – vše',
+    'Module - All': 'Modul – vše',
+    'Deleted': 'Smazáno',
+    'Deleted (Contact Merge)': 'Smazáno (sloučení kontaktů)',
+    'Restored': 'Obnoveno',
+    'Tag Added': 'Štítek přidán',
+    'Tag Removed': 'Štítek odebrán',
+    'Updated (Contact Merge)': 'Aktualizováno (sloučení kontaktů)',
+    'Agency': 'Agentura',
+    'AI Plan': 'AI plán',
+    'API Key': 'API klíč',
+    'Association': 'Vazba',
+    'Calendar Event': 'Událost kalendáře',
+    'Calendar Integrations': 'Integrace kalendáře',
+    'Tag category': 'Kategorie štítků',
+    'Task': 'Úkol',
+    'URL Redirects': 'Přesměrování URL',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'kvě', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -1770,6 +1974,40 @@
     may: 'květen', jun: 'červen', jul: 'červenec', aug: 'srpen',
     sep: 'září', oct: 'říjen', nov: 'listopad', dec: 'prosinec'
   };
+  /* "4 opportunities" / "1 opportunity" */
+  var N_OPPS      = /^(\d+)\s+opportunit(?:y|ies)$/i;
+  /* "1 pipeline" / "3 pipelines" */
+  var N_PIPES     = /^(\d+)\s+pipelines?$/i;
+  /* "1 applied" -- filter/sort chip counters in the smart-list panel */
+  var N_APPLIED   = /^(\d+)\s+applied$/i;
+  /* "Fields (7 out of 8)" */
+  var OUT_OF      = /^(.+?)\s*\((\d+)\s+out of\s+(\d+)\)$/i;
+  /* "Currently at position 1 of 1" */
+  var POS_OF      = /^Currently at position (\d+) of (\d+)$/i;
+  /* Delete pipeline "X"? -- curly or straight quotes */
+  var DEL_PIPE    = /^Delete pipeline\s+[“"](.+)[”"]\?$/;
+  /* "You have 1 unsaved change(s)" */
+  var UNSAVED_N   = /^You have (\d+) unsaved change\(s\)$/i;
+  /* "Pipeline - ZZ-TEST" (board header tooltip) */
+  var PIPE_DASH   = /^Pipeline - (.+)$/;
+  /* "Sep 4, 2026" -- a date cell with no time beside it */
+  var DATE_ABBR   = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/;
+  /* "Sep 5th, 9:00 pm" -- ordinal date + 12h time (card preview, chips) */
+  var ORD_STAMP   = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(?:st|nd|rd|th),\s*(\d{1,2}):(\d{2})\s*(am|pm)$/i;
+  /* "1:04 AM" -- a bare 12h clock cell; Czech uses a 24h clock */
+  var TIME_AMPM   = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
+  /* genitive month names keyed by the 3-letter English abbreviation */
+  var MONTH_GEN_ABBR = {
+    jan: 'ledna', feb: 'února', mar: 'března', apr: 'dubna',
+    may: 'května', jun: 'června', jul: 'července', aug: 'srpna',
+    sep: 'září', oct: 'října', nov: 'listopadu', dec: 'prosince'
+  };
+  function to24(h, ampm) {
+    var n = parseInt(h, 10) % 12;
+    if (/pm/i.test(ampm)) n += 12;
+    return n < 10 ? '0' + n : String(n);
+  }
+
   var MONTH_ABBR = {
     jan: 'led', feb: 'úno', mar: 'bře', apr: 'dub', may: 'kvě', jun: 'čvn',
     jul: 'čvc', aug: 'srp', sep: 'zář', oct: 'říj', nov: 'lis', dec: 'pro'
@@ -1918,6 +2156,46 @@
 
     var my = MON_YEAR.exec(key);
     if (my) return MON_FULL_CZ[my[1].toLowerCase()] + ' ' + my[2];
+
+    var o1 = N_OPPS.exec(key);
+    if (o1) return o1[1] + ' ' +
+      czPlural(parseInt(o1[1], 10), 'příležitost', 'příležitosti', 'příležitostí');
+
+    var o2 = N_PIPES.exec(key);
+    if (o2) return o2[1] + ' ' +
+      czPlural(parseInt(o2[1], 10), 'obchodní kanál', 'obchodní kanály', 'obchodních kanálů');
+
+    var o3 = N_APPLIED.exec(key);
+    if (o3) return 'Použito: ' + o3[1];
+
+    var o4 = OUT_OF.exec(key);
+    if (o4) {
+      var ob = plain(o4[1]);
+      if (ob !== null) return ob + ' (' + o4[2] + ' z ' + o4[3] + ')';
+    }
+
+    var o5 = POS_OF.exec(key);
+    if (o5) return 'Aktuálně na pozici ' + o5[1] + ' z ' + o5[2];
+
+    var o6 = DEL_PIPE.exec(key);
+    if (o6) return 'Smazat obchodní kanál „' + o6[1] + '“?';
+
+    var o7 = UNSAVED_N.exec(key);
+    if (o7) return 'Máte ' + o7[1] + ' ' +
+      czPlural(parseInt(o7[1], 10), 'neuloženou změnu', 'neuložené změny', 'neuložených změn');
+
+    var o8 = PIPE_DASH.exec(key);
+    if (o8) return 'Obchodní kanál – ' + o8[1];
+
+    var o9 = ORD_STAMP.exec(key);
+    if (o9) return o9[2] + '. ' + MONTH_ABBR[o9[1].toLowerCase()] + ', ' +
+                to24(o9[3], o9[5]) + ':' + o9[4];
+
+    var d1 = DATE_ABBR.exec(key);
+    if (d1) return d1[2] + '. ' + MONTH_GEN_ABBR[d1[1].toLowerCase()] + ' ' + d1[3];
+
+    var t9 = TIME_AMPM.exec(key);
+    if (t9) return to24(t9[1], t9[3]) + ':' + t9[2];
 
     /* "Created (PDT)" -- translate the label, keep the timezone abbreviation */
     var m6 = ABBR_PAREN.exec(key);
