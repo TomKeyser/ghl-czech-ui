@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v22';
+  var VERSION = 'v23';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -1808,6 +1808,300 @@
     'Task': 'Úkol',
     'URL Redirects': 'Přesměrování URL',
 
+    /* ===================================================================
+       MARKETING -- deep pass (v23).
+       NOT COVERABLE (cross-origin iframes, confirmed by contentDocument):
+         Marketing > E-maily      -> email-home-prod.leadconnectorhq.com
+         Marketing > Spravce partneru (all 7 sub-routes)
+                                  -> client-app-affiliate-manager.leadconnectorhq.com
+       =================================================================== */
+
+    /* --- social planner ------------------------------------------------ */
+    'One unified platform to manage all your social media. Create content once and publish it automatically across Facebook, Instagram, LinkedIn, TikTok, and more.': 'Jedna platforma pro správu všech vašich sociálních sítí. Vytvořte obsah jednou a publikujte jej automaticky na Facebooku, Instagramu, LinkedInu, TikToku a dalších.',
+    'Major networks': 'Hlavní sítě',
+    '+ Connect': '+ Připojit',
+    'Connect': 'Připojit',
+    'Import and schedule multiple posts at once using CSV files for efficient content management': 'Importujte a naplánujte více příspěvků najednou pomocí CSV souborů pro efektivní správu obsahu',
+    'Create a library of timeless content that automatically recycles to keep your feed fresh': 'Vytvořte knihovnu nadčasového obsahu, který se automaticky opakuje a udržuje váš feed svěží',
+    'Set up posts that automatically repeat on a schedule to maintain consistent engagement': 'Nastavte příspěvky, které se automaticky opakují podle plánu a udržují stálé zapojení',
+    'Automatically create and share posts from your favorite RSS feeds to stay current': 'Automaticky vytvářejte a sdílejte příspěvky z vašich oblíbených RSS kanálů a zůstaňte v obraze',
+    '9:00 AM · Tue & Thu': '9:00 · út a čt',
+
+    /* --- text snippets (shared by Marketing and Conversations) --------- */
+    'Create snippets to quickly insert predefined content into messages for faster, consistent communication.': 'Vytvářejte úryvky pro rychlé vkládání předdefinovaného obsahu do zpráv – pro rychlejší a konzistentní komunikaci.',
+    'New Snippet': 'Nový úryvek',
+    'All Snippets': 'Všechny úryvky',
+    'Body': 'Obsah',
+    'Folder': 'Složka',
+    'Date Updated': 'Datum aktualizace',
+    'No data available!': 'Nejsou k dispozici žádná data!',
+    'Add Text Snippet': 'Přidat textový úryvek',
+    'Add Email Snippet': 'Přidat e-mailový úryvek',
+    'Create Text Snippet': 'Vytvořit textový úryvek',
+    'Create Email Snippet': 'Vytvořit e-mailový úryvek',
+    'Create and reuse text snippets for quick access via shortcuts. Save your go-to phrases and speed up your workflow.': 'Vytvářejte a znovu používejte textové úryvky s rychlým přístupem přes zkratky. Uložte si oblíbené fráze a zrychlete svou práci.',
+    'Create and reuse email snippets for quick access via shortcuts. Save your go-to phrases and speed up your workflow.': 'Vytvářejte a znovu používejte e-mailové úryvky s rychlým přístupem přes zkratky. Uložte si oblíbené fráze a zrychlete svou práci.',
+    'Enter Snippet Name': 'Zadejte název úryvku',
+    'Enter Subject': 'Zadejte předmět',
+    'Snippets Body': 'Obsah úryvku',
+    'Add Attachment': 'Přidat přílohu',
+    'Add file through URL': 'Přidat soubor přes URL',
+    'Enter URL': 'Zadejte URL',
+    'Test Snippet': 'Otestovat úryvek',
+    'Test Email Snippet': 'Otestovat e-mailový úryvek',
+    'From Email Address': 'Odesílatel (e-mail)',
+    'To Email Address': 'Příjemce (e-mail)',
+    'Send Test': 'Odeslat test',
+    'Create new folder': 'Vytvořit novou složku',
+    'Enter a folder name': 'Zadejte název složky',
+
+    /* --- emoji picker + rich-text toolbar (every editor in the app) ---- */
+    'Search emoji': 'Hledat emoji',
+    'Recently Used': 'Naposledy použité',
+    'Smiles & People': 'Smajlíci a lidé',
+    'Animals & Nature': 'Zvířata a příroda',
+    'Food & Drink': 'Jídlo a pití',
+    'Travel & Places': 'Cestování a místa',
+    'Symbols': 'Symboly',
+    'Flags': 'Vlajky',
+    'Background Color': 'Barva pozadí',
+    'Bullet List': 'Odrážkový seznam',
+    'Ordered List': 'Číslovaný seznam',
+    'Strikethrough': 'Přeškrtnutí',
+    'Superscript': 'Horní index',
+    'Subscript': 'Dolní index',
+    'Inline Code Block': 'Řádkový kód',
+    'Code Block': 'Blok kódu',
+    'Block Quote': 'Citace',
+    'Embed Link': 'Vložit odkaz',
+    'Embed Image': 'Vložit obrázek',
+    'Heading 1': 'Nadpis 1', 'Heading 2': 'Nadpis 2', 'Heading 3': 'Nadpis 3',
+    'Heading 4': 'Nadpis 4', 'Heading 5': 'Nadpis 5', 'Heading 6': 'Nadpis 6',
+
+    /* --- countdown timers ---------------------------------------------- */
+    'Countdown Timer': 'Odpočet',
+    'Create and manage your countdown timer templates': 'Vytvářejte a spravujte šablony odpočtů',
+    'Search timer': 'Hledat odpočet',
+    'End Date/Duration': 'Datum konce / trvání',
+    'Create your first countdown timer': 'Vytvořte svůj první odpočet',
+    'Time’s not ticking yet! Let’s set your first countdown timer.': 'Čas ještě neběží! Nastavme váš první odpočet.',
+    "Time's not ticking yet! Let's set your first countdown timer.": 'Čas ještě neběží! Nastavme váš první odpočet.',
+    'Expiry status': 'Stav vypršení',
+    'Fixed': 'Pevný',
+    'Recurring': 'Opakující se',
+    'Dynamic': 'Dynamický',
+    'Select a template to get started': 'Vyberte šablonu a začněte',
+    'Select a template': 'Vyberte šablonu',
+    'Minimalist': 'Minimalistický',
+    'Simple Timer': 'Jednoduchý odpočet',
+    'Progress Timer': 'Odpočet s průběhem',
+    'Timer Ring': 'Kruhový odpočet',
+    'Countdown Wheel': 'Kolo odpočtu',
+    'Deadline Dial': 'Ciferník termínu',
+    'Round Grid Timer': 'Kulatý mřížkový odpočet',
+    'Array View Timer': 'Odpočet v poli',
+    'Square Box Timer': 'Čtvercový odpočet',
+    'Continue with this template ->': 'Pokračovat s touto šablonou ->',
+    'Untitled countdown timer': 'Nepojmenovaný odpočet',
+    'Copy code': 'Kopírovat kód',
+    'General': 'Obecné',
+    'Styling': 'Vzhled',
+    'Timer type': 'Typ odpočtu',
+    'Timer end date': 'Datum konce odpočtu',
+    /* NOTE: the word "on" that follows this string is left in English on
+       purpose -- see the deliberate-skip list in the v23 commit message. */
+    'The subscriber’s timer will end at': 'Odpočet odběratele skončí v',
+    "The subscriber's timer will end at": 'Odpočet odběratele skončí v',
+    'Adapt to Contact’s Time Zone': 'Přizpůsobit časovému pásmu kontaktu',
+    "Adapt to Contact's Time Zone": 'Přizpůsobit časovému pásmu kontaktu',
+    'Active timer leads to link': 'Aktivní odpočet vede na odkaz',
+    'Expired timer leads to link': 'Vypršelý odpočet vede na odkaz',
+    'Select Date and Time': 'Vyberte datum a čas',
+    'Automatically adapts end time to the Contact’s local time zone for a personalized experience.': 'Automaticky přizpůsobí čas konce místnímu časovému pásmu kontaktu pro osobnější zážitek.',
+    "Automatically adapts end time to the Contact's local time zone for a personalized experience.": 'Automaticky přizpůsobí čas konce místnímu časovému pásmu kontaktu pro osobnější zážitek.',
+    'Page users will land on after clicking the timer when it’s active.': 'Stránka, na kterou uživatelé přejdou po kliknutí na aktivní odpočet.',
+    "Page users will land on after clicking the timer when it's active.": 'Stránka, na kterou uživatelé přejdou po kliknutí na aktivní odpočet.',
+    'Page users will land on when the timer expires.': 'Stránka, na kterou uživatelé přejdou po vypršení odpočtu.',
+    'Change template': 'Změnit šablonu',
+    'Labels': 'Popisky',
+    'Days': 'Dny',
+    'Hours': 'Hodiny',
+    'Minutes': 'Minuty',
+    'Seconds': 'Sekundy',
+    'Visible': 'Viditelné',
+    'Hidden': 'Skryté',
+    'Typography': 'Typografie',
+    'Counter font': 'Písmo počítadla',
+    'Label font': 'Písmo popisku',
+    'Corner Radius': 'Zaoblení rohů',
+    'Color options': 'Možnosti barev',
+    'Counter color': 'Barva počítadla',
+    'Label color': 'Barva popisku',
+    'Separator color': 'Barva oddělovače',
+    'Transparent background (Coming soon)': 'Průhledné pozadí (již brzy)',
+    'Expiration image': 'Obrázek po vypršení',
+    'Image URL': 'URL obrázku',
+    'Padding': 'Vnitřní okraj',
+    'Margin': 'Vnější okraj',
+    'Hide Timer in Apple Mail': 'Skrýt odpočet v Apple Mail',
+    'Slider Handle': 'Táhlo posuvníku',
+    'Template preview': 'Náhled šablony',
+    'Countdown timer preview': 'Náhled odpočtu',
+    'Normal': 'Normální',
+    'Bolder': 'Tučnější',
+    'Lighter': 'Tenčí',
+    'Units of time to indicate the remaining duration': 'Jednotky času udávající zbývající dobu',
+    'Edit the font styles used in the timer.': 'Upravte styly písma použité v odpočtu.',
+    'Edit the colors used in the timer': 'Upravte barvy použité v odpočtu',
+    'Replace the timer with this image in your emails when it expires.': 'Po vypršení nahradí odpočet ve vašich e-mailech tímto obrázkem.',
+
+    /* --- trigger links --------------------------------------------------- */
+    'Trigger links allow you to put links inside SMS messages and emails, which allow you to track specific customer actions and trigger events based on when the link is clicked.': 'Spouštěcí odkazy umožňují vkládat odkazy do SMS zpráv a e-mailů, sledovat konkrétní akce zákazníků a spouštět události podle toho, kdy na odkaz kliknou.',
+    'Link': 'Odkaz',
+    'Analyze': 'Analyzovat',
+    'Link Key': 'Klíč odkazu',
+    'No links available': 'Nejsou dostupné žádné odkazy',
+    'Add Trigger Link': 'Přidat spouštěcí odkaz',
+    'Enter Link URL': 'Zadejte URL odkazu',
+    'Index': 'Pořadí',
+    'Clicks': 'Kliknutí',
+    'No records found': 'Nebyly nalezeny žádné záznamy',
+    'Refresh Analytics Data': 'Obnovit data analytiky',
+
+    /* --- brand boards ---------------------------------------------------- */
+    'Personalize your texts, colors, and other brand essentials': 'Přizpůsobte si texty, barvy a další prvky vaší značky',
+    'Global settings': 'Globální nastavení',
+    'Design Kit': 'Designová sada',
+    'Brand Voice': 'Hlas značky',
+    'Customize your brand’s visual identity by managing logos, colors, and design elements for consistent communication across all platforms.': 'Přizpůsobte vizuální identitu své značky správou log, barev a designových prvků pro konzistentní komunikaci na všech platformách.',
+    "Customize your brand's visual identity by managing logos, colors, and design elements for consistent communication across all platforms.": 'Přizpůsobte vizuální identitu své značky správou log, barev a designových prvků pro konzistentní komunikaci na všech platformách.',
+    'Add Design Kit': 'Přidat designovou sadu',
+    'Create your first Brand Board': 'Vytvořte svou první nástěnku značky',
+    'Create a new Brand Board with a splash of color': 'Vytvořte novou nástěnku značky s trochou barvy',
+    'Define your brand’s tone and messaging guidelines to maintain consistency in all written communication': 'Definujte tón a zásady sdělení vaší značky pro konzistenci ve veškeré písemné komunikaci',
+    "Define your brand's tone and messaging guidelines to maintain consistency in all written communication": 'Definujte tón a zásady sdělení vaší značky pro konzistenci ve veškeré písemné komunikaci',
+    'Add Brand Voice': 'Přidat hlas značky',
+    'Define your Brand Voice': 'Definujte hlas své značky',
+    'Set your tone and style to ensure consistent messaging across all channels': 'Nastavte tón a styl pro konzistentní sdělení napříč všemi kanály',
+    'Create new Brand Voice': 'Vytvořit nový hlas značky',
+    'Define tone and style for your brand.': 'Definujte tón a styl pro vaši značku.',
+    'Start from scratch': 'Začít od nuly',
+    'Create manually from scratch': 'Vytvořit ručně od nuly',
+    'Text or URL': 'Text nebo URL',
+    'Auto-fill using scraped data': 'Automaticky vyplnit z načtených dat',
+    'UI Modal': 'Dialogové okno',
+    'Clone': 'Klonovat',
+    'Delete confirmation': 'Potvrzení smazání',
+    'Are you sure to delete this Brand Board?': 'Opravdu chcete tuto nástěnku značky smazat?',
+    'Centralized configurations that, when modified, can impact existing designs or linked assets.': 'Centrální nastavení, jejichž změna může ovlivnit stávající návrhy nebo propojené prvky.',
+    'Custom fonts': 'Vlastní písma',
+    'Custom colors': 'Vlastní barvy',
+    'Search fonts': 'Hledat písma',
+    'Search colors': 'Hledat barvy',
+    'Google Fonts may not display in all email clients. A fallback font will be used when needed.': 'Google Fonts se nemusí zobrazit ve všech e-mailových klientech. V případě potřeby se použije záložní písmo.',
+    'Upload fonts': 'Nahrát písma',
+    'Upload font file': 'Nahrát soubor s písmem',
+    'No custom fonts uploaded yet': 'Zatím nebyla nahrána žádná vlastní písma',
+    'Custom fonts are fonts you upload to match and maintain your brand’s unique typography.': 'Vlastní písma jsou písma, která nahrajete, aby odpovídala jedinečné typografii vaší značky.',
+    "Custom fonts are fonts you upload to match and maintain your brand's unique typography.": 'Vlastní písma jsou písma, která nahrajete, aby odpovídala jedinečné typografii vaší značky.',
+    'No global custom colors yet': 'Zatím žádné globální vlastní barvy',
+    'Start adding colors to keep your designs in sync.': 'Začněte přidávat barvy, aby vaše návrhy zůstaly jednotné.',
+    'Create your Brand Board': 'Vytvořte svou nástěnku značky',
+    'Start by importing your brand using your website URL, or choose a preset style to begin.': 'Začněte importem své značky pomocí URL webu, nebo zvolte přednastavený styl.',
+    'Pull in your brand colors, logo, and fonts instantly using your website URL.': 'Okamžitě načtěte barvy, logo a písma své značky pomocí URL vašeho webu.',
+    'Import Brand Kit': 'Importovat sadu značky',
+    'Or choose from below': 'Nebo vyberte z níže uvedených',
+    'Choose': 'Vybrat',
+    'Start from blank': 'Začít s prázdnou',
+    'Earth': 'Země',
+    'Lagoon': 'Laguna',
+    'Elements': 'Živly',
+    'Tender': 'Něžná',
+    'Desert': 'Poušť',
+    'Dusk': 'Soumrak',
+    'Coffee': 'Káva',
+    'Template thumbnail': 'Náhled šablony',
+
+    /* --- brand voice builder -------------------------------------------- */
+    'New Brand Voice': 'Nový hlas značky',
+    'Set as default': 'Nastavit jako výchozí',
+    'Save Brand Voice': 'Uložit hlas značky',
+    'Business info': 'Informace o firmě',
+    'Enter your brand name here': 'Zde zadejte název své značky',
+    'Name of the brand, company or account': 'Název značky, firmy nebo účtu',
+    'Type of business': 'Typ podnikání',
+    'Select business type': 'Vyberte typ podnikání',
+    'Pick a niche': 'Vyberte obor',
+    'e.g., restaurant, food delivery, catering, etc.': 'např. restaurace, rozvoz jídla, catering apod.',
+    'Company website': 'Web firmy',
+    'Location and contact info': 'Adresa a kontaktní údaje',
+    'Company email': 'E-mail firmy',
+    'Company address': 'Adresa firmy',
+    'Enter address': 'Zadejte adresu',
+    'Phone number': 'Telefonní číslo',
+    'Business hours': 'Otevírací doba',
+    'Monday - Friday 8 AM - 5 PM, Saturday - Sunday closed': 'Pondělí – pátek 8:00–17:00, sobota a neděle zavřeno',
+    'Brand communication and personality': 'Komunikace a osobnost značky',
+    'Tone of voice': 'Tón komunikace',
+    'Professional': 'Profesionální',
+    'Friendly': 'Přátelský',
+    'Trustworthy': 'Důvěryhodný',
+    'Confident': 'Sebevědomý',
+    'Engaging': 'Poutavý',
+    'Empathetic': 'Empatický',
+    'Innovative': 'Inovativní',
+    'Choose a tone that aligns with how you want your audience to perceive your brand': 'Zvolte tón, který odpovídá tomu, jak má vaše publikum vnímat vaši značku',
+    'Brand identity and market positioning': 'Identita značky a pozice na trhu',
+    'Target audience': 'Cílové publikum',
+    'Describe your ideal audience (e.g., young professionals, small business owners)': 'Popište své ideální publikum (např. mladí profesionálové, majitelé malých firem)',
+    'Think about who your brand is primarily speaking to': 'Zamyslete se, ke komu vaše značka primárně mluví',
+    'Customer pain points': 'Bolestivá místa zákazníků',
+    'Describe what problems or frustrations does your audience face?': 'Popište, jaké problémy nebo frustrace vaše publikum řeší.',
+    'Identify key challenges that your brand helps solve': 'Určete klíčové problémy, které vaše značka pomáhá řešit',
+    'Brand promise': 'Slib značky',
+    'Summarize how your brand benefits your audience': 'Shrňte, jaký přínos má vaše značka pro publikum',
+    'Focus on the unique value you provide to your audience': 'Zaměřte se na jedinečnou hodnotu, kterou publiku přinášíte',
+    'Brand values': 'Hodnoty značky',
+    'Highlight what your brand opposes (e.g., poor customer service, inefficiency)': 'Zdůrazněte, proti čemu se vaše značka staví (např. špatná zákaznická podpora, neefektivita)',
+    'Identify something your brand does not compromise on': 'Určete něco, v čem vaše značka nedělá kompromisy',
+    'What does your brand do?': 'Co vaše značka dělá?',
+    'What do you offer? Share a bit about the services or products your brand provides.': 'Co nabízíte? Napište něco o službách nebo produktech vaší značky.',
+    'Focus on your brand’s core function': 'Zaměřte se na hlavní funkci vaší značky',
+    "Focus on your brand's core function": 'Zaměřte se na hlavní funkci vaší značky',
+    'What makes you better than competitors?': 'Čím jste lepší než konkurence?',
+    'Highlight your biggest advantage (e.g., better pricing, superior customer service, exclusive features)': 'Zdůrazněte svou největší výhodu (např. lepší ceny, špičková zákaznická podpora, exkluzivní funkce)',
+    'Why should customers choose you over others?': 'Proč by si zákazníci měli vybrat právě vás?',
+    'Unique selling proposition': 'Jedinečná prodejní nabídka',
+    'State what makes your brand stand out': 'Uveďte, čím se vaše značka odlišuje',
+    'Define what sets you apart in the market': 'Definujte, čím se na trhu odlišujete',
+    'Risks of inaction': 'Rizika nečinnosti',
+    'What happens if your audience doesn’t take action? (e.g., lost time, higher costs, missed opportunities)': 'Co se stane, když vaše publikum nezareaguje? (např. ztracený čas, vyšší náklady, promarněné příležitosti)',
+    "What happens if your audience doesn't take action? (e.g., lost time, higher costs, missed opportunities)": 'Co se stane, když vaše publikum nezareaguje? (např. ztracený čas, vyšší náklady, promarněné příležitosti)',
+    'Create urgency by explaining potential drawbacks of not engaging with your brand': 'Vytvořte naléhavost vysvětlením možných nevýhod toho, když se značkou nezačnou spolupracovat',
+    'Call to action': 'Výzva k akci',
+    'Describe the action you want users to take (e.g., book a ride, sign up)': 'Popište akci, kterou mají uživatelé provést (např. objednat jízdu, zaregistrovat se)',
+    'Specify the most important user action': 'Určete nejdůležitější akci uživatele',
+
+    /* --- ad manager landing --------------------------------------------- */
+    'Welcome To Ad Manager': 'Vítejte ve Správci reklam',
+    'One Platform. Unlimited Possibilities': 'Jedna platforma. Neomezené možnosti',
+    '🚀 Launch and Manage Ads across Facebook, Google & LinkedIn all in one place.': '🚀 Spouštějte a spravujte reklamy na Facebooku, Googlu i LinkedInu z jednoho místa.',
+    '📊 Track Performance, Conversions, and ROI with Detailed Analytics.': '📊 Sledujte výkon, konverze a ROI s podrobnou analytikou.',
+    '⚙️ Streamline Campaigns with Ready-to-Use Templates and Smart Automation.': '⚙️ Zefektivněte kampaně díky hotovým šablonám a chytré automatizaci.',
+    'Activate Ads Manager': 'Aktivovat Správce reklam',
+    'Multi-platform campaigns': 'Kampaně napříč platformami',
+    'Easily launch and manage ads across facebook, google and linkedin from one place.': 'Snadno spouštějte a spravujte reklamy na Facebooku, Googlu a LinkedInu z jednoho místa.',
+    'Proven templates for faster setup': 'Ověřené šablony pro rychlejší nastavení',
+    'Choose from ready-to-use ad templates designed to fit different industries and goals.': 'Vyberte si z hotových reklamních šablon navržených pro různé obory a cíle.',
+    'Detailed performance analytics': 'Podrobná analytika výkonu',
+    'View clear reporting at the campaign, ad group, ad and keyword levels to track ROI.': 'Přehledné reporty na úrovni kampaně, reklamní sestavy, reklamy i klíčového slova pro sledování ROI.',
+    'Seamless conversion tracking': 'Bezproblémové sledování konverzí',
+    'Set up pixels and event tracking effortlessly to measure leads, sales and conversions.': 'Snadno nastavte pixely a sledování událostí pro měření leadů, prodejů a konverzí.',
+    'Granular campaign structure': 'Podrobná struktura kampaní',
+    'Create multiple ad groups and ads within a campaign for testing and better performance insights.': 'Vytvářejte v rámci kampaně více reklamních sestav a reklam pro testování a lepší přehled o výkonu.',
+    'Easy scaling & management': 'Snadné škálování a správa',
+    'Duplicate campaigns, manage multiple ad accounts and streamline workflows for all your clients.': 'Duplikujte kampaně, spravujte více reklamních účtů a zjednodušte procesy pro všechny své klienty.',
+
     /* --- month names (also used by the date reformatter below) --- */
     'January': 'leden', 'February': 'únor', 'March': 'březen', 'April': 'duben',
     'May': 'kvě', 'June': 'červen', 'July': 'červenec', 'August': 'srpen',
@@ -2008,6 +2302,30 @@
     return n < 10 ? '0' + n : String(n);
   }
 
+  /* "3 new" -- RSS / notification counters */
+  var N_NEW       = /^(\d+)\s+new$/i;
+  /* "2m ago" / "15 m ago" -- relative timestamps */
+  var AGO         = /^(\d+)\s*([smhdw])\s+ago$/i;
+  /* "TechCrunch · 2m ago" -- a name followed by a relative timestamp */
+  var NAME_AGO    = /^(.+?)\s*·\s*(\d+)\s*([smhdw])\s+ago$/i;
+  /* "Approximate Cost: $0" */
+  var APPROX_COST = /^Approximate Cost:\s*(\$[\d.,]*)$/i;
+  /* "0 characters | 1 words" */
+  var CHARS_WORDS = /^(\d+)\s+characters?\s*\|\s*(\d+)\s+words?$/i;
+  /* "| 0 segs" -- the SMS segment counter renders as its own node */
+  var SEGS        = /^\|\s*(\d+)\s+segs?$/i;
+  /* "10 / page" -- page-size selector */
+  var PER_PAGE    = /^(\d+)\s*\/\s*page$/i;
+  function agoCz(n, u) {
+    u = u.toLowerCase();
+    var unit = u === 's' ? czPlural(n, 'sekundou', 'sekundami', 'sekundami')
+             : u === 'm' ? czPlural(n, 'minutou', 'minutami', 'minutami')
+             : u === 'h' ? czPlural(n, 'hodinou', 'hodinami', 'hodinami')
+             : u === 'd' ? czPlural(n, 'dnem', 'dny', 'dny')
+             :             czPlural(n, 'týdnem', 'týdny', 'týdny');
+    return 'před ' + n + ' ' + unit;
+  }
+
   var MONTH_ABBR = {
     jan: 'led', feb: 'úno', mar: 'bře', apr: 'dub', may: 'kvě', jun: 'čvn',
     jul: 'čvc', aug: 'srp', sep: 'zář', oct: 'říj', nov: 'lis', dec: 'pro'
@@ -2196,6 +2514,30 @@
 
     var t9 = TIME_AMPM.exec(key);
     if (t9) return to24(t9[1], t9[3]) + ':' + t9[2];
+
+    var q1 = N_NEW.exec(key);
+    if (q1) return q1[1] + ' ' +
+      czPlural(parseInt(q1[1], 10), 'nový', 'nové', 'nových');
+
+    var q2 = AGO.exec(key);
+    if (q2) return agoCz(parseInt(q2[1], 10), q2[2]);
+
+    var q3 = NAME_AGO.exec(key);
+    if (q3) return q3[1] + ' · ' + agoCz(parseInt(q3[2], 10), q3[3]);
+
+    var q4 = APPROX_COST.exec(key);
+    if (q4) return 'Přibližná cena: ' + q4[1];
+
+    var q5 = CHARS_WORDS.exec(key);
+    if (q5) return q5[1] + ' ' + czPlural(parseInt(q5[1], 10), 'znak', 'znaky', 'znaků') +
+      ' | ' + q5[2] + ' ' + czPlural(parseInt(q5[2], 10), 'slovo', 'slova', 'slov');
+
+    var q6 = SEGS.exec(key);
+    if (q6) return '| ' + q6[1] + ' ' +
+      czPlural(parseInt(q6[1], 10), 'segment', 'segmenty', 'segmentů');
+
+    var q7 = PER_PAGE.exec(key);
+    if (q7) return q7[1] + ' / stránku';
 
     /* "Created (PDT)" -- translate the label, keep the timezone abbreviation */
     var m6 = ABBR_PAREN.exec(key);
