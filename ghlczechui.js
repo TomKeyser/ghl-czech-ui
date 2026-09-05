@@ -56,7 +56,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v25';
+  var VERSION = 'v26';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -2755,7 +2755,17 @@
      glossary term exactly (a list literally named "New") would be rewritten. */
   var TRANSLATE_PREFILLS = true;
 
-  var MAX_LEN = 160;
+  /* Longest string the layer will touch, measured on the ENGLISH SOURCE, not
+     on the Czech output — the guard runs before translate().
+     400, not 160: 23 translated strings have an English source longer than 160
+     and were silently skipped in every language (longest 334 chars,
+     reputation…reviewsAIAgents.createStarterModalContent). A length cap is a
+     SILENT coverage hole — nothing errors, the text simply stays English — so
+     check this first whenever a translation that IS in the dictionary fails to
+     appear on screen. 400 clears the longest known string with ~20% headroom
+     while still excluding genuine prose and customer data. Re-measure if the
+     dictionary ever gains longer entries. */
+  var MAX_LEN = 400;
 
   /* Labels that carry a live count are one text node whose content changes:
        "Pending SMS: 0"   "Companies (0)"   "Contacts (1/10)"   "3 items"
@@ -3167,9 +3177,8 @@
     /* Skip if we already wrote this exact value (survives Vue re-renders) */
     if (node.__csDone === node.textContent) return;
     var raw = node.textContent;
-    /* 160, not 80: HighLevel's empty-state sentences ("Organize Deals, track
-       Progress, and turn Leads into Customers...") run past 80 characters and
-       were silently skipped. */
+    /* Length guard — see MAX_LEN. Raised 80 -> 160 (empty-state sentences)
+       -> 400 (long warnings and tooltips). Applies to the English source. */
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
     if (out === null) return;
