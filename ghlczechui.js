@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v30';
+  var VERSION = 'v31';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -301,7 +301,7 @@
 
   var STATUS = window.__ghlCzechStatus = {
     version: VERSION, dataVersion: DATA_VERSION, base: BASE,
-    locale: null, state: 'loading', terms: 0, error: null,
+    locale: null, localeSource: null, state: 'loading', terms: 0, error: null,
     /* Which sub-accounts this build will touch, and whether it is touching the
        CURRENT one. translatingHere is refreshed on every pass rather than
        captured once, because HighLevel is an SPA: you can navigate between
@@ -316,14 +316,80 @@
      a script URL, so it is checked TWICE: a tight character class, then a
      whitelist. Never relax this into "whatever the user typed" -- that is a
      path-traversal / script-injection hole straight into the agency's page. */
+  /* ---------- which language ----------------------------------------------
+     FOUR SOURCES, highest priority first. Set the normal one in the LOADER;
+     the URL is for testing.
+
+       1. ?cslang=<locale>  explicit override. PERSISTED, because HighLevel is
+                            an SPA and rewrites the url on navigation — without
+                            storing it the choice would evaporate on the first
+                            click, which is exactly what happened before v31.
+       2. ?cslang=0         clears a persisted override, back to the loader's
+                            choice. Mirrors ?nocs=0 deliberately: one pattern to
+                            remember, not two.
+       3. window.__ghlLang  set by the loader in the agency's Custom JS box.
+                            THIS IS THE NORMAL WAY TO CHOOSE A LANGUAGE —
+                            one line, no urls, no per-browser state.
+       4. DEFAULT_LOCALE
+
+     EVERY source is validated against AVAILABLE, not just the url one. The
+     value ends up inside a script url, and localStorage is user-writable, so
+     "it came from our own loader" is not a reason to skip the check.         */
+  var LANG_KEY = 'ghl_cs_lang';
+
+  function validLocale(v) {
+    return typeof v === 'string' &&
+      /^[A-Za-z]{2}(?:-[A-Za-z]{2})?$/.test(v) &&
+      Object.prototype.hasOwnProperty.call(AVAILABLE, v);
+  }
+
   function pickLocale() {
-    var m = /[?&]cslang=([A-Za-z]{2}(?:-[A-Za-z]{2})?)(?:&|$)/.exec(window.location.search);
-    var want = m && m[1];
-    if (want && Object.prototype.hasOwnProperty.call(AVAILABLE, want)) return want;
-    if (want) {
-      console.warn('[cs-CZ] unknown ?cslang=' + want + ' — using ' + DEFAULT_LOCALE +
-                   '. Available: ' + Object.keys(AVAILABLE).join(', '));
+    var known = Object.keys(AVAILABLE).join(', ');
+    var qs = window.location.search;
+
+    /* 2 — clear, before we read anything stored */
+    if (/[?&]cslang=0(?:&|$)/.test(qs)) {
+      try { localStorage.removeItem(LANG_KEY); } catch (e) {}
+      console.info('[lang] cleared the stored language override; using the loader default');
+    } else {
+      /* 1 — explicit override, remembered so it survives SPA navigation */
+      var m = /[?&]cslang=([A-Za-z]{2}(?:-[A-Za-z]{2})?)(?:&|$)/.exec(qs);
+      var want = m && m[1];
+      if (want) {
+        if (validLocale(want)) {
+          try { localStorage.setItem(LANG_KEY, want); } catch (e) {}
+          STATUS.localeSource = 'url (?cslang=, remembered)';
+          return want;
+        }
+        console.warn('[lang] unknown ?cslang=' + want + ' — ignoring it. Available: ' + known);
+      }
     }
+
+    /* 3 — a previous ?cslang=, still in force */
+    var stored = null;
+    try { stored = localStorage.getItem(LANG_KEY); } catch (e) {}
+    if (stored) {
+      if (validLocale(stored)) {
+        STATUS.localeSource = 'stored override (clear with ?cslang=0)';
+        return stored;
+      }
+      /* pack was removed, or someone edited localStorage by hand */
+      try { localStorage.removeItem(LANG_KEY); } catch (e) {}
+      console.warn('[lang] stored language "' + stored + '" is not available any more — cleared it');
+    }
+
+    /* 4 — the loader's choice: the normal path */
+    var fromLoader = window.__ghlLang;
+    if (fromLoader) {
+      if (validLocale(fromLoader)) {
+        STATUS.localeSource = 'loader (window.__ghlLang)';
+        return fromLoader;
+      }
+      console.warn('[lang] loader set __ghlLang="' + fromLoader + '", which is not available. ' +
+                   'Available: ' + known + '. Falling back to ' + DEFAULT_LOCALE);
+    }
+
+    STATUS.localeSource = 'default';
     return DEFAULT_LOCALE;
   }
 
@@ -648,7 +714,8 @@
     console.info('[' + STATUS.locale + '] language layer ' + VERSION +
       ' active — ' + STATUS.terms + ' terms (' + STATUS.curated + ' curated, ' +
       STATUS.fromApi + ' from HighLevel), data ' + DATA_VERSION +
-      '. Switch with ?cslang=, disable with ?nocs=1, inspect __ghlCzechStatus');
+      ' — language from ' + STATUS.localeSource +
+      '. Override with ?cslang=<locale>, clear with ?cslang=0, disable with ?nocs=1');
 
     /* "Active" is true of the LAYER, not of this SCREEN. Off-gate, everything
        above still happens -- files load, dictionary builds, observer attaches
