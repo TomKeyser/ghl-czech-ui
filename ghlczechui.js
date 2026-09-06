@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v29';
+  var VERSION = 'v30';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -129,9 +129,11 @@
              ? {text: c, ps, id: e.id || e.parentElement?.id, cls: e.className} : null;
          })).filter(Boolean)
   */
-  var PSEUDO = [
-    { selector: 'html body a#sb_launchpad span.nav-title::before', text: 'Rychlý start' }
-  ];
+  /* FILLED FROM THE LANGUAGE PACK at activate(). It used to hold a Czech
+     literal, which would have CSS-injected 'Rychlý start' into a Spanish UI --
+     language content that escaped the v28 migration because it is CSS rather
+     than dictionary. Empty until a pack supplies pack.pseudo. */
+  var PSEUDO = [];
 
   var PSEUDO_STYLE_ID = 'ghl-cs-pseudo';
 
@@ -279,9 +281,12 @@
      Diagnose with  window.__ghlCzechStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v28';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v30';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
-  var AVAILABLE = { 'cs-CZ': 1 };     /* whitelist; see pickLocale() */
+  /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
+     listed here is refused by pickLocale() -- see the security note there.
+     Adding a language is: ship lang/<locale>.js, add it here, bump VERSION. */
+  var AVAILABLE = { 'cs-CZ': 1, 'es': 1 };
   var LOAD_TIMEOUT_MS = 15000;
 
   /* Prefer our own <script src> as the base so a fork, a CDN move or a
@@ -390,6 +395,7 @@
     if (!P.dict || !P.patterns || !P.plurals)     return disable('pack ' + locale + ' is malformed (needs dict, patterns, plurals)');
 
     RULES = R; SOURCE = S; PACK = P;
+    PSEUDO = Array.isArray(P.pseudo) ? P.pseudo : [];
 
     /* dictApi first, then dict, so HAND-CURATED WINS on conflict. */
     DICT = {};

@@ -31,6 +31,17 @@
     locale: 'cs-CZ',
     name: 'Čeština',
 
+    /* ---- CSS pseudo-element labels --------------------------------------
+       Some sidebar labels are not DOM text at all -- they are drawn by CSS
+       'content' on a ::before, so a text-node translator can never reach them.
+       This lived in the ENGINE until v30, where a Czech literal would have been
+       injected into a Spanish UI. Language content belongs in the pack.
+       SPECIFICITY WARNING: HighLevel's own rule beats '#sb_launchpad .nav-title',
+       so the selector must include element types ('a#... span...') to outrank it. */
+    pseudo: [
+      { selector: 'html body a#sb_launchpad span.nav-title::before', text: 'Rychlý start' }
+    ],
+
     /* ---- date style ------------------------------------------------------
        'numeric' -> 31. 8. 2026.  Confirmed by a native speaker (2026-09-05):
        Czechs always write numeric days. Applies to DATE STAMPS ONLY. Month and
