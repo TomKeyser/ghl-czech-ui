@@ -167,7 +167,7 @@
               on their i18n keys. Because a key exists upstream, the SAME entry
               can be pulled in any of their 12 populated languages for free --
               adding Spanish costs a regeneration, not a translator. Regenerate
-              from harvest/locales/cs-CZ.json; never hand-edit in bulk.
+              from lang/cs-CZ.keys.json; never hand-edit in bulk.
      dict     came from DOM harvesting and covers surfaces the API does not
               reach (settings, workflows, automation). NO upstream key exists,
               so every new language needs these translated by a human. They are

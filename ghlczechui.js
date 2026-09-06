@@ -2649,7 +2649,7 @@
        workflows, automation). Nothing above was overwritten or reordered.
 
        Regenerate rather than hand-editing in bulk, so this file and the
-       key-based source harvest/locales/cs-CZ.json cannot drift apart.
+       key-based source lang/cs-CZ.keys.json cannot drift apart.
        ===================================================================== */
 
     /* --- agencyDashboard (97 entries) --- */

@@ -1,0 +1,34 @@
+# harvest/ is a LOCAL WORK AREA. It is deliberately not tracked.
+#
+# THE REASON THIS FILE EXISTS: this repository is PUBLIC (GitHub Pages serves
+# it), and harvest/ contains a real contact export -- names, phone numbers and
+# email addresses of actual people. A casual `git add harvest/` would publish
+# customer PII to the open internet. Do not remove this rule to "just commit
+# the data files".
+#
+# What is in there, by kind:
+#   NEVER COMMIT   Export_Contacts_real_*.csv        real PII
+#   ALREADY RESCUED  the keyed Czech dictionary used to live at
+#                  harvest/locales/cs-CZ.json. It is authored work that cannot
+#                  be refetched, so it now lives TRACKED at lang/cs-CZ.keys.json,
+#                  beside the pack it generates. Do not put a copy back here.
+#   STILL UNTRACKED AND IRREPLACEABLE
+#                  locales/*-cs.js (per-module authoring sources, with their
+#                  __fix / __asIs annotations) and harvester.js. Superseded by
+#                  cs-CZ.keys.json for regeneration, but keep a backup off this
+#                  machine if the authoring history matters.
+#   REGENERABLE    locales/en-flat.json, en-US.json, and the 12 locale JSONs
+#                  -> refetched in ~2 min from HighLevel's public, unauthenticated
+#                     localization API. Losing them costs nothing.
+#   DISPOSABLE     *.tsv, srape/, untranslated-*.txt, v25-*.txt  -> analysis scratch
+harvest/
+
+# Never, under any circumstances, in a public repo.
+*.csv
+Export_Contacts_*
+seed-contacts*
+
+# local scratch
+*.log
+.DS_Store
+Thumbs.db
