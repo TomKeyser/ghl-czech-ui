@@ -24,9 +24,15 @@
      worse than an English one. See bootData()/activate() below, and check
      window.__ghlCzechStatus to diagnose.
 
-   v20 - based on Tom Keyser's edited file. His DICT additions are preserved
-   verbatim except for two corrections noted in CHANGES-v8.md.
-   Gated to the clean sub-account SbA5m1DElMNEKBVnixsX only.
+   GATED to the sub-accounts listed in ONLY_LOCATIONS below — as of v29 the two
+   test accounts, NOT the whole agency. Off those paths the layer still loads
+   and reports "active", but walk() declines to touch the DOM, so the screen
+   stays English with no error. If translation is missing, check the gate
+   before suspecting anything else:
+     location.pathname   vs   ONLY_LOCATIONS
+   Setting ONLY_LOCATIONS to [] turns it on for EVERY sub-account under the
+   agency, live client accounts included. That is the production setting and a
+   deliberate decision, not a cleanup.
 
    KNOWN LIMITATION - IFRAMED SCREENS  (investigated, closed, do not re-dig)
    Some Settings screens - Settings > Business Profile (/settings/company) is
@@ -67,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __ghlCzechVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v28';
+  var VERSION = 'v29';
 
   if (window.__ghlCzechActive) return;
   window.__ghlCzechActive = true;
@@ -78,7 +84,10 @@
      the layer would switch on for every sub-account under the agency.
      Listed here = Keytone Services only.
      To roll it out agency-wide later, set this to an empty array: []          */
-  var ONLY_LOCATIONS = ['SbA5m1DElMNEKBVnixsX'];
+  var ONLY_LOCATIONS = [
+    'SbA5m1DElMNEKBVnixsX',   /* dummy / clean test sub-account */
+    'zWR1h9iaCeH2Ki6kGZLD'    /* second test sub-account (the harvester's) */
+  ];
 
   function allowedHere() {
     if (!ONLY_LOCATIONS.length) return true;
@@ -287,7 +296,15 @@
 
   var STATUS = window.__ghlCzechStatus = {
     version: VERSION, dataVersion: DATA_VERSION, base: BASE,
-    locale: null, state: 'loading', terms: 0, error: null
+    locale: null, state: 'loading', terms: 0, error: null,
+    /* Which sub-accounts this build will touch, and whether it is touching the
+       CURRENT one. translatingHere is refreshed on every pass rather than
+       captured once, because HighLevel is an SPA: you can navigate between
+       sub-accounts without a reload, and a value frozen at boot would go
+       quietly wrong -- the exact kind of stale artifact this file keeps
+       getting bitten by. */
+    onlyLocations: ONLY_LOCATIONS.slice(),
+    translatingHere: null
   };
 
   /* ?cslang=cs-CZ switches language for now. The value is interpolated into
@@ -561,7 +578,12 @@
 
   function flush() {
     scheduled = false;
-    if (allowedHere()) injectPseudoCss();   /* cheap; restores it if removed */
+    /* re-evaluated every pass, so __ghlCzechStatus.translatingHere stays true
+       to the screen you are actually looking at after an in-app sub-account
+       switch. allowedHere() was already being called here; this just records
+       the answer. */
+    STATUS.translatingHere = allowedHere();
+    if (STATUS.translatingHere) injectPseudoCss();   /* cheap; restores it if removed */
     var batch = queue;
     queue = [];
     for (var i = 0; i < batch.length; i++) {
@@ -621,6 +643,18 @@
       ' active — ' + STATUS.terms + ' terms (' + STATUS.curated + ' curated, ' +
       STATUS.fromApi + ' from HighLevel), data ' + DATA_VERSION +
       '. Switch with ?cslang=, disable with ?nocs=1, inspect __ghlCzechStatus');
+
+    /* "Active" is true of the LAYER, not of this SCREEN. Off-gate, everything
+       above still happens -- files load, dictionary builds, observer attaches
+       -- and walk() then declines to touch the DOM, so the page stays English
+       with no error anywhere. That combination cost a real debugging round
+       trip: the console claimed success while the screen showed none. Say it
+       out loud instead of leaving someone to infer it. */
+    if (!allowedHere()) {
+      console.info('[' + STATUS.locale + '] ...but NOT translating this screen: ' +
+        'the sub-account is not in ONLY_LOCATIONS. path ' + window.location.pathname +
+        ' | allowed ' + (ONLY_LOCATIONS.length ? ONLY_LOCATIONS.join(', ') : '(all)'));
+    }
   }
 
   /* Nothing runs until the language files are in hand. bootData() calls
