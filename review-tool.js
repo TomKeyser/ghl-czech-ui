@@ -245,29 +245,91 @@
     if (e.key === 'Escape') closeInput();
   }, true);
 
-  /* ---------- badge ------------------------------------------------------- */
+  /* ---------- badge -------------------------------------------------------
+     Mechanics lifted from harvester.js, which already learned these the hard
+     way: BOTTOM-CENTRE by default because HighLevel puts real controls in the
+     bottom-right corner and a badge there covers them; draggable, because every
+     screen hides something different; and dimmed at rest so it never competes
+     with the interface being reviewed. Position is remembered under its own key
+     so the two tools cannot fight over one another's corner. */
+  var POS_KEY = 'ghl_review_pos';
+
+  function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
   var badge = document.createElement('div');
-  badge.setAttribute('style', [
-    'position:fixed', 'right:14px', 'bottom:14px', 'z-index:2147483646',
-    'background:#1E211F', 'color:#fff', 'border-radius:6px', 'padding:9px 11px',
-    'font:12px/1.35 system-ui,sans-serif', 'box-shadow:0 4px 18px rgba(0,0,0,.3)',
-    'display:flex', 'gap:9px', 'align-items:center'
-  ].join(';'));
+  badge.id = 'ghl-review-badge';
+  badge.setAttribute('aria-hidden', 'true');
+  badge.style.cssText = [
+    'position:fixed', 'z-index:2147483646',
+    'background:#1E211F', 'color:#fff', 'border-radius:6px', 'padding:8px 10px',
+    'font:12px/1.35 system-ui,sans-serif', 'box-shadow:0 2px 10px rgba(0,0,0,.35)',
+    'display:flex', 'gap:8px', 'align-items:center',
+    'opacity:.6', 'transition:opacity .15s', 'user-select:none'
+  ].join(';');
+  badge.addEventListener('mouseenter', function () { badge.style.opacity = '1'; });
+  badge.addEventListener('mouseleave', function () { badge.style.opacity = '.6'; });
+
+  function applyPos() {
+    var p = null;
+    try { p = JSON.parse(localStorage.getItem(POS_KEY) || 'null'); } catch (e) {}
+    if (p && typeof p.left === 'number' && typeof p.top === 'number') {
+      badge.style.left = clamp(p.left, 0, window.innerWidth - 80) + 'px';
+      badge.style.top = clamp(p.top, 0, window.innerHeight - 40) + 'px';
+      badge.style.right = badge.style.bottom = badge.style.transform = '';
+    } else {
+      badge.style.left = '50%';
+      badge.style.bottom = '12px';
+      badge.style.transform = 'translateX(-50%)';
+    }
+  }
+  applyPos();
   document.body.appendChild(badge);
+
+  function makeDraggable(handle) {
+    var dx = 0, dy = 0, dragging = false;
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      var r = badge.getBoundingClientRect();
+      dx = e.clientX - r.left;
+      dy = e.clientY - r.top;
+      dragging = true;
+      badge.style.transform = '';
+      badge.style.right = badge.style.bottom = '';
+      badge.style.opacity = '1';
+      document.addEventListener('mousemove', move, true);
+      document.addEventListener('mouseup', up, true);
+    });
+    function move(e) {
+      if (!dragging) return;
+      badge.style.left = clamp(e.clientX - dx, 0, window.innerWidth - badge.offsetWidth) + 'px';
+      badge.style.top = clamp(e.clientY - dy, 0, window.innerHeight - badge.offsetHeight) + 'px';
+    }
+    function up() {
+      dragging = false;
+      document.removeEventListener('mousemove', move, true);
+      document.removeEventListener('mouseup', up, true);
+      var r = badge.getBoundingClientRect();
+      try { localStorage.setItem(POS_KEY, JSON.stringify({ left: r.left, top: r.top })); } catch (e) {}
+    }
+  }
 
   function button(label, fn) {
     var b = document.createElement('button');
+    b.type = 'button';                       /* never submit a HighLevel form */
     b.textContent = label;
-    b.setAttribute('style',
-      'font:11px system-ui,sans-serif;background:#333833;color:#fff;' +
-      'border:1px solid #555;border-radius:3px;padding:4px 7px;cursor:pointer');
-    b.addEventListener('click', function (e) { e.stopPropagation(); fn(); });
+    b.style.cssText = [
+      'font:11px/1 system-ui,sans-serif', 'padding:5px 8px', 'cursor:pointer',
+      'background:#333833', 'color:#fff', 'border:1px solid #555', 'border-radius:3px'
+    ].join(';');
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); fn(); });
     return b;
   }
 
+  /* the count doubles as the drag handle, so the buttons stay clickable */
   var countEl = document.createElement('span');
-  countEl.setAttribute('style', 'font-weight:600');
+  countEl.style.cssText = 'font-weight:600;white-space:nowrap;cursor:move';
   badge.appendChild(countEl);
+  makeDraggable(countEl);
 
   var modeBtn = button('Flag mode', function () { setFlagMode(!flagMode); });
   badge.appendChild(modeBtn);
