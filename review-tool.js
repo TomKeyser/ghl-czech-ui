@@ -137,6 +137,7 @@
     var english = reverse(hit.text);
 
     input = document.createElement('div');
+    input.id = 'ghl-review-panel';
     input.setAttribute('style', [
       'position:fixed', 'z-index:2147483647',
       'left:' + Math.min(x, window.innerWidth - 340) + 'px',
@@ -218,7 +219,11 @@
     unmarkAll();
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
-        return (n.__csDone && n.__csDone === n.textContent) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        if (!n.__csDone || n.__csDone !== n.textContent) return NodeFilter.FILTER_REJECT;
+        /* our own badge gets translated too — do not outline it */
+        var p = n.parentElement;
+        if (p && p.closest && p.closest('#ghl-review-badge, #ghl-review-panel')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
       }
     });
     var n;
@@ -234,6 +239,13 @@
      the reviewer can still use the application normally the rest of the time. */
   document.addEventListener('click', function (e) {
     if (!(e.altKey || flagMode)) return;
+    /* NEVER intercept our own UI. The engine translates anything in document.body
+       that is not in CONTENT_ZONES — and it does not exempt this tool — so our own
+       "Download" and "Clear" labels get translated and stamped with __csDone. That
+       made every badge button look like a flaggable string, and stopPropagation
+       then swallowed the click before the button's own handler ran: flag mode
+       could be turned on and never off. */
+    if (e.target.closest && e.target.closest('#ghl-review-badge, #ghl-review-panel')) return;
     var hit = findFlaggable(e.target);
     if (!hit) return;
     e.preventDefault();
