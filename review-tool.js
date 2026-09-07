@@ -37,7 +37,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'r1';
+  var VERSION = 'r2';
   var ONLY_LOCATION = 'zWR1h9iaCeH2Ki6kGZLD';   /* the seeded test sub-account */
   var KEY = 'ghl_review_v1';
   var MAX_BYTES = 4 * 1024 * 1024;              /* headroom under the ~5MB cap */
@@ -147,17 +147,23 @@
       'font:13px/1.45 system-ui,sans-serif', 'padding:12px'
     ].join(';'));
 
+    /* same wrapper trick as the badge — keeps our own labels, and the input's
+       placeholder attribute, out of the engine's reach */
+    var panelInner = document.createElement('code');
+    panelInner.style.cssText = UNTOUCHABLE + ';display:block';
+    input.appendChild(panelInner);
+
     var head = document.createElement('div');
     head.setAttribute('style', 'font-weight:600;margin-bottom:2px;word-break:break-word');
     head.textContent = hit.text;
-    input.appendChild(head);
+    panelInner.appendChild(head);
 
     var sub = document.createElement('div');
     sub.setAttribute('style', 'color:#666;margin-bottom:8px;font-size:12px');
     sub.textContent = english.length
       ? 'from English: ' + english.slice(0, 3).join('  /  ')
       : 'source string not found in the pack (may be composed at runtime)';
-    input.appendChild(sub);
+    panelInner.appendChild(sub);
 
     var box = document.createElement('input');
     box.type = 'text';
@@ -165,12 +171,12 @@
     box.setAttribute('style',
       'width:100%;box-sizing:border-box;padding:7px 8px;border:1px solid #ccc;' +
       'border-radius:3px;font:13px system-ui,sans-serif');
-    input.appendChild(box);
+    panelInner.appendChild(box);
 
     var hint = document.createElement('div');
     hint.setAttribute('style', 'color:#888;margin-top:7px;font-size:11px');
     hint.textContent = 'Enter to save · Esc to cancel · leave blank to just mark it wrong';
-    input.appendChild(hint);
+    panelInner.appendChild(hint);
 
     document.body.appendChild(input);
     box.focus();
@@ -281,6 +287,19 @@
   badge.addEventListener('mouseenter', function () { badge.style.opacity = '1'; });
   badge.addEventListener('mouseleave', function () { badge.style.opacity = '.6'; });
 
+  /* EVERYTHING WE RENDER GOES INSIDE A <code> ELEMENT, and that is not
+     decoration. The engine translates any text in document.body outside
+     CONTENT_ZONES, and it translates the ATTRS list — placeholder, title,
+     aria-label, alt — gated only by the same zones. Our labels are ordinary
+     English words, so "Download" and "Clear" were being translated into Czech
+     and our placeholder along with them. `code` is already in CONTENT_ZONES,
+     so one wrapper per overlay exempts its text AND its attributes in a single
+     move, with no engine change. Styled to inherit so it is invisible. */
+  var UNTOUCHABLE = 'font:inherit;background:none;color:inherit;padding:0;margin:0;border:0';
+  var badgeInner = document.createElement('code');
+  badgeInner.style.cssText = UNTOUCHABLE + ';display:flex;gap:8px;align-items:center';
+  badge.appendChild(badgeInner);
+
   function applyPos() {
     var p = null;
     try { p = JSON.parse(localStorage.getItem(POS_KEY) || 'null'); } catch (e) {}
@@ -340,13 +359,13 @@
   /* the count doubles as the drag handle, so the buttons stay clickable */
   var countEl = document.createElement('span');
   countEl.style.cssText = 'font-weight:600;white-space:nowrap;cursor:move';
-  badge.appendChild(countEl);
+  badgeInner.appendChild(countEl);
   makeDraggable(countEl);
 
   var modeBtn = button('Flag mode', function () { setFlagMode(!flagMode); });
-  badge.appendChild(modeBtn);
+  badgeInner.appendChild(modeBtn);
 
-  badge.appendChild(button('Download', function () {
+  badgeInner.appendChild(button('Download', function () {
     var blob = new Blob([JSON.stringify(flags, null, 2)], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -355,7 +374,7 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
   }));
 
-  badge.appendChild(button('Clear', function () {
+  badgeInner.appendChild(button('Clear', function () {
     if (!confirm('Delete all ' + flags.length + ' flags? Download first if you have not.')) return;
     flags = []; save();
   }));
