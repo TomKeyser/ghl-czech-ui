@@ -52,7 +52,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'r3';
+  var VERSION = 'r4';
   var KEY = 'ghl_review_v1';
   var MAX_BYTES = 4 * 1024 * 1024;              /* headroom under the ~5MB cap */
 
@@ -175,14 +175,27 @@
     return m ? m[1] : null;
   }
 
+  /* WHERE THE FLAG CAME FROM, and it has to survive being read a day later.
+     A bare tag chain like div>div>div>div>h1 identifies nothing, which is what
+     the first smoke test produced. So: keep the short tag chain for shape, and
+     hunt up to TWELVE ancestors for something nameable — an id first, a
+     meaningful class as fallback. Framework noise (ng-, v-, css- hashes) is
+     skipped because it changes between builds and would be worse than nothing. */
   function selectorFor(el) {
-    var parts = [], depth = 0;
-    for (var n = el; n && n.nodeType === 1 && depth < 5; n = n.parentElement, depth++) {
-      var s = n.tagName.toLowerCase();
-      if (n.id) { parts.unshift(s + '#' + n.id); break; }
-      parts.unshift(s);
+    var chain = [], depth = 0, byId = '', byClass = '';
+    for (var n = el; n && n.nodeType === 1 && depth < 12; n = n.parentElement, depth++) {
+      var tag = n.tagName.toLowerCase();
+      if (depth < 5) chain.unshift(tag);
+      if (!byId && n.id) byId = tag + '#' + n.id;
+      if (!byClass && typeof n.className === 'string') {
+        var c = n.className.trim().split(/\s+/).filter(function (x) {
+          return x.length > 2 && x.length < 28 && !/^(ng-|v-|css-|is-|has-|hl-?)/.test(x);
+        })[0];
+        if (c) byClass = tag + '.' + c;
+      }
     }
-    return parts.join('>');
+    var anchor = byId || byClass;
+    return anchor ? anchor + ' ' + chain.join('>') : chain.join('>');
   }
 
   /* ---------- the correction input --------------------------------------- */
