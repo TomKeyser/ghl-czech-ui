@@ -14,12 +14,31 @@
    can never capture a contact name, a message body, or anything else belonging
    to the customer. If the engine did not write it, this tool cannot see it.
 
-   HOW TO USE IT
-   1. Paste BELOW the existing loader in
-      Agency > Settings > Company > Whitelabel > Custom JS.  Append, do not
-      replace. Remove it when the review is finished — it is a tool, not a
-      feature.
-   2. Log in as a user of the gated sub-account and open any screen.
+   HOW TO LOAD IT — AND WHY NOT A BARE CONSOLE PASTE
+   A console injection dies on every FULL PAGE LOAD, and clicking a link or
+   pasting a URL is a full page load. Only in-app sidebar navigation survives,
+   because HighLevel is an SPA. For a review that walks eighteen screens that is
+   untenable, so the loader goes in Custom JS — but GUARDED, so it is inert for
+   everyone who has not deliberately switched it on:
+
+     <script>if(localStorage.getItem('ghl_review')==='1'){var s=document.createElement('script');
+     s.src='https://tomkeyser.github.io/ghl-czech-ui/review-tool.js?t='+Date.now();
+     document.head.appendChild(s);}</script>
+
+   APPEND that below the existing loader in Agency > Settings > Company >
+   Whitelabel > Custom JS. Do not replace anything. Then, once, in the reviewer's
+   browser console on the domain they will use:
+
+     localStorage.setItem('ghl_review','1')      // then reload
+
+   DOUBLE-GATED as a result: the tool loads only for a browser that opted in AND
+   only inside the sub-account below. For everyone else the added line evaluates
+   to nothing. Turn it off with localStorage.removeItem('ghl_review'), and delete
+   the line entirely when the review is done — it is a tool, not a feature.
+   NOTE localStorage is per-origin: agency owners are on app.gohighlevel.com and
+   sub-account users on the white-label domain, so opt in on the one being used.
+
+   1. Log in as a user of the gated sub-account and open any screen.
    3. ALT-CLICK any translated word to flag it. Or press the badge to turn on
       Flag mode, which outlines everything we translated and makes plain clicks
       flag instead of navigate.
