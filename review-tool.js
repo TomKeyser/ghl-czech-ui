@@ -14,39 +14,35 @@
    can never capture a contact name, a message body, or anything else belonging
    to the customer. If the engine did not write it, this tool cannot see it.
 
-   HOW TO LOAD IT — AND WHY NOT A BARE CONSOLE PASTE
+   HOW TO LOAD IT — CUSTOM JS, NOT A CONSOLE PASTE
    A console injection dies on every FULL PAGE LOAD, and clicking a link or
-   pasting a URL is a full page load. Only in-app sidebar navigation survives,
+   pasting a URL is a full page load — only in-app sidebar navigation survives,
    because HighLevel is an SPA. For a review that walks eighteen screens that is
-   untenable, so the loader goes in Custom JS — but GUARDED, so it is inert for
-   everyone who has not deliberately switched it on:
+   untenable. So APPEND this one line below the existing loader in
+   Agency > Settings > Company > Whitelabel > Custom JS (append, never replace):
 
-     <script>if(localStorage.getItem('ghl_review')==='1'){var s=document.createElement('script');
-     s.src='https://tomkeyser.github.io/ghl-czech-ui/review-tool.js?t='+Date.now();
-     document.head.appendChild(s);}</script>
+     <script src="https://tomkeyser.github.io/ghl-czech-ui/review-tool.js"></script>
 
-   APPEND that below the existing loader in Agency > Settings > Company >
-   Whitelabel > Custom JS. Do not replace anything. Then, once, in the reviewer's
-   browser console on the domain they will use:
+   That is safe to leave in the shared field because THIS TOOL GATES ITSELF ON
+   EXACTLY THE SAME SUB-ACCOUNTS THE ENGINE TRANSLATES — see the gate below, which
+   READS THE ENGINE'S OWN LIST rather than keeping a second copy that could drift.
+   Everywhere else it loads, finds it is not wanted, and returns without touching
+   the page. Delete the line when the review is finished: it is a tool, not a
+   feature.
 
-     localStorage.setItem('ghl_review','1')      // then reload
-
-   DOUBLE-GATED as a result: the tool loads only for a browser that opted in AND
-   only inside the sub-account below. For everyone else the added line evaluates
-   to nothing. Turn it off with localStorage.removeItem('ghl_review'), and delete
-   the line entirely when the review is done — it is a tool, not a feature.
-   NOTE localStorage is per-origin: agency owners are on app.gohighlevel.com and
-   sub-account users on the white-label domain, so opt in on the one being used.
-
-   1. Log in as a user of the gated sub-account and open any screen.
-   3. ALT-CLICK any translated word to flag it. Or press the badge to turn on
+   THEN
+   1. Log in as a user of a gated sub-account and open any screen.
+   2. ALT-CLICK any translated word to flag it. Or press the badge to turn on
       Flag mode, which outlines everything we translated and makes plain clicks
       flag instead of navigate.
-   4. Type the correction, press Enter. Esc cancels.
-   5. Press Download on the badge. One JSON file with everything.
+   3. Type the correction, press Enter. Esc cancels.
+   4. Press Download on the badge. One JSON file with everything.
 
    SAFETY
-   - Hard-gated to ONE sub-account. Outside it, nothing runs.
+   - Gated to the SAME sub-accounts as the engine (ONLY_LOCATIONS, read from
+     window.__ghlCzechStatus). Elsewhere, nothing runs and no badge appears.
+   - Re-checked on SPA navigation, because HighLevel lets you move between
+     sub-accounts without a reload and a value frozen at boot goes quietly wrong.
    - Reads only nodes the translation engine itself wrote. Never reads .value,
      never touches contenteditable, never makes a network call of any kind.
    - Writes nothing to the page except its own badge, outlines and input.
@@ -56,20 +52,46 @@
 (function () {
   'use strict';
 
-  var VERSION = 'r2';
-  var ONLY_LOCATION = 'zWR1h9iaCeH2Ki6kGZLD';   /* the seeded test sub-account */
+  var VERSION = 'r3';
   var KEY = 'ghl_review_v1';
   var MAX_BYTES = 4 * 1024 * 1024;              /* headroom under the ~5MB cap */
 
+  /* Used only if the engine has not published its list — which should not
+     happen, since there is nothing to review where the engine is not running. */
+  var FALLBACK_LOCATIONS = [
+    'SbA5m1DElMNEKBVnixsX',
+    'zWR1h9iaCeH2Ki6kGZLD'
+  ];
+
   if (window.top !== window) return;            /* top document only */
   if (window.__ghlReviewActive) return;
-  if (location.pathname.indexOf('/location/' + ONLY_LOCATION) === -1) return;
   if (location.search.indexOf('noreview=1') !== -1) {
     console.info('[review] disabled via ?noreview=1');
     return;
   }
   window.__ghlReviewActive = true;
   window.__ghlReviewVersion = VERSION;
+
+  /* ---------- the gate ----------------------------------------------------
+     INHERITED FROM THE ENGINE, NOT COPIED. window.__ghlCzechStatus.onlyLocations
+     is the engine's own live list, so adding a sub-account there covers this tool
+     automatically and the two can never disagree.
+     RE-EVALUATED EVERY TIME, never captured at boot: HighLevel is an SPA and you
+     can move between sub-accounts without a reload, so a value frozen at load
+     would go quietly wrong — the exact stale-artifact bug the engine's own
+     comments warn about. */
+  function gatedLocations() {
+    var s = window.__ghlCzechStatus;
+    return (s && s.onlyLocations && s.onlyLocations.length) ? s.onlyLocations : FALLBACK_LOCATIONS;
+  }
+  function allowedHere() {
+    var list = gatedLocations();
+    if (!list.length) return true;              /* engine ungated = we are too */
+    for (var i = 0; i < list.length; i++) {
+      if (location.pathname.indexOf('/location/' + list[i]) !== -1) return true;
+    }
+    return false;
+  }
 
   /* ---------- storage ---------------------------------------------------- */
   var flags = [];
@@ -94,8 +116,15 @@
   var REVERSE = null;
   function reverse(czech) {
     if (!REVERSE) {
-      REVERSE = Object.create(null);
       var packs = window.GhlLangPacks || {};
+      /* Do NOT cache an empty map. If this runs before the packs have finished
+         loading we would remember "no English for anything" forever, and every
+         flag after that would lose its source string. Build only once there is
+         something to build from, and retry on the next flag otherwise. */
+      var any = false;
+      for (var k in packs) { any = true; break; }
+      if (!any) return [];
+      REVERSE = Object.create(null);
       for (var loc in packs) {
         var p = packs[loc] || {};
         [p.dictApi, p.dict].forEach(function (d) {
@@ -132,6 +161,18 @@
       if (el.__csVal) return { el: el, text: String(el.__csVal).trim(), kind: 'attribute' };
     }
     return null;
+  }
+
+  /* /v2/location/<id>/reputation/overview -> "/reputation/overview".
+     Derived from the path rather than a known id, so it works on any host and
+     survives HighLevel renumbering /v2 — and so a flag records WHICH sub-account
+     it came from, now that more than one is in scope. */
+  function routeOf() {
+    return location.pathname.replace(/^\/v[0-9]+\/location\/[^/]+/, '') || '/';
+  }
+  function locationId() {
+    var m = /\/location\/([^/]+)/.exec(location.pathname);
+    return m ? m[1] : null;
   }
 
   function selectorFor(el) {
@@ -205,7 +246,8 @@
       if (e.key === 'Escape') { closeInput(); return; }
       if (e.key !== 'Enter') return;
       flags.push({
-        route: location.pathname.replace('/v2/location/' + ONLY_LOCATION, '') || '/',
+        route: routeOf(),
+        account: locationId(),
         shown: hit.text,
         english: english,
         should_be: box.value.trim(),
@@ -264,6 +306,7 @@
      the reviewer can still use the application normally the rest of the time. */
   document.addEventListener('click', function (e) {
     if (!(e.altKey || flagMode)) return;
+    if (!allowedHere()) return;                 /* moved to an ungated sub-account */
     /* NEVER intercept our own UI. The engine translates anything in document.body
        that is not in CONTENT_ZONES — and it does not exempt this tool — so our own
        "Download" and "Clear" labels get translated and stamped with __csDone. That
@@ -405,15 +448,34 @@
   }
   paintBadge();
 
+  /* ---------- show only where the engine translates -----------------------
+     Re-checked rather than decided once, for the SPA reason above: navigating to
+     an ungated sub-account must make the badge disappear, and coming back must
+     bring it back. Flag mode is force-dropped on the way out so its outlines
+     never linger on a sub-account we are not reviewing. */
+  var wasAllowed = null;
+  function syncVisibility() {
+    var ok = allowedHere();
+    if (ok === wasAllowed) return;
+    wasAllowed = ok;
+    badge.style.display = ok ? '' : 'none';
+    if (!ok) { if (flagMode) setFlagMode(false); closeInput(); }
+  }
+  syncVisibility();
+  setInterval(syncVisibility, 1000);
+
   /* re-outline after SPA navigation while flag mode is on */
   var reMark = null;
   new MutationObserver(function () {
+    syncVisibility();
     if (!flagMode) return;
     clearTimeout(reMark);
     reMark = setTimeout(markAll, 400);
   }).observe(document.body, { childList: true, subtree: true });
 
-  console.info('[review] ' + VERSION + ' ready. Alt-click a translated word, or press Flag mode. ' +
-               flags.length + ' flags stored. Engine: ' +
-               (window.__ghlCzechActive ? window.__ghlCzechVersion : 'NOT ACTIVE — nothing will be flaggable'));
+  console.info('[review] ' + VERSION + ' ready · ' + flags.length + ' flags stored · ' +
+    'engine ' + (window.__ghlCzechActive ? window.__ghlCzechVersion : 'NOT YET ACTIVE') + ' · ' +
+    'gate ' + (window.__ghlCzechStatus ? "from the engine's list" : 'from the fallback list, re-checked every second') +
+    ' · here: ' + (allowedHere() ? 'ACTIVE' : 'not a reviewed sub-account, badge hidden') +
+    ' · Alt-click a translated word, or press Flag mode.');
 })();
