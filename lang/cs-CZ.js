@@ -3133,6 +3133,7 @@
        batch rather than one at a time. */
     "moved": "přesunuto",
     "Reports are loading": "Načítání přehledů",
+    "Expand sidebar": "Rozbalit postranní panel",
     "Collapse stage": "Sbalit fázi",
     "View conversations": "Zobrazit konverzace",
     "Add an appointment": "Přidat schůzku",

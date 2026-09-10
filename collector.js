@@ -50,7 +50,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'c1';
+  var VERSION = 'c2';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;         /* well under the ~5MB origin cap */
@@ -169,15 +169,37 @@
   var entries = 0;
   for (var k in store.picks) if (Object.prototype.hasOwnProperty.call(store.picks, k)) entries++;
 
-  window.__kaOnMiss = function (raw, node, attr) {
-    if (!allowedHere()) return;
-    var text = String(raw == null ? '' : raw).trim();
-    if (!text) return;
-    /* single characters, bare numbers and separators are never worth a
-       dictionary entry and would swamp the frequency ranking */
-    if (text.length < 2) return;
-    if (/^[\s\W\d]+$/.test(text)) return;
+  /* ---------- animated text -----------------------------------------------
+     The Calendars screen types its greeting out one character at a time, and
+     the first walk recorded EVERY FRAME: "Hi", "Hi z", "Hi zz", "Hi zz t" ...
+     sixty-odd entries from one string, crowding the frequency ranking that
+     makes this queue worth reading.
 
+     So a miss on a TEXT NODE waits to see whether that node is still moving.
+     Only the settled text is recorded. It is the same "wait for the DOM to
+     stop" discipline the automated walk uses between routes, applied per node.
+
+     Attributes are committed immediately: nothing animates an aria-label, and
+     delaying them would only lose misses on nodes that vanish quickly. */
+  var SETTLE_MS = 700;
+  var pending = new Map();
+
+  /* "Status: Pe..." arrives already cut off — the ellipsis is IN the text, not
+     in CSS. No dictionary entry can ever match it, and one entry appears per
+     column width. Marked rather than dropped: a marked row can still be counted
+     and inspected, whereas a dropped one silently disappears and someone
+     re-discovers it later. The test is the last word: "calendars..." is a real
+     string, "Pe..." is a fragment. */
+  function looksTruncated(t) {
+    /* everything after the label cut away: "Due Date: ..." */
+    if (/\s(\.{3}|…)$/.test(t)) return true;
+    var m = /(\S+)(?:\.{3}|…)$/.exec(t);
+    if (!m) return false;
+    var lastWord = m[1].replace(/[.…]+$/, '');
+    return lastWord.length > 0 && lastWord.length < 4;
+  }
+
+  function record(text, node, attr) {
     var id = (attr ? attr + '|' : '') + text;
     var rec = store.picks[id];
     var route = routeOf();
@@ -193,6 +215,7 @@
         accounts: [],
         where: whereOf(node, attr),
         suspect: suspectOf(text),
+        truncated: looksTruncated(text),
         first: new Date().toISOString()
       };
     }
@@ -201,6 +224,27 @@
     var acc = locationId();
     if (acc && rec.accounts.indexOf(acc) === -1) rec.accounts.push(acc);
     schedule();
+  }
+
+  window.__kaOnMiss = function (raw, node, attr) {
+    if (!allowedHere()) return;
+    var text = String(raw == null ? '' : raw).trim();
+    if (!text) return;
+    /* single characters, bare numbers and separators are never worth a
+       dictionary entry and would swamp the frequency ranking */
+    if (text.length < 2) return;
+    if (/^[\s\W\d]+$/.test(text)) return;
+
+    if (attr || !node || node.nodeType !== 3) { record(text, node, attr); return; }
+
+    var prev = pending.get(node);
+    if (prev) clearTimeout(prev.timer);
+    var entry = { text: text };
+    entry.timer = setTimeout(function () {
+      pending.delete(node);
+      record(entry.text, node, null);
+    }, SETTLE_MS);
+    pending.set(node, entry);
   };
 
   /* ---------- reading it back --------------------------------------------- */
@@ -235,8 +279,11 @@
     version: VERSION,
     stats: stats,
     all: all,
+    /* strings the DOM had already cut off — no dictionary entry can match a
+       fragment, and there is one per column width */
+    truncated: function () { return all().filter(function (r) { return r.truncated; }); },
     top: function (n) {
-      var list = all().filter(function (r) { return !r.suspect; }).slice(0, n || 30);
+      var list = all().filter(function (r) { return !r.suspect && !r.truncated; }).slice(0, n || 30);
       /* console.table gives a readable grid; fall back to the array if not there */
       if (console.table) console.table(list.map(function (r) {
         return { seen: r.seen, text: r.text.slice(0, 70), attr: r.attr || '', routes: r.routes.length };
