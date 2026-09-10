@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v33';
+  var VERSION = 'v34';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -577,6 +577,22 @@
     return el.tagName.toLowerCase() + (cls ? '.' + cls : '');
   }
 
+  /* Everything we have already written into the page. Text nodes carry
+     __kaDone so they need no lookup, but attributes are stamped with nothing,
+     and a node re-rendered by the framework can lose its marker while keeping
+     our Czech. Built once, on first use. */
+  var REVERSE_OUTPUTS = null;
+  function isOurOutput(v) {
+    if (!DICT || !v) return false;
+    if (!REVERSE_OUTPUTS) {
+      REVERSE_OUTPUTS = Object.create(null);
+      for (var k in DICT) {
+        if (own(DICT, k) && typeof DICT[k] === 'string') REVERSE_OUTPUTS[DICT[k]] = 1;
+      }
+    }
+    return !!REVERSE_OUTPUTS[v] || !!REVERSE_OUTPUTS[v.toLowerCase()];
+  }
+
   /* which CONTENT_ZONES entry actually caught this element */
   function zoneOf(el, forAttr) {
     var list = forAttr ? CONTENT_ZONES : CONTENT_ZONES.concat(['input', 'textarea', 'select']);
@@ -605,6 +621,18 @@
                    : (isText ? node.textContent : el.textContent);
     var key = String(raw == null ? '' : raw).trim();
     if (!key) return { reason: 'empty' };
+
+    /* ALREADY OURS -- ask this before translating, or the answer is nonsense.
+       Once a node is translated its textContent IS the Czech, so looking that
+       up misses the dictionary and reports 'missing' for the very strings that
+       are working. The gap picker's map painted an entire screen amber for
+       exactly this reason. */
+    if (isText && node.__kaDone === node.textContent) {
+      return { reason: 'translated', text: key, attr: null };
+    }
+    if (isOurOutput(key)) {
+      return { reason: 'translated', text: key, attr: attr || null };
+    }
     if (key.length > MAX_LEN) {
       return { reason: 'too-long', length: key.length, max: MAX_LEN, text: key.slice(0, 60) };
     }
