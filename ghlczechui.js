@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v39';
+  var VERSION = 'v40';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -308,6 +308,12 @@
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
     '.chat-message', '.chat-content', '[data-testid="CENTRALPANEL_NAME"]',
+    /* a whole conversation-list row: the contact name, the message preview and
+       the timestamp all sit inside it. Blocking the row costs us translating
+       the relative time ("2 days ago") in that list, which is a cosmetic loss
+       against protecting the densest customer data on the busiest screen. The
+       preview line is named separately in case a row ever lacks the id. */
+    '[data-conversation-id]', '[data-testid="ASSERT_LC_LEFTPANEL"]',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
