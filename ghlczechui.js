@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v41';
+  var VERSION = 'v42';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -318,6 +318,21 @@
        Found by the collector flagging a real address as suspect on the dashboard,
        which is the detector doing precisely what it exists for. */
     '.user-info-card',
+    /* THE CONTACTS TABLE, AND EVERY OTHER TABULATOR LIST. Measured on a real
+       smart list, 10 Sep: 160 body cells, and the ONLY translatable content in
+       any of them was the date columns -- the rest was contact names, company
+       names, phone numbers, email addresses and tags. Tabulator labels each
+       cell with tabulator-field, which names the column semantically and comes
+       from HighLevel's column config rather than from styling.
+
+       BLOCK EVERYTHING EXCEPT DATE-LIKE COLUMNS, rather than listing the data
+       columns. Smart lists are user-configurable: an unknown or newly added
+       column must be treated as customer data by default, and a rule that
+       lists what to protect would silently miss every column added later.
+       Header cells are untouched, so column titles still translate. */
+    '.tabulator-cell:not([tabulator-field*="date" i]):not([tabulator-field*="time" i]):not([tabulator-field*="activity" i]):not([tabulator-field*="created" i]):not([tabulator-field*="updated" i])',
+    /* the dashboard widget tables, which use HighLevel's own component library */
+    '.hr-data-table__body-cell',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
