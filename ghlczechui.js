@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v43';
+  var VERSION = 'v44';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -922,10 +922,25 @@
       if (!el.hasAttribute || !el.hasAttribute(a)) continue;
       var v = el.getAttribute(a);
       if (!v || v.length > MAX_LEN) continue;
+      /* THE ATTRIBUTE EQUIVALENT OF __kaDone. Text nodes have carried a marker
+         since the beginning; attributes never did, so doAttrs re-read its own
+         output on every pass and reported it as a gap. isOurOutput() covered
+         the literal case in v41, but not strings COMPOSED by a pattern rule --
+         "Zobrazit stranku 1" is built at runtime and is in no dictionary, so
+         the reverse index could not recognise it. A per-attribute marker closes
+         the class of bug rather than the instance, and stops us re-translating
+         every attribute on every pass as a side effect.
+
+         If the application rewrites the attribute back to English the value no
+         longer matches the marker, so it is translated again -- the same
+         contract text nodes have always had. */
+      var mark = '__kaAttr_' + a;
+      if (el[mark] === v) continue;              /* ours, and untouched since */
       var out = translate(v);
       if (out === null) { missed(v, el, a); continue; }
       if (out === v) continue;
       el.setAttribute(a, out);
+      el[mark] = out;
       if (TOUCHED_ATTRS.length < MAX_TOUCHED) TOUCHED_ATTRS.push([el, a, v, out]);
     }
   }
