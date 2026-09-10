@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v32';
+  var VERSION = 'v33';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -649,6 +649,23 @@
     maxLen: MAX_LEN
   };
 
+  /* ---------- the miss hook ----------------------------------------------
+     There is exactly ONE place a text node fails to translate and one for an
+     attribute, and both are below. A passive collector wants precisely those
+     two moments, so hand them over rather than making it re-walk the DOM
+     behind us -- that would duplicate this entire pass on every mutation.
+
+     SAFE BY CONSTRUCTION, and this is the reason it is here and not in a
+     collector's own observer: by the time either site is reached the string
+     has ALREADY passed CONTENT_ZONES and the length guard. Customer data
+     cannot reach a listener unless the firewall has a hole -- and if it ever
+     does, that is exactly what the collector should be flagging. */
+  function missed(raw, node, attr) {
+    var h = window.__kaOnMiss;
+    if (typeof h !== 'function') return;
+    try { h(String(raw), node, attr || null); } catch (e) { /* never break a render */ }
+  }
+
   function doTextNode(node) {
     /* Skip if we already wrote this exact value (survives Vue re-renders) */
     if (node.__kaDone === node.textContent) return;
@@ -657,7 +674,7 @@
        -> 400 (long warnings and tooltips). Applies to the English source. */
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
-    if (out === null) return;
+    if (out === null) { missed(raw, node, null); return; }
     /* preserve surrounding whitespace so layout/spacing is unchanged */
     var lead = raw.match(/^\s*/)[0];
     var tail = raw.match(/\s*$/)[0];
@@ -672,7 +689,8 @@
       var v = el.getAttribute(a);
       if (!v || v.length > MAX_LEN) continue;
       var out = translate(v);
-      if (out === null || out === v) continue;
+      if (out === null) { missed(v, el, a); continue; }
+      if (out === v) continue;
       el.setAttribute(a, out);
     }
   }
