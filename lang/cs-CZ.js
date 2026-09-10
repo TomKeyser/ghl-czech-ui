@@ -149,6 +149,12 @@
        {N} capture · {~form:N} plural · {=N} glossary (rule fails on miss)
        {?N} glossary with fallback · {*N} recursive translate with fallback  */
     patterns: {
+      /* {1} passes the capture through untouched: the status word is ours, the
+         record name belongs to whoever created it. */
+      CAL_DRAFTED:    '(Koncept) {1}',
+      CAL_PERSONAL:   'Osobní kalendář – {1}',
+      CAL_DRAFT_PERS: '(Koncept) Osobní kalendář – {1}',
+
       COUNT_ITEMS:    '{1} {~items:1}',
       COUNT_COLON:    '{=1}: {2}',
       COUNT_PAREN:    '{=1} ({2})',
@@ -3096,6 +3102,11 @@
   };
 
   pack.dict = {
+    /* Calendars screen, flagged with the gap picker 10 Sep 2026 */
+    "Schedule an Appointment": "Naplánovat schůzku",
+    "Day view": "Denní zobrazení",
+    "Month view": "Měsíční zobrazení",
+
     "Launchpad": "Rychlý start",
     "Dashboard": "Nástěnka",
     "Conversations": "Konverzace",

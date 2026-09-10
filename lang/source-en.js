@@ -61,6 +61,24 @@
          or a weekday rather than a word. These three rules replace 33 of them,
          and no dictionary entry could have done it -- "1 PM" is 13:00 in Czech,
          not a translation. */
+      /* A STATUS PREFIX ON A USER-NAMED RECORD. Tom's note on the pick said it
+         exactly: "(Drafted) only, the rest of the line is user defined". The
+         template passes the capture through untouched, so "(Drafted) Boxing
+         Class" becomes "(Koncept) Boxing Class" and the calendar keeps the name
+         its owner gave it. A dictionary entry could never do this, and blocking
+         the element would lose the status word. */
+      /* The two compose, so the combination gets its own rule rather than
+         nesting a translate() call inside the template. Passing the capture
+         through {*1} would work here and would also run the dictionary over
+         user-named records -- a calendar called "Manual" would be rewritten.
+         An explicit rule costs one line and touches no name. Must precede
+         CAL_DRAFTED, which would otherwise match first and stop. */
+      ['CAL_DRAFT_PERS', /^\(Drafted\)\s+(.+)['’]s Personal Calendar$/i],
+      ['CAL_DRAFTED',    /^\(Drafted\)\s+(.+)$/i],
+      /* "tom keyser's Personal Calendar" — a possessive around a person's name.
+         Rendered as a dash rather than a Czech possessive, because declining a
+         name we did not author goes wrong in a language with seven cases. */
+      ['CAL_PERSONAL',   /^(.+)['’]s Personal Calendar$/i],
       ['CAL_DAY_COL',    /^(\d{1,2})\s+(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/i, '@dayWeekday'],
       ['CAL_HOUR',       /^(\d{1,2})\s*(AM|PM)$/i, '@hourLabel'],
       ['CAL_DAY_RANGE',  /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s*[–-]\s*(\d{1,2}),\s*(\d{4})$/i, '@dayRangeInMonth'],
