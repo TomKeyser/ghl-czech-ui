@@ -3126,6 +3126,7 @@
        are my Czech, unlike the three above. Flag them to a native reader in a
        batch rather than one at a time. */
     "moved": "přesunuto",
+    "Reports are loading": "Načítání přehledů",
     "Deselect All": "Zrušit výběr všech",
     "Assigned to:": "Přiřazeno:",
     "Created by:": "Vytvořil:",

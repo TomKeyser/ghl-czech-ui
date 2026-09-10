@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v49';
+  var VERSION = 'v50';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -356,6 +356,12 @@
        plural rule already handles it. Blocking the card would take the
        translation away with the data. */
     '[id^="data-stage-name-"]',
+    /* THE SUB-ACCOUNT SWITCHER in the sidebar: the account's own name and its
+       address ("ZZ My Gym", "ZZ Las Vegas, NV"). Both sit in .hl_location-text
+       inside div#location-switcher-sidbar-v2 (HighLevel's own typo). Blocking
+       the text wrapper rather than the switcher leaves the switcher's chrome
+       translatable. Found by the harvest walk once the noise was cleared. */
+    '.hl_location-text',
     /* the selected pipeline, also user-named. Scoped to that one dropdown on
        purpose: .hr-base-selection-label is HighLevel's design system and is
        used by every select in the product, including status pickers whose
@@ -483,7 +489,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v34';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v35';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
