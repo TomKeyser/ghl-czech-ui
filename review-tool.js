@@ -7,8 +7,8 @@
    it came from, and their correction — then downloads as one JSON file.
 
    WHY IT CLICKS ONLY ON OUR OWN TEXT
-   The engine marks every text node it writes with  node.__csDone  (and every
-   attribute with  el.__csVal ). This tool will ONLY flag nodes carrying those
+   The engine marks every text node it writes with  node.__kaDone  (and every
+   attribute with  el.__kaVal ). This tool will ONLY flag nodes carrying those
    marks. That is not a convenience, it is the safety property: those nodes have
    already passed the engine's CONTENT_ZONES / BLOCKED_TEXT firewall, so a flag
    can never capture a contact name, a message body, or anything else belonging
@@ -40,7 +40,7 @@
 
    SAFETY
    - Gated to the SAME sub-accounts as the engine (ONLY_LOCATIONS, read from
-     window.__ghlCzechStatus). Elsewhere, nothing runs and no badge appears.
+     window.__kaStatus). Elsewhere, nothing runs and no badge appears.
    - Re-checked on SPA navigation, because HighLevel lets you move between
      sub-accounts without a reload and a value frozen at boot goes quietly wrong.
    - Reads only nodes the translation engine itself wrote. Never reads .value,
@@ -73,7 +73,7 @@
   window.__ghlReviewVersion = VERSION;
 
   /* ---------- the gate ----------------------------------------------------
-     INHERITED FROM THE ENGINE, NOT COPIED. window.__ghlCzechStatus.onlyLocations
+     INHERITED FROM THE ENGINE, NOT COPIED. window.__kaStatus.onlyLocations
      is the engine's own live list, so adding a sub-account there covers this tool
      automatically and the two can never disagree.
      RE-EVALUATED EVERY TIME, never captured at boot: HighLevel is an SPA and you
@@ -81,7 +81,7 @@
      would go quietly wrong — the exact stale-artifact bug the engine's own
      comments warn about. */
   function gatedLocations() {
-    var s = window.__ghlCzechStatus;
+    var s = window.__kaStatus;
     return (s && s.onlyLocations && s.onlyLocations.length) ? s.onlyLocations : FALLBACK_LOCATIONS;
   }
   function allowedHere() {
@@ -146,7 +146,7 @@
        mark is one we are responsible for */
     var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
-        return (n.__csDone && n.__csDone === n.textContent && n.textContent.trim())
+        return (n.__kaDone && n.__kaDone === n.textContent && n.textContent.trim())
           ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
       }
     });
@@ -158,7 +158,7 @@
     for (var el = start; el && el !== document.body; el = el.parentElement) {
       var t = translatedTextUnder(el);
       if (t) return { el: el, text: t, kind: 'text' };
-      if (el.__csVal) return { el: el, text: String(el.__csVal).trim(), kind: 'attribute' };
+      if (el.__kaVal) return { el: el, text: String(el.__kaVal).trim(), kind: 'attribute' };
     }
     return null;
   }
@@ -299,7 +299,7 @@
     unmarkAll();
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
-        if (!n.__csDone || n.__csDone !== n.textContent) return NodeFilter.FILTER_REJECT;
+        if (!n.__kaDone || n.__kaDone !== n.textContent) return NodeFilter.FILTER_REJECT;
         /* our own badge gets translated too — do not outline it */
         var p = n.parentElement;
         if (p && p.closest && p.closest('#ghl-review-badge, #ghl-review-panel')) return NodeFilter.FILTER_REJECT;
@@ -322,7 +322,7 @@
     if (!allowedHere()) return;                 /* moved to an ungated sub-account */
     /* NEVER intercept our own UI. The engine translates anything in document.body
        that is not in CONTENT_ZONES — and it does not exempt this tool — so our own
-       "Download" and "Clear" labels get translated and stamped with __csDone. That
+       "Download" and "Clear" labels get translated and stamped with __kaDone. That
        made every badge button look like a flaggable string, and stopPropagation
        then swallowed the click before the button's own handler ran: flag mode
        could be turned on and never off. */
@@ -487,8 +487,8 @@
   }).observe(document.body, { childList: true, subtree: true });
 
   console.info('[review] ' + VERSION + ' ready · ' + flags.length + ' flags stored · ' +
-    'engine ' + (window.__ghlCzechActive ? window.__ghlCzechVersion : 'NOT YET ACTIVE') + ' · ' +
-    'gate ' + (window.__ghlCzechStatus ? "from the engine's list" : 'from the fallback list, re-checked every second') +
+    'engine ' + (window.__kaActive ? window.__kaVersion : 'NOT YET ACTIVE') + ' · ' +
+    'gate ' + (window.__kaStatus ? "from the engine's list" : 'from the fallback list, re-checked every second') +
     ' · here: ' + (allowedHere() ? 'ACTIVE' : 'not a reviewed sub-account, badge hidden') +
     ' · Alt-click a translated word, or press Flag mode.');
 })();

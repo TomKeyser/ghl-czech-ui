@@ -22,7 +22,7 @@
    - IF THE LANGUAGE FILES DO NOT LOAD, THE LAYER DOES NOTHING. It never
      half-translates: a partly-Czech screen looks like corruption and is far
      worse than an English one. See bootData()/activate() below, and check
-     window.__ghlCzechStatus to diagnose.
+     window.__kaStatus to diagnose.
 
    GATED to the sub-accounts listed in ONLY_LOCATIONS below — as of v29 the two
    test accounts, NOT the whole agency. Off those paths the layer still loads
@@ -71,13 +71,13 @@
   /* ===== BUMP THIS WHENEVER YOU CHANGE THE FILE =====================
      It is the fastest way to tell whether GitHub Pages has finished
      deploying your edit. After committing, refresh HighLevel and check
-     the browser console, or just type   __ghlCzechVersion   there.
+     the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v31';
+  var VERSION = 'v32';
 
-  if (window.__ghlCzechActive) return;
-  window.__ghlCzechActive = true;
-  window.__ghlCzechVersion = VERSION;
+  if (window.__kaActive) return;
+  window.__kaActive = true;
+  window.__kaVersion = VERSION;
 
   /* ---------- which sub-accounts get Czech --------------------------------
      HighLevel's Custom JS box lives at the AGENCY level, so without this gate
@@ -101,9 +101,9 @@
   /* ---------- kill switch ---------------------------------------------- */
   try {
     var qs = window.location.search;
-    if (qs.indexOf('nocs=1') !== -1) localStorage.setItem('ghl_cs_off', '1');
-    if (qs.indexOf('nocs=0') !== -1) localStorage.removeItem('ghl_cs_off');
-    if (localStorage.getItem('ghl_cs_off') === '1') {
+    if (qs.indexOf('nocs=1') !== -1) localStorage.setItem('ka_off', '1');
+    if (qs.indexOf('nocs=0') !== -1) localStorage.removeItem('ka_off');
+    if (localStorage.getItem('ka_off') === '1') {
       console.info('[cs-CZ] translation layer disabled via kill switch');
       return;
     }
@@ -278,7 +278,7 @@
      touched. A half-translated interface is worse than an English one: it
      looks like corruption, it is hard to diagnose, and it destroys trust in
      the layer. English is a correct, complete, boring fallback.
-     Diagnose with  window.__ghlCzechStatus  in the console.
+     Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
   var DATA_VERSION  = 'v30';          /* bump when lang/<locale>.js changes */
@@ -299,7 +299,7 @@
     return 'https://tomkeyser.github.io/ghl-czech-ui/';
   })();
 
-  var STATUS = window.__ghlCzechStatus = {
+  var STATUS = window.__kaStatus = {
     version: VERSION, dataVersion: DATA_VERSION, base: BASE,
     locale: null, localeSource: null, state: 'loading', terms: 0, error: null,
     /* Which sub-accounts this build will touch, and whether it is touching the
@@ -327,7 +327,7 @@
        2. ?cslang=0         clears a persisted override, back to the loader's
                             choice. Mirrors ?nocs=0 deliberately: one pattern to
                             remember, not two.
-       3. window.__ghlLang  set by the loader in the agency's Custom JS box.
+       3. window.__kaLang  set by the loader in the agency's Custom JS box.
                             THIS IS THE NORMAL WAY TO CHOOSE A LANGUAGE —
                             one line, no urls, no per-browser state.
        4. DEFAULT_LOCALE
@@ -335,7 +335,7 @@
      EVERY source is validated against AVAILABLE, not just the url one. The
      value ends up inside a script url, and localStorage is user-writable, so
      "it came from our own loader" is not a reason to skip the check.         */
-  var LANG_KEY = 'ghl_cs_lang';
+  var LANG_KEY = 'ka_lang';
 
   function validLocale(v) {
     return typeof v === 'string' &&
@@ -379,13 +379,13 @@
     }
 
     /* 4 — the loader's choice: the normal path */
-    var fromLoader = window.__ghlLang;
+    var fromLoader = window.__kaLang;
     if (fromLoader) {
       if (validLocale(fromLoader)) {
-        STATUS.localeSource = 'loader (window.__ghlLang)';
+        STATUS.localeSource = 'loader (window.__kaLang)';
         return fromLoader;
       }
-      console.warn('[lang] loader set __ghlLang="' + fromLoader + '", which is not available. ' +
+      console.warn('[lang] loader set __kaLang="' + fromLoader + '", which is not available. ' +
                    'Available: ' + known + '. Falling back to ' + DEFAULT_LOCALE);
     }
 
@@ -435,7 +435,7 @@
     STATUS.error = why;
     console.warn('[cs-CZ] language layer DISABLED — ' + why +
       '. The interface is left in English; nothing was partially translated. ' +
-      'Details: window.__ghlCzechStatus');
+      'Details: window.__kaStatus');
   }
 
   function loadScript(url, done) {
@@ -555,9 +555,103 @@
     return !el || (el.closest && el.closest(BLOCKED_ATTR));
   }
 
+  /* ---------- __kaDebug: read-only diagnosis surface ----------------------
+     The gap picker and the errors channel both need to answer ONE question
+     about a string on screen: why is this not in Czech? Everything needed to
+     answer it lives in this closure, so expose it deliberately rather than
+     letting a tool re-implement the selector lists and drift out of step.
+
+     Nothing here writes to the page. It is safe to leave in production, and
+     the errors channel gets its diagnosis from the same function a human
+     would use with the picker. */
+
+  function describe(el) {
+    if (!el || !el.tagName) return '';
+    if (el.id) return '#' + el.id;
+    var cls = (el.className && el.className.baseVal !== undefined)
+      ? el.className.baseVal : el.className;
+    cls = String(cls || '').split(/\s+/).filter(function (c) {
+      /* framework noise: scoped ids, utility classes, state flags */
+      return c && !/^(data-v-|v-|ng-|is-|has-|svelte-)/.test(c) && c.length > 2;
+    })[0];
+    return el.tagName.toLowerCase() + (cls ? '.' + cls : '');
+  }
+
+  /* which CONTENT_ZONES entry actually caught this element */
+  function zoneOf(el, forAttr) {
+    var list = forAttr ? CONTENT_ZONES : CONTENT_ZONES.concat(['input', 'textarea', 'select']);
+    for (var i = 0; i < list.length; i++) {
+      try { if (el.closest(list[i])) return list[i]; } catch (e) {}
+    }
+    return null;
+  }
+
+  /* why(node[, attr]) -> { reason, ... }
+     reasons: not-ready | empty | too-long | iframe | content-zone |
+              data-picker | missing | translated                        */
+  function why(node, attr) {
+    if (!node) return { reason: 'no-node' };
+    if (!DICT) return { reason: 'not-ready' };
+
+    var isText = node.nodeType === 3;
+    var el = isText ? node.parentElement : node;
+    if (!el) return { reason: 'no-element' };
+    if (el.tagName === 'IFRAME') {
+      return { reason: 'iframe', src: el.getAttribute('src') || '',
+               note: 'cross-origin micro-frontend: unreachable from any DOM layer' };
+    }
+
+    var raw = attr ? (el.getAttribute && el.getAttribute(attr))
+                   : (isText ? node.textContent : el.textContent);
+    var key = String(raw == null ? '' : raw).trim();
+    if (!key) return { reason: 'empty' };
+    if (key.length > MAX_LEN) {
+      return { reason: 'too-long', length: key.length, max: MAX_LEN, text: key.slice(0, 60) };
+    }
+
+    var caught = attr ? blockedAttr(el) : blockedText(el);
+    if (caught) {
+      if (!attr && (el.tagName === 'OPTION' || el.closest('option')) && inDataPicker(el)) {
+        return { reason: 'data-picker', on: describe(el.closest('select') || el), text: key };
+      }
+      return { reason: 'content-zone', zone: zoneOf(el, !!attr),
+               on: describe(el.closest(attr ? BLOCKED_ATTR : BLOCKED_TEXT) || el), text: key };
+    }
+    if (!attr && inDataPicker(el)) {
+      return { reason: 'data-picker', on: describe(el.closest(DATA_PICKERS) || el), text: key };
+    }
+
+    var out = translate(key);
+    return out === null
+      ? { reason: 'missing', text: key, attr: attr || null }
+      : { reason: 'translated', text: key, to: out, attr: attr || null };
+  }
+
+  /* Zero-match audit. A do-not-touch selector that matches nothing on any
+     screen is not protecting anything -- it only reads like protection.
+     Run it screen by screen; absence on one page is not absence everywhere. */
+  function dead() {
+    return CONTENT_ZONES.map(function (sel) {
+      var n = 0;
+      try { n = document.querySelectorAll(sel).length; } catch (e) { n = -1; }
+      return { selector: sel, matches: n };
+    });
+  }
+
+  window.__kaDebug = {
+    version: VERSION,
+    translate: translate,
+    why: why,
+    describe: describe,
+    dead: dead,
+    zones: CONTENT_ZONES,
+    attrs: ATTRS,
+    maxLen: MAX_LEN
+  };
+
   function doTextNode(node) {
     /* Skip if we already wrote this exact value (survives Vue re-renders) */
-    if (node.__csDone === node.textContent) return;
+    if (node.__kaDone === node.textContent) return;
     var raw = node.textContent;
     /* Length guard — see MAX_LEN. Raised 80 -> 160 (empty-state sentences)
        -> 400 (long warnings and tooltips). Applies to the English source. */
@@ -568,7 +662,7 @@
     var lead = raw.match(/^\s*/)[0];
     var tail = raw.match(/\s*$/)[0];
     node.textContent = lead + out + tail;
-    node.__csDone = node.textContent;
+    node.__kaDone = node.textContent;
   }
 
   function doAttrs(el) {
@@ -589,11 +683,11 @@
     if (el === document.activeElement) return;          /* never mid-typing */
     var v = el.value;
     if (!v || v.length > MAX_LEN) return;
-    if (el.__csVal === v) return;                       /* already handled */
+    if (el.__kaVal === v) return;                       /* already handled */
     var out = translate(v);
     if (out === null || out === v) return;
     el.value = out;
-    el.__csVal = out;
+    el.__kaVal = out;
     /* Without these the framework's model keeps the English string: the user
        would see Czech and save English, or the next render would revert it. */
     try {
@@ -650,7 +744,7 @@
 
   function flush() {
     scheduled = false;
-    /* re-evaluated every pass, so __ghlCzechStatus.translatingHere stays true
+    /* re-evaluated every pass, so __kaStatus.translatingHere stays true
        to the screen you are actually looking at after an in-app sub-account
        switch. allowedHere() was already being called here; this just records
        the answer. */
@@ -710,7 +804,7 @@
 
     /* Diagnostic line: locale and provenance split, because "is it even
        loaded, and which language?" is the first question every support
-       conversation starts with. Full detail in window.__ghlCzechStatus. */
+       conversation starts with. Full detail in window.__kaStatus. */
     console.info('[' + STATUS.locale + '] language layer ' + VERSION +
       ' active — ' + STATUS.terms + ' terms (' + STATUS.curated + ' curated, ' +
       STATUS.fromApi + ' from HighLevel), data ' + DATA_VERSION +
