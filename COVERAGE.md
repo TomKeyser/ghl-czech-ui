@@ -1,0 +1,83 @@
+# Coverage — measured, 10 September 2026
+
+**98.6% of translatable interface text on the operator surface.**
+Engine v52, Czech, measured on a live sub-account rather than against a corpus.
+
+## The number that matters, and the two that don't
+
+Three different figures have been quoted during this project. Only the third is
+defensible.
+
+| | |
+|---|---|
+| **99.6%** | Coverage of HighLevel's *localization API corpus*. Meaningless — that corpus does not include the newer product surfaces at all, which is why a native reviewer still found untranslated screens. |
+| **50.5%** | The same corpus including wordpress, yext and reselling — surfaces a sub-account operator never opens. Measures the wrong product. |
+| **98.6%** | What a person using the CRM actually sees. Measured below. |
+
+## Method
+
+Walk twelve operator routes, wait for the DOM to settle, then ask the engine's
+own diagnosis (`__kaDebug.why()`) about every visible text node:
+
+- **translated** — we wrote it
+- **content-zone / data-picker** — deliberately off limits: message bodies,
+  contact names, pipeline and stage names, table cells holding records
+- **missing** — reached the engine and had no translation
+
+Coverage is `translated / (translated + missing)`, counted per **text node**, so
+a string appearing forty times counts forty times. That is the right denominator
+for "what does a user see", and the wrong one for "how big is the dictionary".
+
+## Result
+
+| Route | Translated | Gaps | Off limits | % |
+|---|---|---|---|---|
+| Opportunities | 122 | 9 | 12 | 93.1 |
+| Contacts list | 123 | 10 | 146 | 92.5 |
+| Dashboard | 145 | 12 | 105 | 92.4 |
+| Reputation | 100 | 9 | 5 | 91.7 |
+| Payments | 95 | 9 | 5 | 91.3 |
+| Tasks | 93 | 9 | 22 | 91.2 |
+| Calendars | 101 | 11 | 5 | 90.2 |
+| Reporting | 68 | 9 | 5 | 88.3 |
+| Contact detail | 89 | 12 | 6 | 88.1 |
+| Conversations | 66 | 9 | 5 | 88.0 |
+| Social planner | 119 | 18 | 5 | 86.9 |
+| Media storage | 46 | 7 | 2 | 86.8 |
+| **Raw total** | **1,167** | **124** | **323** | **90.4** |
+
+## Why the honest figure is higher than the raw one
+
+Of those 124 "gaps", 108 are not translatable text:
+
+| Count | What | |
+|---|---|---|
+| 60 | `×` `*` `#` `T` | single-character symbols |
+| 24 | `snapshots.loadSnapshotsTemplate.selectSnapshotTemplate` | **HighLevel's own untranslated key**, leaking into the DOM |
+| 12 | `<strong>We're sorry but the application…` | the `<noscript>` block — never rendered |
+| 12 | `ctrlK` | a keyboard-shortcut token |
+
+Leaving **16 genuine gaps** across twelve screens: `Win%`, `0s`, `$0/M`,
+`1 more`, and a handful of fragments.
+
+**1,167 / (1,167 + 16) = 98.6%.**
+
+## What is excluded, and why that is the point
+
+**323 nodes off limits** — message bodies, contact and company names, pipeline
+and stage names, tags, the account switcher, table cells holding records. These
+are customer data. Not translating them is the product working, not a shortfall,
+and the count is worth quoting alongside the coverage figure: it is the size of
+what we deliberately never touch.
+
+**56 more** reached the engine and look like customer data, mostly on the
+opportunities board. Those are firewall gaps, tracked separately.
+
+## Honest caveats
+
+- One sub-account, one dataset. A screen with no records shows fewer strings.
+- Cross-origin iframes — Settings sub-pages, the workflow builder — are outside
+  this measurement entirely. No DOM layer can reach them, ours or a competitor's.
+- Counts occurrences, not distinct strings. The **distinct** gap across the whole
+  operator surface is about fifty strings, which is the figure to use when
+  estimating work rather than describing the product.
