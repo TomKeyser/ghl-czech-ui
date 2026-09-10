@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v51';
+  var VERSION = 'v52';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -619,6 +619,16 @@
     if (!DICT) return null;                      /* not ready: touch nothing */
     var key = String(raw).trim();
     if (!key) return null;
+
+    /* Brands and technical tokens, checked BEFORE the dictionary so no pack can
+       accidentally translate one. Returns the string unchanged rather than null:
+       null would mean "miss", and every brand name on the page would then pile
+       up in the harvest queue for ever. */
+    if (RULES && RULES.neverTranslate) {
+      var keep = RULES.neverTranslate(key);
+      if (keep !== null) return keep;
+    }
+
     if (own(DICT, key)) return DICT[key];
 
     var viaRule = RULES.applyRules(SOURCE, PACK, key, { plain: plain, translate: translate });
