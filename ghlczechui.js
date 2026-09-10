@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v35';
+  var VERSION = 'v36';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -724,6 +724,7 @@
     /* preserve surrounding whitespace so layout/spacing is unchanged */
     var lead = raw.match(/^\s*/)[0];
     var tail = raw.match(/\s*$/)[0];
+    node.__kaSrc = raw;                 /* the English we are replacing */
     node.textContent = lead + out + tail;
     node.__kaDone = node.textContent;
   }
@@ -738,6 +739,7 @@
       if (out === null) { missed(v, el, a); continue; }
       if (out === v) continue;
       el.setAttribute(a, out);
+      if (TOUCHED_ATTRS.length < MAX_TOUCHED) TOUCHED_ATTRS.push([el, a, v, out]);
     }
   }
 
@@ -758,6 +760,60 @@
       el.dispatchEvent(new Event('input',  { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     } catch (e) {}
+  }
+
+  /* ---------- putting it back --------------------------------------------
+     HighLevel is an SPA: moving between sub-accounts does not reload the page,
+     and the shell -- sidebar, top bar -- is not re-rendered. So the nodes we
+     translated on a gated sub-account are the SAME NODES when you arrive
+     somewhere ungated, still carrying our Czech. The engine correctly stops
+     TRANSLATING, but until now it had no way to put anything BACK, so an
+     agency owner clicking from a Czech client into any other client saw a
+     half-Czech sidebar until they hard-refreshed.
+
+     Found by Tom on 2026-09-10 by switching to his agency sub-account.
+
+     Only ever restore text we still recognise as ours: if the app has since
+     rewritten a node, __kaDone no longer matches and we leave it alone. The
+     alternative -- blindly writing __kaSrc back -- would clobber whatever the
+     application put there, which is far worse than a stale Czech label.
+
+     Prefilled VALUES are deliberately not reverted: restoring one means
+     dispatching input/change into the framework's model, and firing synthetic
+     events at an app we are only decorating is not worth it for a niche
+     feature. They are re-checked on the next pass anyway.                  */
+  var MAX_TOUCHED = 6000;
+  var TOUCHED_ATTRS = [];
+
+  function revertAll() {
+    var restored = 0;
+
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while ((n = w.nextNode())) {
+      if (n.__kaSrc === undefined) continue;
+      if (n.__kaDone === n.textContent) { n.textContent = n.__kaSrc; restored++; }
+      n.__kaSrc = undefined;
+      n.__kaDone = undefined;
+    }
+
+    for (var i = 0; i < TOUCHED_ATTRS.length; i++) {
+      var t = TOUCHED_ATTRS[i];
+      try {
+        if (t[0].getAttribute && t[0].getAttribute(t[1]) === t[3]) {
+          t[0].setAttribute(t[1], t[2]);
+          restored++;
+        }
+      } catch (e) { /* node gone */ }
+    }
+    TOUCHED_ATTRS = [];
+
+    /* the pseudo-element rules are ours too, and would keep applying */
+    var css = document.getElementById(PSEUDO_STYLE_ID);
+    if (css && css.parentNode) css.parentNode.removeChild(css);
+
+    STATUS.reverted = restored;
+    return restored;
   }
 
   function walk(root) {
@@ -812,7 +868,12 @@
        to the screen you are actually looking at after an in-app sub-account
        switch. allowedHere() was already being called here; this just records
        the answer. */
+    var wasHere = STATUS.translatingHere;
     STATUS.translatingHere = allowedHere();
+    /* the gate just closed behind us -- put the shell back into English */
+    if (wasHere === true && STATUS.translatingHere === false) {
+      try { revertAll(); } catch (e) { /* never break the app */ }
+    }
     if (STATUS.translatingHere) injectPseudoCss();   /* cheap; restores it if removed */
     var batch = queue;
     queue = [];
