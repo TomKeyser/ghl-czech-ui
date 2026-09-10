@@ -189,6 +189,12 @@
       REMOVE_FILT:    'Odebrat filtr: {?1}',
       RANGE_OF:       '{1} – {2} z {3}',
       N_OPPS:         '{1} {~opportunities:1}',
+      /* "0 opportunities selected" — the plural agrees with the number, which is
+         why this cannot be a dictionary entry: Czech needs one/few/other and
+         English has two forms. */
+      N_OPPS_SEL:     'Vybráno {1} {~opportunities:1}',
+      /* The calendar assistant greets by name; the name passes through. */
+      CAL_AI_HI:      'Dobrý den, {1}! Jsem Calendar AI. Řekněte mi, s čím vám mohu pomoci, nebo zvolte možnost níže.',
       N_PIPES:        '{1} {~pipelines:1}',
       N_APPLIED:      'Použito: {1}',
       OUT_OF:         '{=1} ({2} z {3})',
@@ -3127,6 +3133,10 @@
        batch rather than one at a time. */
     "moved": "přesunuto",
     "Reports are loading": "Načítání přehledů",
+    "Collapse stage": "Sbalit fázi",
+    "View conversations": "Zobrazit konverzace",
+    "Add an appointment": "Přidat schůzku",
+    "Loading calendars...": "Načítání kalendářů…",
     "Deselect All": "Zrušit výběr všech",
     "Assigned to:": "Přiřazeno:",
     "Created by:": "Vytvořil:",

@@ -108,7 +108,10 @@
       ['CAL_DAY_RANGE',  /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s*[–-]\s*(\d{1,2}),\s*(\d{4})$/i, '@dayRangeInMonth'],
       ['STAMP',          /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
       ['MON_YEAR',       /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@monYear'],
+      /* must precede N_OPPS, which would otherwise never see the longer string */
+      ['N_OPPS_SEL',     /^(\d+)\s+opportunit(?:y|ies)\s+selected$/i],
       ['N_OPPS',         /^(\d+)\s+opportunit(?:y|ies)$/i],
+      ['CAL_AI_HI',      /^Hi\s+(.+?)!\s*I'm Calendar AI\.\s*Tell me what you'd like help with, or choose an option below\.$/i],
       ['N_PIPES',        /^(\d+)\s+pipelines?$/i],
       ['N_APPLIED',      /^(\d+)\s+applied$/i],
       ['OUT_OF',         /^(.+?)\s*\((\d+)\s+out of\s+(\d+)\)$/i],
