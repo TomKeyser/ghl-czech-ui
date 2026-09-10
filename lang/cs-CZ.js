@@ -151,6 +151,17 @@
     patterns: {
       /* {1} passes the capture through untouched: the status word is ours, the
          record name belongs to whoever created it. */
+      /* Activity feed. ⚠ NEEDS A NATIVE EYE ON ONE POINT: "přesunuto" is the
+         impersonal neuter, chosen because the VERB IS ITS OWN TEXT NODE and we
+         never see the subject. Czech would prefer agreement — "příležitost
+         přesunuta" (feminine), "úkol přesunut" (masculine) — and we cannot
+         produce it without knowing what moved. The impersonal form is the only
+         one that is never wrong, but a native may prefer a noun form
+         ("přesun") in a log line. Ask; do not guess twice. */
+      ACT_MOVE_LINE:  'z {1} → {2} v {3}',
+      ACT_IN_STAGE:   'v {1} – {2}',
+      ACT_OPP_NAMED:  'Příležitost {1}',
+
       CAL_DRAFTED:    '(Koncept) {1}',
       CAL_PERSONAL:   'Osobní kalendář – {1}',
       CAL_DRAFT_PERS: '(Koncept) Osobní kalendář – {1}',
@@ -3108,6 +3119,46 @@
     "Schedule an Appointment": "Naplánovat schůzku",
     "Day view": "Denní zobrazení",
     "Month view": "Měsíční zobrazení",
+
+    /* Harvest walk, 10 Sep 2026 — 31 routes. NOT YET NATIVE-CONFIRMED; these
+       are my Czech, unlike the three above. Flag them to a native reader in a
+       batch rather than one at a time. */
+    "moved": "přesunuto",
+    "Deselect All": "Zrušit výběr všech",
+    "Assigned to:": "Přiřazeno:",
+    "Created by:": "Vytvořil:",
+    "First attribution source:": "První zdroj atribuce:",
+    "Interval": "Interval",
+    "Compare": "Porovnat",
+    "Fetch": "Načíst",
+    "Select a user": "Vyberte uživatele",
+    "Select a date range": "Vyberte časové období",
+    "Opportunity Stats": "Statistiky příležitostí",
+    "Loading dashboard": "Načítání nástěnky",
+    "Loading activities": "Načítání aktivit",
+    "Loading new sub account data...": "Načítání dat nového sub-účtu…",
+    "No Tasks found": "Nenalezeny žádné úkoly",
+    "Create tag": "Vytvořit štítek",
+    "Tag name": "Název štítku",
+    "Create and manage labels for contacts that help you organize data and run automations":
+      "Vytvářejte a spravujte štítky kontaktů, které pomáhají třídit data a spouštět automatizace",
+    "Back to contacts list page": "Zpět na seznam kontaktů",
+    "Customize": "Přizpůsobit",
+    "Unarchive Conversation": "Obnovit konverzaci z archivu",
+    "Delete contact": "Smazat kontakt",
+    "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
+    "Please select a to number": "Vyberte cílové číslo",
+    "Page visits, form submissions, appointments, calls, and more will appear here. Engage now to start tracking!":
+      "Zde se zobrazí návštěvy stránek, odeslané formuláře, schůzky, hovory a další. Začněte a uvidíte je tu.",
+    "Turn on AI Agent": "Zapnout AI agenta",
+    "Let AI draft your replies Turn on AI Agent": "Nechte AI navrhovat odpovědi – zapnout AI agenta",
+    "Dismiss Let AI draft your replies": "Skrýt nabídku návrhů odpovědí AI",
+    "Get AI reply suggestions for every inbound message. You approve before anything is sent.":
+      "Získejte návrhy odpovědí AI na každou příchozí zprávu. Nic se neodešle bez vašeho schválení.",
+    "Membership Builder Interface": "Rozhraní pro tvorbu členské sekce",
+    "vs No comparison": "vs. bez porovnání",
+    "Google Business Profile": "Firemní profil Google",
+    "UTM term": "UTM term",
 
     "Launchpad": "Rychlý start",
     "Dashboard": "Nástěnka",

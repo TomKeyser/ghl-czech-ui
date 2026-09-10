@@ -67,6 +67,19 @@
          Class" becomes "(Koncept) Boxing Class" and the calendar keeps the name
          its owner gave it. A dictionary entry could never do this, and blocking
          the element would lose the status word. */
+      /* ACTIVITY FEED on contact detail. Inspected before writing these: the
+         line arrives as THREE separate text nodes, not one string --
+           [Opportunity Zz Test R] [moved] [from A → B in C]
+         so "moved" is a plain dictionary entry and only the third node needs a
+         pattern. Had it been one node, all of it would have been one rule; had
+         it been five, none of it could have been. Check the node structure
+         before writing a rule for any composed line.
+
+         Captures pass through with {1}: every one of them is a pipeline, stage
+         or opportunity name its owner chose. */
+      ['ACT_MOVE_LINE',  /^from (.+?) → (.+?) in (.+)$/],
+      ['ACT_IN_STAGE',   /^in (.+?) - (.+)$/],
+      ['ACT_OPP_NAMED',  /^Opportunity (.+)$/],
       /* The two compose, so the combination gets its own rule rather than
          nesting a translate() call inside the template. Passing the capture
          through {*1} would work here and would also run the dictionary over
