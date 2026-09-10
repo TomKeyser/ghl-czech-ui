@@ -55,7 +55,9 @@
     frames: {
       ago: 'před {n} {unit}',
       lastPeriod: '(Posledních {n} {unit})',
-      numericDate: '{d}. {m}. {y}'
+      numericDate: '{d}. {m}. {y}',
+      createdOn: 'Vytvořeno: {stamp}',
+      overdue: 'Po termínu – {date}'
     },
 
     /* ---- plural forms ---------------------------------------------------- */

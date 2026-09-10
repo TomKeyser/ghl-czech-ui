@@ -159,6 +159,42 @@
   }
 
   var FORMATTERS = {
+    /* "Created on: Sep 4 2026, 7:13 PM (PDT)" — a label, a stamp and a zone.
+       THE ZONE IS PASSED THROUGH UNCHANGED: it is the account's real setting,
+       not a word to translate, and it varies per sub-account. Writing it into
+       the pack is exactly the mistake that leaves a competitor shipping
+       "Created (BST)" to a CEST location. */
+    createdOnStamp: function (pack, m) {
+      var f = pack.frames && pack.frames.createdOn;
+      if (!f) return null;
+      var date;
+      if (isNumeric(pack)) {
+        var i = monthIndex(m[1]);
+        if (i === null) return null;
+        date = numericDate(pack, m[2], i, m[3]);
+      } else {
+        var mo = month(pack, 'genitive', m[1]);
+        if (mo === null) return null;
+        date = m[2] + '. ' + mo + ' ' + m[3];
+      }
+      var out = date + ' ' + to24(m[4], m[6]) + ':' + m[5];
+      if (m[7]) out += ' (' + m[7] + ')';
+      return f.replace('{stamp}', out);
+    },
+    /* "Overdue - 9/5/2026" — US month/day/year behind an English label */
+    overdueSlash: function (pack, m) {
+      var f = pack.frames && pack.frames.overdue;
+      return f ? f.replace('{date}', numericDate(pack, m[2], parseInt(m[1], 10), m[3])) : null;
+    },
+    /* "Sep 4" — a bare month and day, no year */
+    monDay: function (pack, m) {
+      if (isNumeric(pack)) {
+        var i = monthIndex(m[1]);
+        return i === null ? null : parseInt(m[2], 10) + '. ' + i + '.';
+      }
+      var mo = month(pack, 'genitive', m[1]);
+      return mo === null ? null : parseInt(m[2], 10) + '. ' + mo;
+    },
     /* "06 Sun" — the day-number and weekday a calendar draws above a column */
     dayWeekday: function (pack, m) {
       var w = weekday(pack, 'abbr', m[2]);

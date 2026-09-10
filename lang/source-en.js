@@ -67,6 +67,17 @@
          Class" becomes "(Koncept) Boxing Class" and the calendar keeps the name
          its owner gave it. A dictionary entry could never do this, and blocking
          the element would lose the status word. */
+      /* COMPOSED DATE LINES — the shape the native reviewer flagged in
+         Reporting: a label, a US-format stamp and a timezone, all in one
+         string. No dictionary entry can reach any of it.
+
+         The zone is passed through unchanged: it is the account's real setting
+         and varies per sub-account. Writing zones into a pack is precisely the
+         mistake that has a competitor shipping "Created (BST)" to a CEST
+         location, where the header then stays English because of a timezone. */
+      ['CREATED_ON_TZ',  /^Created on:\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4}),\s*(\d{1,2}):(\d{2})\s*(AM|PM)(?:\s*\(([A-Za-z]{2,5})\))?$/i, '@createdOnStamp'],
+      ['OVERDUE_SLASH',  /^Overdue\s*-\s*(\d{1,2})\/(\d{1,2})\/(\d{4})$/i, '@overdueSlash'],
+      ['MON_DAY',        /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})$/i, '@monDay'],
       /* ACTIVITY FEED on contact detail. Inspected before writing these: the
          line arrives as THREE separate text nodes, not one string --
            [Opportunity Zz Test R] [moved] [from A → B in C]
