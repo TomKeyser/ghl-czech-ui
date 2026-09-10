@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v40';
+  var VERSION = 'v41';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -314,6 +314,10 @@
        against protecting the densest customer data on the busiest screen. The
        preview line is named separately in case a row ever lacks the id. */
     '[data-conversation-id]', '[data-testid="ASSERT_LC_LEFTPANEL"]',
+    /* the header account card: the signed-in user's own name and email address.
+       Found by the collector flagging a real address as suspect on the dashboard,
+       which is the detector doing precisely what it exists for. */
+    '.user-info-card',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -855,6 +859,15 @@
   function missed(raw, node, attr) {
     var h = window.__kaOnMiss;
     if (typeof h !== 'function') return;
+    /* NEVER REPORT OUR OWN OUTPUT AS A GAP. Text nodes are safe because
+       __kaDone stops them before they reach here, but ATTRIBUTES carry no
+       marker: doAttrs re-reads its own Czech on every pass, translate() misses
+       because Czech is not a key, and the collector recorded it as missing.
+       Measured 10 Sep on one dashboard: our own aria-labels held the top three
+       places by frequency (31, 18, 15 sightings), which is exactly the ranking
+       that was supposed to sort real work to the top. Same root cause as the
+       why() bug fixed in v34 -- fixed there, missed here. */
+    if (isOurOutput(String(raw).trim())) return;
     try { h(String(raw), node, attr || null); } catch (e) { /* never break a render */ }
   }
 
