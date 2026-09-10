@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v36';
+  var VERSION = 'v37';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -96,6 +96,93 @@
       if (path.indexOf('/location/' + ONLY_LOCATIONS[i]) !== -1) return true;
     }
     return false;
+  }
+
+  /* ---------- WHICH LANGUAGE IS THE SCREEN ALREADY IN? ---------------------
+     Every key in the pack is ENGLISH, so the layer only works when HighLevel
+     is rendering English. If a sub-account admin sets the platform language to
+     Spanish, the UI arrives in Spanish, every lookup misses, and we do nothing
+     -- silently, which is the support call Tom predicted on day one: "the
+     system's not working, only because the sub-account admin changed or
+     selected the wrong platform language."
+
+     HighLevel resolves the CURRENT USER's platform language into
+     localStorage.locale (hyphenated: 'en-US'), and mirrors the primary subtag
+     onto <html lang>. Neither costs a token or an API call, and both are
+     maintained by the same machinery that re-renders the shell -- so we sit on
+     HighLevel's own axis rather than inventing one.                        */
+  var PACK_SOURCE = 'en';               /* the language our KEYS are written in */
+
+  function platformLang() {
+    var v = '';
+    try { v = localStorage.getItem('locale') || ''; } catch (e) {}
+    if (!v && document.documentElement) v = document.documentElement.lang || '';
+    return String(v).toLowerCase().split(/[-_]/)[0];   /* 'en-US' -> 'en' */
+  }
+
+  function sourceMatches() {
+    var l = platformLang();
+    return !l || l === PACK_SOURCE;     /* unknown: assume English, as before */
+  }
+
+  /* ---------- WHO IS READING IT? ------------------------------------------
+     DECISION 2026-09-10: sub-account staff get the translated interface;
+     agency users keep whatever the platform gives them. An agency owner who
+     opens a Czech client's sub-account to fix something must be able to read
+     the screen -- that is their normal working day, not an edge case.
+
+     AppUtils.Utilities.getCurrentUser() carries no language field, but it does
+     carry type: 'agency' | 'account', which is exactly the distinction needed.
+
+     A CZECH-SPEAKING AGENCY IS THE EXCEPTION, so the loader can set
+     window.__kaAgencyToo = true, and ?csagency=1 does the same for one page
+     load while testing.
+
+     UNKNOWN MEANS WAIT, NOT GUESS: audience starts null and nothing is
+     translated until it resolves, so nobody sees a flash of Czech that is then
+     reverted. If AppUtils never answers we fall back to translating, because
+     doing nothing is the more visible failure -- and STATUS records that it
+     was a fallback rather than an answer.                                   */
+  var audience = null;                  /* null unknown · true yes · false no */
+  var AUDIENCE_TIMEOUT_MS = 6000;
+
+  function agencyToo() {
+    if (window.__kaAgencyToo === true) return true;
+    try { return window.location.search.indexOf('csagency=1') !== -1; } catch (e) { return false; }
+  }
+
+  function resolveAudience() {
+    if (agencyToo()) { audience = true; STATUS.userType = 'any (override)'; return; }
+
+    var settled = false;
+    function settle(val, why) {
+      if (settled) return;
+      settled = true;
+      audience = val;
+      STATUS.userType = why;
+      /* the answer may arrive after the first passes have already run */
+      try { schedule(document.body); } catch (e) {}
+    }
+
+    setTimeout(function () {
+      settle(true, 'unknown (AppUtils did not answer; translating anyway)');
+    }, AUDIENCE_TIMEOUT_MS);
+
+    try {
+      var U = window.AppUtils && window.AppUtils.Utilities;
+      if (!U || !U.getCurrentUser) { settle(true, 'unknown (no AppUtils)'); return; }
+      Promise.resolve(U.getCurrentUser()).then(function (u) {
+        var t = (u && u.type) || '';
+        settle(t !== 'agency', t || 'unknown');
+      }, function () {
+        settle(true, 'unknown (getCurrentUser failed)');
+      });
+    } catch (e) { settle(true, 'unknown (threw)'); }
+  }
+
+  /* everything that has to be true before a single node is touched */
+  function shouldTranslate() {
+    return allowedHere() && sourceMatches() && audience === true;
   }
 
   /* ---------- kill switch ---------------------------------------------- */
@@ -495,6 +582,7 @@
       }
     }
 
+    resolveAudience();
     STATUS.state = 'ready';
     STATUS.terms = Object.keys(DICT).length;
     STATUS.curated = Object.keys(P.dict).length;
@@ -819,7 +907,7 @@
   function walk(root) {
     if (!root) return;
     /* re-checked per pass so switching sub-accounts in-app takes effect at once */
-    if (!allowedHere()) return;
+    if (!shouldTranslate()) return;
 
     if (root.nodeType === 3) {
       if (!blockedText(root.parentElement)) doTextNode(root);
@@ -858,6 +946,19 @@
     while ((n = w.nextNode())) doTextNode(n);
   }
 
+  /* HighLevel mirrors the user's platform language onto <html lang>, and
+     changes it in place when that language changes. Watching the attribute
+     means we hear about it on THEIR axis, with no polling -- and the next
+     pass either starts translating or reverts, whichever is now right. */
+  function watchPlatformLang() {
+    if (!document.documentElement) return;
+    try {
+      new MutationObserver(function () {
+        try { schedule(document.body); } catch (e) {}
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    } catch (e) { /* observer unavailable: the per-pass check still covers it */ }
+  }
+
   /* ---------- batched observer ------------------------------------------ */
   var queue = [];
   var scheduled = false;
@@ -869,7 +970,20 @@
        switch. allowedHere() was already being called here; this just records
        the answer. */
     var wasHere = STATUS.translatingHere;
-    STATUS.translatingHere = allowedHere();
+    STATUS.translatingHere = shouldTranslate();
+    STATUS.platformLang = platformLang();
+    STATUS.audience = audience;
+    if (!STATUS.translatingHere) {
+      STATUS.notTranslatingBecause =
+        !allowedHere()     ? 'sub-account is not in ONLY_LOCATIONS' :
+        !sourceMatches()   ? 'platform language is "' + platformLang() + '", but this pack ' +
+                             'translates from "' + PACK_SOURCE + '" — set the platform language ' +
+                             'back to English for this sub-account' :
+        audience === null  ? 'waiting to find out who is logged in' :
+                             'agency user — the platform language is left alone';
+    } else {
+      STATUS.notTranslatingBecause = null;
+    }
     /* the gate just closed behind us -- put the shell back into English */
     if (wasHere === true && STATUS.translatingHere === false) {
       try { revertAll(); } catch (e) { /* never break the app */ }
@@ -903,7 +1017,8 @@
   }
 
   function start() {
-    if (allowedHere()) injectPseudoCss();
+    if (shouldTranslate()) injectPseudoCss();
+    watchPlatformLang();
     walk(document.body);
 
     new MutationObserver(function (muts) {
