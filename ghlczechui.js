@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v37';
+  var VERSION = 'v38';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -113,10 +113,16 @@
      HighLevel's own axis rather than inventing one.                        */
   var PACK_SOURCE = 'en';               /* the language our KEYS are written in */
 
+  /* MEASURED 2026-09-10, and it settled which signal to trust: impersonating a
+     user whose platform language is Spanish gave localStorage.locale = 'es'
+     while <html lang> STAYED 'en'. So the lang attribute is decorative -- it
+     is not a fallback, and watching it for changes would never fire. The
+     locale key is re-resolved per session, including on impersonation, which
+     is exactly the axis we want. Every pass re-reads it, so a change is picked
+     up by the same pass that notices the re-render it causes. */
   function platformLang() {
     var v = '';
     try { v = localStorage.getItem('locale') || ''; } catch (e) {}
-    if (!v && document.documentElement) v = document.documentElement.lang || '';
     return String(v).toLowerCase().split(/[-_]/)[0];   /* 'en-US' -> 'en' */
   }
 
@@ -183,6 +189,25 @@
   /* everything that has to be true before a single node is touched */
   function shouldTranslate() {
     return allowedHere() && sourceMatches() && audience === true;
+  }
+
+  /* Called from start() as well as from every pass, so __kaStatus answers
+     honestly the moment the page loads rather than only after the first
+     mutation. A diagnostic that is empty when you go looking is worse than
+     no diagnostic -- it reads as "the layer never ran". */
+  function refreshStatus() {
+    STATUS.translatingHere = shouldTranslate();
+    STATUS.platformLang = platformLang();
+    STATUS.packSource = PACK_SOURCE;
+    STATUS.audience = audience;
+    STATUS.notTranslatingBecause = STATUS.translatingHere ? null : (
+      !allowedHere()   ? 'sub-account is not in ONLY_LOCATIONS' :
+      !sourceMatches() ? 'platform language is "' + platformLang() + '", but this pack ' +
+                         'translates from "' + PACK_SOURCE + '" — set the platform language ' +
+                         'back to English for this sub-account' :
+      audience === null ? 'waiting to find out who is logged in'
+                        : 'agency user — the platform language is left alone'
+    );
   }
 
   /* ---------- kill switch ---------------------------------------------- */
@@ -946,19 +971,6 @@
     while ((n = w.nextNode())) doTextNode(n);
   }
 
-  /* HighLevel mirrors the user's platform language onto <html lang>, and
-     changes it in place when that language changes. Watching the attribute
-     means we hear about it on THEIR axis, with no polling -- and the next
-     pass either starts translating or reverts, whichever is now right. */
-  function watchPlatformLang() {
-    if (!document.documentElement) return;
-    try {
-      new MutationObserver(function () {
-        try { schedule(document.body); } catch (e) {}
-      }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-    } catch (e) { /* observer unavailable: the per-pass check still covers it */ }
-  }
-
   /* ---------- batched observer ------------------------------------------ */
   var queue = [];
   var scheduled = false;
@@ -970,20 +982,7 @@
        switch. allowedHere() was already being called here; this just records
        the answer. */
     var wasHere = STATUS.translatingHere;
-    STATUS.translatingHere = shouldTranslate();
-    STATUS.platformLang = platformLang();
-    STATUS.audience = audience;
-    if (!STATUS.translatingHere) {
-      STATUS.notTranslatingBecause =
-        !allowedHere()     ? 'sub-account is not in ONLY_LOCATIONS' :
-        !sourceMatches()   ? 'platform language is "' + platformLang() + '", but this pack ' +
-                             'translates from "' + PACK_SOURCE + '" — set the platform language ' +
-                             'back to English for this sub-account' :
-        audience === null  ? 'waiting to find out who is logged in' :
-                             'agency user — the platform language is left alone';
-    } else {
-      STATUS.notTranslatingBecause = null;
-    }
+    refreshStatus();
     /* the gate just closed behind us -- put the shell back into English */
     if (wasHere === true && STATUS.translatingHere === false) {
       try { revertAll(); } catch (e) { /* never break the app */ }
@@ -1017,8 +1016,8 @@
   }
 
   function start() {
+    refreshStatus();
     if (shouldTranslate()) injectPseudoCss();
-    watchPlatformLang();
     walk(document.body);
 
     new MutationObserver(function (muts) {
