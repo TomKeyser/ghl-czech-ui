@@ -125,9 +125,12 @@
        Same table shape as months, so a language that declines weekdays can add
        a second table without the engine changing.
 
-       ⚠ WORTH A NATIVE EYE, and cheap to change: Czech calendars vary between
-       these two-letter forms and three-letter ones (po/pon, út/úte). Ask when
-       the next Czech review happens rather than guessing twice. */
+       CONFIRMED BY A NATIVE SPEAKER, 10 Sep 2026, on the live calendar: these
+       two-letter forms read correctly, and so does the 24-hour clock the
+       CAL_HOUR rule produces. Czech calendars also use three-letter forms
+       (pon, úte) in some places, so this was worth asking rather than
+       guessing -- it is settled now, do not re-open it without a native
+       saying otherwise. */
     weekdays: {
       abbr: {
         mon: 'po', tue: 'út', wed: 'st', thu: 'čt',
