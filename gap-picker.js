@@ -50,7 +50,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'g1';
+  var VERSION = 'g2';
   var KEY = 'ka_gaps_v1';
   var POS_KEY = 'ka_gap_pos';
   var MAX_BYTES = 4 * 1024 * 1024;             /* headroom under the ~5MB cap */
@@ -258,6 +258,7 @@
 
     panel = document.createElement('div');
     panel.id = 'ka-gap-panel';
+    panel.setAttribute('data-ka-ignore', '');
     panel.style.cssText = [
       'position:fixed', 'z-index:2147483647',
       'left:' + Math.min(x, window.innerWidth - 340) + 'px',
@@ -446,6 +447,8 @@
   var badge = document.createElement('div');
   badge.id = 'ka-gap-badge';
   badge.setAttribute('aria-hidden', 'true');
+  /* ours: the engine skips this subtree entirely, text and attributes alike */
+  badge.setAttribute('data-ka-ignore', '');
   badge.style.cssText = [
     'position:fixed', 'z-index:2147483646',
     'background:#1E211F', 'color:#fff', 'border-radius:6px', 'padding:8px 10px',

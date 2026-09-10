@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v42';
+  var VERSION = 'v43';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -303,7 +303,20 @@
      and the right-hand panel. __kaDebug.dead() reports which of these match
      nothing on a given screen; a selector at zero everywhere is decoration.  */
   var CONTENT_ZONES = [
-    'code', 'pre', 'script', 'style', 'svg',
+    /* OUR OWN INJECTED UI MARKS ITSELF. Tom's idea, 10 Sep. Anything Keytone
+       puts on the page sets data-ka-ignore on its root and the engine leaves the
+       whole subtree alone -- text AND attributes, since BLOCKED_ATTR is built
+       from this list.
+
+       AN ATTRIBUTE RATHER THAN A JS PROPERTY, DELIBERATELY: el.__kaIgnore could
+       not appear in a selector, so the engine would need its own ancestor walk on
+       every node. This costs nothing, because closest() is already doing the walk.
+
+       It replaces the <code> wrapper the tools used to hide inside -- that worked
+       only because code was already in this list, and it forced every overlay to
+       live in a monospace element and undo its own styling. */
+    '[data-ka-ignore]',
+    'code', 'pre', 'style', 'script', 'svg',
     '[contenteditable="true"]', '[contenteditable=""]',
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
