@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v38';
+  var VERSION = 'v39';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -275,13 +275,40 @@
      use the looser one that permits form controls. We only ever write the
      placeholder / title / aria-label attributes -- never `.value`. */
 
+  /* AUDITED 2026-09-10 AND LARGELY REBUILT. What was here before was REASONED,
+     never OBSERVED: .message-body, .contact-name, .note-body and the rest were
+     plausible names that HighLevel does not use. Every one of them matched ZERO
+     elements on twelve routes -- including a conversation holding real messages
+     and an open contact -- so the customer-data half of this firewall was
+     protecting nothing at all. Nothing bad had happened only because the
+     dictionary happens not to contain anyone's name; a company called "Open
+     House" or a contact tagged "New" would have been rewritten.
+
+     WHAT REPLACED THEM, each read off the live DOM:
+       .chat-message / .chat-content   message bodies, inbound and outbound.
+                                       Both wrap the same text; keeping both
+                                       because they are siblings in one
+                                       component and a rename may spare one.
+       [data-testid="CENTRALPANEL_NAME"]  the contact identity in the
+                                       conversation header.
+
+     PREFER data-testid WHERE IT EXISTS. HighLevel's visible classes are
+     Tailwind utilities -- text-[14px], flex, gap-1 -- and change whenever
+     someone restyles a component. Test ids change rarely, because their own
+     tests break when they do.
+
+     STILL UNMAPPED, and honestly recorded rather than guessed at: EMAIL bodies
+     (a different component from .chat-message; no email thread was available
+     to inspect), NOTE bodies, CUSTOM FIELD values, and contact names in LISTS
+     and the right-hand panel. __kaDebug.dead() reports which of these match
+     nothing on a given screen; a selector at zero everywhere is decoration.  */
   var CONTENT_ZONES = [
     'code', 'pre', 'script', 'style', 'svg',
     '[contenteditable="true"]', '[contenteditable=""]',
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
-    '.message-body', '.msg-body', '.message-content', '.conversation-message',
-    '.email-body', '.email-content', '.note-body', '.custom-field-value',
-    '.contact-name', '.company-name', '.user-name',
+    /* verified against HighLevel's own DOM, 2026-09-10 */
+    '.chat-message', '.chat-content', '[data-testid="CENTRALPANEL_NAME"]',
+    /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
 
