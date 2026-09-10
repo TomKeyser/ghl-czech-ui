@@ -116,6 +116,25 @@
       }
     },
 
+    /* ---- weekdays --------------------------------------------------------
+       Czech weekday abbreviations, as a calendar column header draws them.
+       Two letters is the standard short form; "út" and "čt" carry diacritics
+       and "pá" an acute, so this is not something a naive truncation of the
+       full name would produce.
+
+       Same table shape as months, so a language that declines weekdays can add
+       a second table without the engine changing.
+
+       ⚠ WORTH A NATIVE EYE, and cheap to change: Czech calendars vary between
+       these two-letter forms and three-letter ones (po/pon, út/úte). Ask when
+       the next Czech review happens rather than guessing twice. */
+    weekdays: {
+      abbr: {
+        mon: 'po', tue: 'út', wed: 'st', thu: 'čt',
+        fri: 'pá', sat: 'so', sun: 'ne'
+      }
+    },
+
     maps: {
       invoiceState: {
         'in draft': 'v konceptu', 'in due': 'k úhradě',

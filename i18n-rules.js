@@ -137,7 +137,45 @@
     return i < 0 ? null : i + 1;
   }
 
+  /* Weekday names, like month names, live in the pack. Same shape as months so
+     a language that declines them can add another table without touching this
+     file. */
+  function weekday(pack, which, token) {
+    var t = pack.weekdays && pack.weekdays[which];
+    if (!t) return null;
+    var k = String(token).slice(0, 3).toLowerCase();
+    return t[k] !== undefined ? t[k] : null;
+  }
+
+  /* A bare hour label with no minutes, as a calendar gutter draws it.
+     THIS IS NOT A TRANSLATION, IT IS A CLOCK CHANGE: Czech uses 24-hour time,
+     so "1 PM" is 13:00 and "12 AM" is 0:00. No dictionary could ever produce
+     that, which is why the whole calendar column came back as a gap. Written
+     unpadded because that is how Czech calendars label the hour. */
+  function hour24(h, ampm) {
+    var n = parseInt(h, 10) % 12;
+    if (/pm/i.test(ampm)) n += 12;
+    return String(n);
+  }
+
   var FORMATTERS = {
+    /* "06 Sun" — the day-number and weekday a calendar draws above a column */
+    dayWeekday: function (pack, m) {
+      var w = weekday(pack, 'abbr', m[2]);
+      return w === null ? null : m[1] + ' ' + w;
+    },
+    /* "12 AM", "1 PM" — a calendar gutter hour */
+    hourLabel: function (pack, m) { return hour24(m[1], m[2]) + ':00'; },
+    /* "Sep 6 – 12, 2026" — one month, a span of days, shared year */
+    dayRangeInMonth: function (pack, m) {
+      var d1 = parseInt(m[2], 10), d2 = parseInt(m[3], 10), y = m[4];
+      if (isNumeric(pack)) {
+        var i = monthIndex(m[1]);
+        return i === null ? null : d1 + '.–' + d2 + '. ' + i + '. ' + y;
+      }
+      var mo = month(pack, 'genitive', m[1]);
+      return mo === null ? null : d1 + '.–' + d2 + '. ' + mo + ' ' + y;
+    },
     /* "January 4, 2026" */
     dateFull: function (pack, m) {
       if (isNumeric(pack)) { var i = monthIndex(m[1]); return i === null ? null : numericDate(pack, m[2], i, m[3]); }

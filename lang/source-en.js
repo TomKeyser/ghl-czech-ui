@@ -56,6 +56,14 @@
       ['N_INVOICES',     /^(\d+)\s+Invoice\(s\)\s+(in Draft|in Due|received|Overdue)$/i, '@invoices'],
       ['REMOVE_FILT',    /^Remove filter:\s*(.+)$/i],
       ['RANGE_OF',       /^(\d+)\s*-\s*(\d+)\s+of\s+(\d+)$/i],
+      /* Calendar furniture. Found by the automated walk on 10 Sep: the
+         Calendars screen produced 106 misses, and almost every one was a clock
+         or a weekday rather than a word. These three rules replace 33 of them,
+         and no dictionary entry could have done it -- "1 PM" is 13:00 in Czech,
+         not a translation. */
+      ['CAL_DAY_COL',    /^(\d{1,2})\s+(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/i, '@dayWeekday'],
+      ['CAL_HOUR',       /^(\d{1,2})\s*(AM|PM)$/i, '@hourLabel'],
+      ['CAL_DAY_RANGE',  /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s*[–-]\s*(\d{1,2}),\s*(\d{4})$/i, '@dayRangeInMonth'],
       ['STAMP',          /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
       ['MON_YEAR',       /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@monYear'],
       ['N_OPPS',         /^(\d+)\s+opportunit(?:y|ies)$/i],
