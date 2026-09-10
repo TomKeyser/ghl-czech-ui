@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v44';
+  var VERSION = 'v45';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -346,6 +346,21 @@
     '.tabulator-cell:not([tabulator-field*="date" i]):not([tabulator-field*="time" i]):not([tabulator-field*="activity" i]):not([tabulator-field*="created" i]):not([tabulator-field*="updated" i])',
     /* the dashboard widget tables, which use HighLevel's own component library */
     '.hr-data-table__body-cell',
+    /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
+       and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
+       An id prefix is a better anchor than any class here -- it names what the
+       element holds rather than how it looks.
+
+       PRECISELY THIS ELEMENT, NOT THE CARD AROUND IT. The stage header also
+       contains data-stage-total-<uuid>, which reads "1 příležitost" because our
+       plural rule already handles it. Blocking the card would take the
+       translation away with the data. */
+    '[id^="data-stage-name-"]',
+    /* the selected pipeline, also user-named. Scoped to that one dropdown on
+       purpose: .hr-base-selection-label is HighLevel's design system and is
+       used by every select in the product, including status pickers whose
+       values we DO translate. (Their id really is spelled DropdDown.) */
+    '#pipelineDropdDown-listview .hr-base-selection-label',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
