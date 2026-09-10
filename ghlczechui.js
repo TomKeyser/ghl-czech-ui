@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v34';
+  var VERSION = 'v35';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -194,11 +194,21 @@
     '[class*="assignee" i]', '[class*="user-select" i]', '[class*="contact-select" i]'
   ].join(',');
 
+  /* THE PICKER ITSELF DECIDES -- never an ancestor. The old version fell
+     through to el.closest(DATA_PICKERS), which meant any container with
+     "contact" in its id suppressed everything beneath it. On a CONTACT DETAIL
+     page that is most of the screen: div#contacts-more-action-options alone
+     swallowed "Manage duplicates" and "Contact settings". An id containing
+     "contact" says nothing about whether the text is a record.
+
+     So: a native <option> is judged by ITS OWN <select>, and a custom listbox
+     by the element actually carrying the role. Nothing else is a picker. */
   function inDataPicker(el) {
     if (!el || !el.closest) return false;
     var sel = el.closest('select');
-    if (sel && sel.matches && sel.matches(DATA_PICKERS)) return true;
-    return !!el.closest(DATA_PICKERS);
+    if (sel) return !!(sel.matches && sel.matches(DATA_PICKERS));
+    var box = el.closest('[role="listbox"],[role="combobox"]');
+    return !!(box && box.matches && box.matches(DATA_PICKERS));
   }
 
   var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
@@ -637,16 +647,24 @@
       return { reason: 'too-long', length: key.length, max: MAX_LEN, text: key.slice(0, 60) };
     }
 
-    var caught = attr ? blockedAttr(el) : blockedText(el);
-    if (caught) {
-      if (!attr && (el.tagName === 'OPTION' || el.closest('option')) && inDataPicker(el)) {
+    /* MIRROR blockedText EXACTLY. An earlier version ran inDataPicker on every
+       element, which the engine never does -- it consults it only for <option>.
+       The gap picker's first export therefore blamed seven perfectly ordinary
+       menu items on a suppression that had not happened. A diagnostic that does
+       not match the code it describes is worse than none. */
+    if (attr) {
+      if (blockedAttr(el)) {
+        return { reason: 'content-zone', zone: zoneOf(el, true),
+                 on: describe(el.closest(BLOCKED_ATTR) || el), text: key };
+      }
+    } else {
+      if (el.closest(BLOCKED_TEXT)) {
+        return { reason: 'content-zone', zone: zoneOf(el, false),
+                 on: describe(el.closest(BLOCKED_TEXT) || el), text: key };
+      }
+      if ((el.tagName === 'OPTION' || el.closest('option')) && inDataPicker(el)) {
         return { reason: 'data-picker', on: describe(el.closest('select') || el), text: key };
       }
-      return { reason: 'content-zone', zone: zoneOf(el, !!attr),
-               on: describe(el.closest(attr ? BLOCKED_ATTR : BLOCKED_TEXT) || el), text: key };
-    }
-    if (!attr && inDataPicker(el)) {
-      return { reason: 'data-picker', on: describe(el.closest(DATA_PICKERS) || el), text: key };
     }
 
     var out = translate(key);
