@@ -100,17 +100,19 @@ The lesson is worth more than the fixes: **when a selector names one member of a
 family, census the family.** Every instance above was found by asking the live
 DOM what else shared the shape, not by reading the code.
 
-### Known remaining leak, one of them
+### That leak, closed — v98, 11 September
 
-Smart-list **view names** in `#views-bar .view-label` on the contacts screen
-("ZZ few", "ZZ many"). The same element class holds HighLevel's own labels
-("All", "Add Smart List") which we translate correctly, so a selector would
-break two working strings to protect two user-authored ones — and the backstop
-cannot help, because a smart list's name appears nowhere inside the firewall.
+Smart-list **view names** ("ZZ few", "ZZ many") shared an element class with
+HighLevel's own "All" and "Add Smart List", so no selector separated them.
+Closed by the **per-zone phrase allowlist** (FIREWALL.md): the tabs are zoned,
+`Add Smart List` keeps translating because it sits outside `.lists`, and `All`
+is let back through as an exact phrase.
 
-Left deliberately. Severity is low: the name is the user's own, visible only to
-them, and exact-match translation cannot alter it unless it collides with a
-dictionary key. It is recorded here rather than quietly rounded off.
+Building it turned up **six more pickers of the same shape** on the dashboard
+alone — five reporting widgets each with their own pipeline select, plus the
+workflow, campaign, user and Google-Business-page pickers. All were leaking a
+record's name the moment somebody chose one, and all looked clean here only
+because this account has a single pipeline and no workflows. Zoned in v99.
 
 ## The sweep route list
 

@@ -243,9 +243,9 @@ If it does change, the measurement above says write `:has(.some-class)`, never
 
 ---
 
-## Designed, not built: HighLevel's own phrases inside a zone
+## HighLevel's own phrases inside a zone — built, v98/v99
 
-Decided with Tom on 11 Sep 2026 (design mode, no code yet). Some zones mix
+Decided with Tom on 11 Sep 2026, built the same day. Some zones mix
 HighLevel's own text with customer data in the same component, and no
 selector separates them. The fix is a **per-zone allowlist of exact phrases**
 that are translated even inside the zone. Everything else in the zone stays
@@ -269,29 +269,67 @@ almost certainly HighLevel's, not theirs. (Tom's reasoning.)
   per-zone scoping and the shortness of the list keep that unlikely. Check a
   new phrase against common snapshot vocabulary before adding it.
 
-**First entries:**
+**Structure was checked first, and it decided half of it.** On the live tab bar,
+`Add Smart List` sits **outside** `.lists` while `All` sits inside it, in an
+element identical to a user's list — same tag, same classes, same attributes,
+and the order is the user's to change. So the zone is scoped
+`#views-bar .lists .view-label`, which keeps *Add Smart List* translating with
+no allowlist at all, and only `All` needs a phrase.
 
-| Zone | Phrases | Effect |
-|---|---|---|
-| Smart-list tabs (`#views-bar .view-label`, **newly zoned**) | "All", "Add Smart List" | Closes the known gap below *and* keeps HighLevel's two labels translated |
-| Dashboard pipeline picker (`[id="select-id"] .hr-base-selection-label`) | "No pipeline available" | The empty-state placeholder translates; pipeline names stay blocked |
+**The entries as built:**
 
-Before building it, confirm on the live page that option 1 (a structural
-difference between HighLevel's entries and the user's) really isn't available.
-Structure beats text wherever it exists.
+| Zone | Phrases |
+|---|---|
+| `#views-bar .lists .view-label` | All |
+| `[id="select-id"] .hr-base-selection-label` | No pipeline available |
+| `[id*="-select-pipeline_"] .hr-base-selection-label` | All pipelines |
+| `[id*="manual-action-workflow-selection"] …` | All, all |
+| `[id*="manual-action-campaign-selection"] …` | All, all |
+| `[id*="task-user-selection"] …`, `[id*="user-sales-efficiency"] …` | All users |
+| `[id*="gbp-page"] …` | Please Select |
+
+**Everything below the first two rows was found by censusing the family**, and
+none of it was in the design. The dashboard has **six more** record pickers
+built like the one that was: five reporting widgets with their own pipeline
+select (`reporting_<widget>-select-pipeline_<id>`), plus workflow, campaign,
+user and Google-Business-page pickers. Each reads `All …` until somebody
+chooses, and then shows a record's name. They had been leaking by default and
+looked clean only because this account has one pipeline and no workflows.
+
+**How a phrase is applied:** only when its own zone is the *only* thing
+blocking the node. Inside any other zone, or a widget-table column, it stays
+blocked. Text nodes only — never attributes. A node we already translated is
+recognised by its `__kaDone` marker, so a phrase survives re-renders.
+
+**The cost of a missing phrase is silence.** A label inside a zone whose
+phrase list does not cover it stays English and is *not* reported as a gap —
+zones never report. `__kaDebug.phrases` lists what each zone lets through, and
+a sweep's `why()` walk shows such a node as `content-zone` rather than
+`missing`. That is the trade for protecting the record names beside it.
 
 ## Known gaps
 
-**Smart-list view names**, `#views-bar .view-label` on the contacts screen
-("ZZ few", "ZZ many"). The same class holds HighLevel's own labels — *All*,
-*Add Smart List* — which we translate correctly, so a selector would break two
-working strings to protect two user-authored ones.
+~~**Smart-list view names**~~ — **closed in v98** by the phrase allowlist
+above. The tabs are zoned and *All* comes back through a phrase, so the user's
+list names are protected and HighLevel's two labels still translate.
 
-Neither mechanism reaches it: the backstop cannot help because a smart list's
-name appears nowhere inside the firewall, and `:has()` would not help either
-(`.view-label` has no record child). Left deliberately. Severity is low — the
-name is the user's own, seen only by them, and exact-match translation cannot
-alter it unless it collides with a dictionary key.
+**A record picker's option MENU**, found 11 Sep while building the allowlist.
+The selected label is reachable and is now zoned; the **dropdown's options are
+not**. HighLevel portals the menu out of the select — the open list sits in
+`.hr-select-menu-container` under a virtual-list wrapper at body level, with
+nothing tying it back to the picker that opened it. A zone on
+`.hr-select-option-label` would reach it, and would also silence every status,
+type and enum picker in the product, which is a far bigger loss than the leak.
+
+Today those options are caught by the **record backstop**: on the dashboard's
+user picker, "zz tom zz keyser" reports `record-mirror`, because the same name
+appears inside a zone elsewhere on the page. **That is coverage by
+coincidence.** A second user, whose name appears nowhere else on that screen,
+would reach the engine as an ordinary miss. It cannot be translated unless the
+name collides with a dictionary key, but it would reach the harvest.
+
+Worth watching in the sweeps rather than fixing blind: the fix needs a real
+second user on the account to confirm against, and this one has one.
 
 **Cross-origin iframes** are outside every mechanism here, and outside any
 DOM layer's reach. That now means four Settings pages (company, profile,
