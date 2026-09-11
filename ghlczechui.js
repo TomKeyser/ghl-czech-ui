@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v83';
+  var VERSION = 'v84';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -504,6 +504,25 @@
        everything else in the grid is ratings or our own text. */
     '[data-testid="app-card-header"]',
     '[data-testid="app-card"] p.line-clamp-2',
+    /* THE AI AGENT TEMPLATES marketplace, v84 — the same case in a different
+       component: each bot card's title, name, author and description belong to
+       whoever published the agent ("Clara", "GenZAutomates"). The author's
+       LABEL beside the name is ours, so only the truncated name is blocked. */
+    '[data-testid="bot-card-title-column"]',
+    '[data-testid="bot-card-name"]',
+    '[data-testid="bot-card-author"] p.truncate',
+    '[data-testid="bot-card-body"] p.line-clamp-2',
+    /* install counts ("318.8K"): figures, not words, and noise in every sweep */
+    '[data-testid="bot-card-usage"]',
+    /* A CONTACT'S ATTRIBUTION SOURCE, v84: "První zdroj atribuce: CRM UI". The
+       label is ours; the value is whatever brought the contact in, which for a
+       real account is a campaign name or a UTM string someone typed. */
+    '#attribution-value',
+    /* THE ADS REPORTS (Google, Facebook), v84: a Bootstrap table whose body is
+       campaign names and figures. Sample campaigns today ("Lawn Space
+       Gardening"), a real account's own campaigns once connected. The column
+       headers are in thead and stay open. */
+    '.table-hl tbody',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -739,7 +758,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v58';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v59';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1168,12 +1187,23 @@
      every sweep reported it. Nothing in any language is spelled like this. */
   var OBJECT_ID = /^[0-9a-f]{24}$/i;
 
-  /* the three shapes together: the reason why() gives, or null */
+  /* And a bare phone number or e-mail address, v84: the contact screen's call
+     button carries "Call: +420…" as its label (translated by a pattern that
+     passes the number through), and the bare forms turn up wherever a contact
+     is shown. Reporting them would put a customer's number in the harvest. */
+  /* not an ISO date: "2026-09-10" has the same characters, and an untranslated
+     date shown as text is a real gap worth seeing */
+  var PHONE_SHAPE = /^(?!\d{4}-\d{2}-\d{2}$)\+?\(?\d[\d\s().-]{6,}\d$/;
+  var EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+  /* the shapes together: the reason why() gives, or null */
   function recordShape(s) {
     var t = String(s).trim();
     if (FILE_NAME.test(t)) return 'file-name';
     if (URL_SHAPE.test(t)) return 'url';
     if (OBJECT_ID.test(t)) return 'record-id';
+    if (PHONE_SHAPE.test(t)) return 'phone';
+    if (EMAIL_SHAPE.test(t)) return 'email';
     return null;
   }
 
@@ -1305,6 +1335,10 @@
     if (OBJECT_ID.test(key)) {
       return { reason: 'record-id', text: key, attr: attr || null,
                note: '24 hex digits: a HighLevel record id' };
+    }
+    if (PHONE_SHAPE.test(key) || EMAIL_SHAPE.test(key)) {
+      return { reason: recordShape(key), text: key, attr: attr || null,
+               note: 'a phone number or e-mail address: customer data' };
     }
     return { reason: 'missing', text: key, attr: attr || null };
   }

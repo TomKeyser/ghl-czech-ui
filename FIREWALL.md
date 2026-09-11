@@ -79,7 +79,22 @@ Bounded at 800 strings, minimum length 3, per page load, never persisted.
   printed as plain text by the product editor ("Internal Product Id").
   `why()` says `record-id`.
 
+- **The shape of a phone number or e-mail address** (v84). Whole strings only;
+  an ISO date is excluded, since it has the same characters. Found because
+  the contact screen's call button is labelled "Call: +420555000121", and
+  that label, number included, reached the harvest as a gap. The label itself
+  is now translated by a pattern (`CALL_TO`) that passes the number through.
+
 All of these suppress reporting only, like the rest of the backstop.
+
+**Third-party content is customer data too** (v81, v84). The App
+Marketplace and the AI agent templates list other companies' products: names,
+publishers and descriptions. They're blocked on HighLevel's `data-testid`
+names (`app-card-header`, `bot-card-name`, …), because translating
+"Restaurant Menu" would rename someone else's product. The ads reports'
+campaign table (`.table-hl tbody`) and a contact's attribution source
+(`#attribution-value`) are blocked for the usual reason: they're the
+account's own data.
 
 **Attribute-only zones** (v81, `SELF_ATTR_ZONES`). A zone works through
 `closest()`, so it silences everything inside it. That cannot express "this

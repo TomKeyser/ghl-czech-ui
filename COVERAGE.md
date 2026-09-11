@@ -139,12 +139,40 @@ memberships/client-portal/client-portal-ai  media-storage
 reputation/overview  reporting/reports  integration  settings/company
 ```
 
+**The sub-menus** (added v84, read off each module's own top bar; about 90
+pages, 425 strings on the first pass):
+
+```
+conversations/manual_actions  conversations/templates  conversations/trigger-links
+conversations/analytics  conversations/settings  calendars/appointments
+contacts/bulk/actions  tasks  businesses/list  contacts/detail/<one contact>
+opportunities/forecast  opportunities/pipeline  opportunities/bulk-actions
+automation/workflows/settings
+marketing/emails/statistics  marketing/templates  marketing/countdown-timer
+marketing/trigger-links  marketing/affiliate-manager/{dashboard,media,settings}
+marketing/ad-manager/home
+funnels-websites/{websites,stores,webinars,chat-widget}  analytics  blogs
+wordpress  funnels-websites/client-portal/{dashboard,settings,branded-app}
+form-builder/main  survey-builder/main  quiz-builder/main  qr-codes
+memberships/client-portal/{settings,branded-app}
+memberships/courses/{dashboard-v2,products-v2,offers-list-v2,analytics-v2}
+memberships/communities/{community-groups,clientportal-domain-setup,communities-branded-app}
+memberships/certificates/create-certificates  memberships/gokollab/activation
+reputation/{requests,reviews,video-testimonials,widget,listing,settings}
+reporting/{google-ads,facebook-ads,attribution,call,appointment,local-marketing-audit}
+ai-agents/{agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,content-ai,agent-logs}
+```
+
 Plus one saved record per editor (a product, a recurring invoice), and a
 *create* form wherever toggles hide sections (see the caveat below).
 
-**Parked, deliberately:** `ai-agents/getting-started` is HighLevel's own
-marketing landing page, about 100 strings of sales copy and demo chats.
-Translating it is a product decision, not a gap.
+**Parked, deliberately:** HighLevel's own sales pages. `ai-agents/getting-started`
+is about 100 strings of sales copy and demo chats, `ai-agents/voice-ai`
+shows a welcome pitch until the first agent exists, and `wordpress/dashboard`
+is a hosting pitch until WordPress is activated. Translating them is a product
+decision, not a gap. Also left alone: the survey and quiz builders' template
+galleries, whose names and truncated tags ("Digital Mark...") are HighLevel's
+sample content.
 
 ## Honest caveats
 

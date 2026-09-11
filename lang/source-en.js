@@ -131,6 +131,9 @@
          shape nobody has observed is how the old firewall came to match
          nothing. Add them when a real account shows them. */
       ['MONEY_KC',       /^(-?)(Kč)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?$/, '@money'],
+      /* "(Kč0.00)" — the same amount in brackets, the forecast's at-risk rows.
+         The inside goes back through the rules, so MONEY_KC formats it. */
+      ['MONEY_KC_PAREN', /^\((-?Kč\s?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?)\)$/],
       /* THE RECURRING-INVOICE EDITOR, 11 Sep */
       ['RECURRING_EVERY', /^Recurring\s+Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@recurringEvery'],
       /* the dates are HighLevel's own and go through the date rules via {*N} */
@@ -198,6 +201,14 @@
          Only the seconds form has been SEEN; longer lengths ("3d 4h"?) have
          not, so they are not guessed at here. Case-sensitive on purpose. */
       ['DUR_SECS',       /^(\d+)s$/],
+      /* "Call: +420555000121" — the contact screen's call button, as its
+         aria-label. The number is the CONTACT'S and passes through raw. Until
+         v84 it reached the harvest as a gap, number and all. */
+      ['CALL_TO',        /^Call:\s*(\+?\d[\d\s().-]{5,}\d)$/],
+      /* "1 month" — a period picker's value (agent logs), 11 Sep. Whole string
+         only, so it does not collide with the /payments "month" fragment. */
+      ['N_MONTHS',       /^(\d+)\s+months?$/i],
+      ['N_DAYS',         /^(\d+)\s+days?$/i],
       /* "16px" — the rich-text editor's font-size box. A CSS size, the same in
          every language; the rule exists so it stops reading as a gap. No "%":
          Czech writes "50 %", so a percentage is not an identity. */
