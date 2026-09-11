@@ -3330,6 +3330,16 @@
       "Do tohoto pole můžete volitelně uložit podrobný popis prodávaného produktu pro vlastní účely zobrazení.",
     "Enable Product Label":             "Zapnout štítek produktu",
     "Product Tax Code":                 "Daňový kód produktu",
+    /* ONE SENTENCE, TWO NODES: the text ends and a BUTTON finishes it —
+       "...from your [tax settings]". The Czech is written to run into the
+       button: "z vašeho" + "nastavení daní" (genitive, which "nastavení"
+       already is). Held back in v69 until the button was read, because half a
+       sentence ending in an unknown English link reads worse than none. */
+    "This will be used for calculating automatic tax. Defaults to preset product tax code from your":
+      "Použije se pro automatický výpočet daně. Výchozí je přednastavený daňový kód produktu z vašeho",
+    /* lowercase key, lowercase Czech: it is the mid-sentence button above.
+       The capitalised "Tax Settings" elsewhere still gets "Nastavení daní". */
+    "tax settings":                     "nastavení daní",
     "Select a tax category":            "Vyberte daňovou kategorii",
     "Include tax in prices":            "Zahrnout daň do cen",
     "Define if product prices should be inclusive or exclusive of tax by default.":

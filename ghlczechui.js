@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v69';
+  var VERSION = 'v70';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -422,6 +422,17 @@
        in a restyle. If it does, this rule matches nothing and the name leaks
        again — the collector flags it, which is failing open, not silently. */
     '.price-scroll span.truncate',
+    /* THE PRODUCT EDITOR'S TOOLBAR repeats the product's name between Back and
+       Save. Found v69's check, 11 Sep. The Back label and the name share a
+       styling class (span.text-gray-800), so the class would take Back with
+       it. What separates them is STRUCTURE, not position: Back sits inside a
+       <button>, the name is a bare span directly under its toolbar group. So
+       '> span' — a direct child — takes the name and leaves every button.
+
+       Scoped to #createProducts (both create and edit use it). Other editors
+       probably share this toolbar; widen only after looking at one, since a
+       toolbar group elsewhere may hold a bare span of OUR text. */
+    '#createProducts .hl-toolbar-group > span',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -641,7 +652,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v47';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v48';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1334,6 +1345,31 @@
     /* BLOCKED_ATTR is the looser list, so being blocked for attributes means
        being blocked for everything -- safe to bail on the whole subtree. */
     if (blockedAttr(root)) return;
+
+    /* INPUT VALUES ARE RECORDS — note them before anything else reads the page.
+       Added v70, from the product editor: its toolbar repeats the product's
+       NAME beside Save and Discard, and that copy reached the engine as a gap.
+       Nearly every edit screen does this — the record's name echoed in a
+       header, a breadcrumb, a title. The input holding it is already blocked,
+       but nothing told the record backstop that its value IS a record, so the
+       echo looked like ordinary untranslated text.
+
+       A text input's value is customer data by definition, so it goes in the
+       record set — except values WE wrote (__kaVal), which are our own Czech.
+       BEFORE the text walk, for the reason the walk order is load-bearing:
+       otherwise the header copy is reported on the first pass, before its
+       input has been seen.
+
+       Like the rest of the backstop this suppresses REPORTING, not
+       translation. Stopping the echo being translated still needs a selector
+       — see '#createProducts .hl-toolbar-group > span' in CONTENT_ZONES. */
+    var recFields = root.querySelectorAll('input,textarea');
+    for (var rf = -1; rf < recFields.length; rf++) {
+      var fe = rf < 0 ? root : recFields[rf];
+      if (fe.tagName !== 'INPUT' && fe.tagName !== 'TEXTAREA') continue;
+      if (fe.tagName === 'INPUT' && fe.type && !/^(text|search)$/i.test(fe.type)) continue;
+      if (fe.value && fe.__kaVal !== fe.value) noteRecord(fe.value);
+    }
 
     /* TEXT FIRST, ATTRIBUTES SECOND, AND THE ORDER IS LOAD-BEARING.
 
