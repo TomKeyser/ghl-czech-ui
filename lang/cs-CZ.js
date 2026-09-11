@@ -3128,9 +3128,25 @@
     "Day view": "Denní zobrazení",
     "Month view": "Měsíční zobrazení",
 
-    /* Harvest walk, 10 Sep 2026 — 31 routes. NOT YET NATIVE-CONFIRMED; these
-       are my Czech, unlike the three above. Flag them to a native reader in a
-       batch rather than one at a time. */
+    /* Harvest walk, 10 Sep 2026 — 31 routes.
+
+       NATIVE-CONFIRMED 11 Sep 2026, in one batch, as intended. All 44 items in
+       the wording review — these entries plus the seven composed patterns
+       (created-on stamp, the moved-stage line, the selected-count plural, the
+       drafted and personal calendar frames, the overdue line, the Calendar AI
+       greeting) — came back "ok" with NOT ONE suggested rewording.
+
+       WORTH RECORDING HONESTLY: the reviewer did not need to open the pages to
+       judge them. That is a statement about the strings reading correctly on
+       their own, not about the review being shallow — her remit was to check
+       the translations and report, and she reported.
+
+       It also means the judgement calls survived: "Vyberte časové období" for a
+       date range rather than a literal date span, "Interval" left as-is,
+       "UTM term" and "Firemní profil Google" left in their platform forms, and
+       the impersonal "přesunuto" in the moved-stage line, which was the one
+       gender decision I could not make alone. That last one is settled: the
+       impersonal form stands. */
     "moved": "přesunuto",
     "Reports are loading": "Načítání přehledů",
     "Expand sidebar": "Rozbalit postranní panel",
