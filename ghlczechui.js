@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v81';
+  var VERSION = 'v82';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -607,6 +607,22 @@
 
   /* attributes: everything above, but form controls are allowed */
   var BLOCKED_ATTR = CONTENT_ZONES.join(',');
+
+  /* ATTRIBUTE-ONLY ZONES, v81: an element whose OWN attributes hold a record
+     while its children are ours. CONTENT_ZONES cannot express that — they
+     work through closest(), so a zone on a container silences everything
+     inside it. Matched with matches(), never closest(): the element itself,
+     not its descendants.
+
+     The product editor's toolbar carries the product's name as its title
+     ("ZZ digital goods") and holds Zpět / Zahodit / Uložit, which must
+     translate. The record backstop usually catches the title — but only once
+     the name has been seen in a zone, and on the first paint the toolbar can
+     arrive first. The collector recorded exactly that single leak. */
+  var SELF_ATTR_ZONES = [
+    '.hl-toolbar[title]'
+  ];
+  var SELF_ATTR = SELF_ATTR_ZONES.join(',');
   /* text nodes: the above plus form controls, whose text is data.
      `option` is NOT in this list -- native dropdown options are translated,
      but only outside the data pickers listed in DATA_PICKERS below. */
@@ -723,7 +739,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v56';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v57';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1066,7 +1082,9 @@
   }
 
   function blockedAttr(el) {
-    return !el || (el.closest && el.closest(BLOCKED_ATTR));
+    if (!el) return true;
+    if (el.matches && el.matches(SELF_ATTR)) return true;
+    return el.closest && el.closest(BLOCKED_ATTR);
   }
 
   /* ---------- MIRRORED RECORDS: the backstop behind the selectors ---------
@@ -1143,6 +1161,20 @@
     return URL_SHAPE.test(String(s).trim());
   }
 
+  /* And a database id, v81: 24 hex digits, HighLevel's record ids. The
+     product editor prints the product's "Internal Product Id" as plain text;
+     every sweep reported it. Nothing in any language is spelled like this. */
+  var OBJECT_ID = /^[0-9a-f]{24}$/i;
+
+  /* the three shapes together: the reason why() gives, or null */
+  function recordShape(s) {
+    var t = String(s).trim();
+    if (FILE_NAME.test(t)) return 'file-name';
+    if (URL_SHAPE.test(t)) return 'url';
+    if (OBJECT_ID.test(t)) return 'record-id';
+    return null;
+  }
+
   /* ---------- __kaDebug: read-only diagnosis surface ----------------------
      The gap picker and the errors channel both need to answer ONE question
      about a string on screen: why is this not in Czech? Everything needed to
@@ -1183,6 +1215,11 @@
 
   /* which CONTENT_ZONES entry actually caught this element */
   function zoneOf(el, forAttr) {
+    if (forAttr) {
+      for (var j = 0; j < SELF_ATTR_ZONES.length; j++) {
+        try { if (el.matches(SELF_ATTR_ZONES[j])) return SELF_ATTR_ZONES[j] + ' (self)'; } catch (e) {}
+      }
+    }
     var list = forAttr ? CONTENT_ZONES : CONTENT_ZONES.concat(['input', 'textarea', 'select']);
     for (var i = 0; i < list.length; i++) {
       try { if (el.closest(list[i])) return list[i]; } catch (e) {}
@@ -1263,6 +1300,10 @@
       return { reason: 'url', text: key, attr: attr || null,
                note: 'a whole URL: untranslatable, and often the customer\'s own' };
     }
+    if (OBJECT_ID.test(key)) {
+      return { reason: 'record-id', text: key, attr: attr || null,
+               note: '24 hex digits: a HighLevel record id' };
+    }
     return { reason: 'missing', text: key, attr: attr || null };
   }
 
@@ -1336,7 +1377,7 @@
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
     if (out === null) {
-      if (!isRecordMirror(raw) && !looksLikeFileName(raw) && !looksLikeUrl(raw)) missed(raw, node, null);
+      if (!isRecordMirror(raw) && !recordShape(raw)) missed(raw, node, null);
       return;
     }
     /* preserve surrounding whitespace so layout/spacing is unchanged */
@@ -1369,7 +1410,7 @@
       if (el[mark] === v) continue;              /* ours, and untouched since */
       var out = translate(v);
       if (out === null) {
-        if (!isRecordMirror(v) && !looksLikeFileName(v) && !looksLikeUrl(v)) missed(v, el, a);
+        if (!isRecordMirror(v) && !recordShape(v)) missed(v, el, a);
         continue;
       }
       if (out === v) continue;
@@ -1464,8 +1505,10 @@
     }
     if (root.nodeType !== 1) return;
     /* BLOCKED_ATTR is the looser list, so being blocked for attributes means
-       being blocked for everything -- safe to bail on the whole subtree. */
-    if (blockedAttr(root)) return;
+       being blocked for everything -- safe to bail on the whole subtree.
+       closest() only, NOT blockedAttr(): an attribute-only zone blocks the
+       element's own attributes, and bailing here would silence its children. */
+    if (root.closest && root.closest(BLOCKED_ATTR)) return;
 
     /* INPUT VALUES ARE RECORDS — note them before anything else reads the page.
        Added v70, from the product editor: its toolbar repeats the product's

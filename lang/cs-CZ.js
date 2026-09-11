@@ -412,6 +412,10 @@
       BYTES_USED:     'Využito {1} {2}',
       N_ACCOUNTS:     '{1} {~accounts:1}',
       N_APPS:         '{1} {~apps:1}',
+      /* "Odesláno: 0" — the state word from the tab bar, then the count. A
+         colon rather than "0 odesláno", which would need agreement with a
+         noun that is not there. MY CZECH. */
+      EST_IN:         '{=2}: {1}',
       ABBR_PAREN:     '{=1} ({2})'
     }
   };
@@ -3476,6 +3480,16 @@
     /* THE PAYMENTS SUB-PAGES the sweep never reached, 11 Sep: its route list
        had two stale paths and skipped fifteen sub-pages. Now read off the
        payments menu itself. MY CZECH throughout. */
+    /* estimates (Cenové nabídky). The tiles read "0 in sent" — see EST_IN. */
+    "Create and Manage all estimates generated for your business":
+      "Vytvářejte a spravujte všechny cenové nabídky své firmy",
+    "New Estimate":                     "Nová cenová nabídka",
+    "Quote Name":                       "Název nabídky",
+    "Estimate Number":                  "Číslo nabídky",
+    /* estimate states, neuter like "Odesláno" beside them on the same tab bar */
+    "Accepted":                         "Přijato",
+    "Declined":                         "Odmítnuto",
+    "Invoiced":                         "Vyfakturováno",
     /* accounting sync */
     "Add or manage accounting integrations to sync invoices, contacts, and financial data.":
       "Přidejte nebo spravujte napojení na účetní systémy a synchronizujte faktury, kontakty a finanční údaje.",

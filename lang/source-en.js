@@ -203,6 +203,9 @@
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],
       ['BYTES_USED',     /^([\d.,]+)\s*(Bytes|B|KB|MB|GB|TB)\s+used$/i],
       ['N_ACCOUNTS',     /^(\d+)\s+Accounts?$/i],
+      /* "0 in sent", "0  in sent" (sic, two spaces) — the estimates summary
+         tiles: how many estimates are in each state. 11 Sep. */
+      ['EST_IN',         /^(\d+)\s+in\s+(sent|accepted|declined|invoiced)$/i],
       /* "1665 Apps" — the marketplace's result count, 11 Sep */
       ['N_APPS',         /^(\d+)\s+Apps?$/i],
       ['DATE_RANGE',     /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s*-\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateRange'],

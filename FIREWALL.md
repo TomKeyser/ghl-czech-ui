@@ -75,7 +75,22 @@ Bounded at 800 strings, minimum length 3, per page load, never persisted.
   business's website or booking link can turn up anywhere. `why()` reports it
   as `url`. A sentence containing a link is not caught.
 
+- **The shape of a record id** (v81). 24 hex digits, HighLevel's database ids,
+  printed as plain text by the product editor ("Internal Product Id").
+  `why()` says `record-id`.
+
 All of these suppress reporting only, like the rest of the backstop.
+
+**Attribute-only zones** (v81, `SELF_ATTR_ZONES`). A zone works through
+`closest()`, so it silences everything inside it. That cannot express "this
+element's own attributes are a record, its children are ours". The product
+editor's toolbar has exactly that shape: `title="ZZ digital goods"` on a bar
+holding Zpět / Zahodit / Uložit. These selectors are tested with `matches()`
+on the element itself. The walk still descends into it; only its own
+attributes are refused. The backstop usually catches such a title anyway, but
+only after the name has been seen in a zone, and on first paint the toolbar
+can arrive first. The collector recorded that single leak, which is how it
+was found.
 
 **Order is load-bearing.** The text walk populates the record set; the attribute
 pass consults it. Running attributes first — as the engine did until v59 — meant
