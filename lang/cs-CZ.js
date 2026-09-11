@@ -428,6 +428,8 @@
       KB_USAGE:       'Využití znalostní báze: {1} z {2}, zbývá {3}',
       /* "live" = switched on for everyone. MY CZECH. */
       LABS_LIVE_IN:   'Aktivujte hned – pro všechny za {1} {~periodDays:1}',
+      /* "znaků" is the genitive after the maximum, right for any count */
+      CHAR_COUNT:     '{1} / {2} znaků',
       N_MONTHS:       '{1} {~periodMonths:1}',
       N_DAYS:         '{1} {~periodDays:1}',
       CSS_SIZE:       '{1}{2}',
@@ -4022,6 +4024,133 @@
     "Calculation":                      "Výpočet",
     "documentType":                     "Typ dokumentu",
     "sourceName":                       "Název zdroje",
+
+    /* THE DIALOG WALK, 11 Sep: every "Create…" / "Add…" button opened and
+       closed unsaved — dialogs, drawers and create pages the route list cannot
+       reach. MY CZECH. */
+    /* time pickers still offer AM/PM on some forms (coupons) */
+    "AM":                               "dop.",
+    "PM":                               "odp.",
+    "HH : MM":                          "HH : MM",
+    /* coupons */
+    "eg. SUMMER20":                     "např. LETO20",
+    "Enter or generate":                "Zadejte nebo vygenerujte",
+    "Create coupons":                   "Vytvořit kupóny",
+    "Offer exciting discounts on one-time and subscription products.":
+      "Nabídněte atraktivní slevy na jednorázové produkty i předplatné.",
+    "Document link":                    "Odkaz na dokumentaci",
+    "Set up your discount coupon":      "Nastavte slevový kupón",
+    "Coupon type":                      "Typ kupónu",
+    "Start date-time":                  "Datum a čas začátku",
+    "End date-time":                    "Datum a čas konce",
+    "Coupon usage rules & restrictions": "Pravidla a omezení použití kupónu",
+    "Limit the total number of times this coupon can be redeemed":
+      "Omezit, kolikrát lze kupón celkem uplatnit",
+    "Limit to selected products on which the coupon can be applied":
+      "Omezit na vybrané produkty, na které lze kupón uplatnit",
+    "Limit use to once per customer":   "Omezit na jedno použití na zákazníka",
+    "Recurring payment settings":       "Nastavení opakovaných plateb",
+    "For how long should this coupon apply to subscriptions once redeemed?":
+      "Jak dlouho se má kupón po uplatnění vztahovat na předplatné?",
+    "Forever":                          "Navždy",
+    "Limited number of months":         "Omezený počet měsíců",
+    /* payment links */
+    "Pay":                              "Zaplatit",
+    "Enter Link Name":                  "Zadejte název odkazu",
+    "Powered with Love":                "Vytvořeno s láskou",
+    "Copy / Send":                      "Kopírovat / odeslat",
+    "Select a product":                 "Vyberte produkt",
+    "Options":                          "Možnosti",
+    "Require customers to add a phone number": "Vyžadovat od zákazníků telefonní číslo",
+    "Collect customer addresses":       "Shromažďovat adresy zákazníků",
+    "Allow coupon codes":               "Povolit slevové kódy",
+    "Enable redirection to custom URL": "Povolit přesměrování na vlastní URL",
+    "Advanced Options":                 "Pokročilé možnosti",
+    "Call to action for payment link button": "Výzva k akci na tlačítku platebního odkazu",
+    "Add Terms And Conditions":         "Přidat obchodní podmínky",
+    "Automatic Deactivation":           "Automatická deaktivace",
+    "Test":                             "Test",
+    /* new funnel */
+    "Alternative text for avatar image not provided": "Alternativní text obrázku nebyl zadán",
+    "From blank":                       "Od začátku",
+    "e.g. Sales funnel":                "např. Prodejní trychtýř",
+    "From templates":                   "Ze šablon",
+    "Create new funnel":                "Vytvořit nový trychtýř",
+    "Funnel name":                      "Název trychtýře",
+    "Design from scratch using the funnel builder.": "Navrhněte od začátku v editoru trychtýřů.",
+    "Generate using AI":                "Vygenerovat pomocí AI",
+    "Whip it up with AI in just a few seconds!": "S AI to máte hotové za pár sekund!",
+    "Over 1000+ Templates":             "Přes 1000 šablon",
+    "Jump start with an awesome prebuilt funnel": "Začněte rychle s hotovým trychtýřem",
+    /* opportunity, task, company dialogs */
+    "Additional contacts (Max: 10)":    "Další kontakty (max. 10)",
+    "Add additional contacts":          "Přidat další kontakty",
+    "Select time":                      "Vyberte čas",
+    "Please input company name":        "Zadejte název společnosti",
+    /* gift cards */
+    "Enter Gift Card Name":             "Zadejte název dárkového poukazu",
+    "A little about the Gift Card":     "Pár slov o dárkovém poukazu",
+    "Select Expiry Date":               "Vyberte datum platnosti",
+    "Insert/Edit Link":                 "Vložit/upravit odkaz",
+    "Numbered List":                    "Číslovaný seznam",
+    "Clear Formatting":                 "Vymazat formátování",
+    "Enter Basic Information":          "Zadejte základní údaje",
+    "Card Details and Expiry":          "Údaje o poukazu a platnost",
+    "Select or Upload Artwork":         "Vyberte nebo nahrajte grafiku",
+    "Set Values, Tax, and Category":    "Nastavte hodnoty, daň a kategorii",
+    "Define Denominations, Tax Options, and Product Category": "Určete nominální hodnoty, daně a kategorii produktu",
+    "Review Card":                      "Kontrola poukazu",
+    "Finalize Gift Card Details":       "Dokončete údaje o dárkovém poukazu",
+    "Gift Card Name":                   "Název dárkového poukazu",
+    "Gift Card Description":            "Popis dárkového poukazu",
+    "Write Using AI":                   "Napsat pomocí AI",
+    "How To Redeem URL (Optional)":     "URL s návodem k uplatnění (volitelné)",
+    "No Link":                          "Bez odkazu",
+    "Select this if you don’t want to include a link along with the gift card.":
+      "Zvolte, pokud k dárkovému poukazu nechcete přikládat odkaz.",
+    "Link to URL":                      "Odkaz na URL",
+    "Add a URL that will be shared along with the gift card code for redemption or more information.":
+      "Přidejte URL, která se odešle spolu s kódem poukazu – k uplatnění nebo pro další informace.",
+    /* new subscription */
+    "Create New Subscription":          "Vytvořit nové předplatné",
+    "Customer Details":                 "Údaje o zákazníkovi",
+    "Add Customer":                     "Přidat zákazníka",
+    "Subscription Details":             "Údaje o předplatném",
+    "Add Bill Start Date":              "Přidat datum začátku fakturace",
+    "Product(s)":                       "Produkty",
+    "Schedule":                         "Naplánovat",
+    /* custom values, tags, objects */
+    "Enter custom value name":          "Zadejte název vlastní hodnoty",
+    "Enter custom value (optional)":    "Zadejte vlastní hodnotu (volitelné)",
+    "Select a folder (optional)":       "Vyberte složku (volitelné)",
+    "Enter a short, descriptive name (e.g., \"VIP Customer\")": "Zadejte krátký, výstižný název (např. „VIP zákazník“)",
+    "Create custom object":             "Vytvořit vlastní objekt",
+    "Build with your own fields and associations": "Sestavte z vlastních polí a vazeb",
+    "Use a template":                   "Použít šablonu",
+    "Use a template to get started faster": "Začněte rychleji se šablonou",
+    /* new blog site */
+    "Blog title":                       "Název blogu",
+    "Select domain":                    "Vyberte doménu",
+    "Add your blog slug":               "Přidejte slug blogu",
+    "Type something...":                "Napište něco…",
+    "Setup your blog site":             "Nastavte svůj blog",
+    "Blog site title":                  "Název blogu",
+    "Domain and slug":                  "Doména a slug",
+    "Add/edit domain":                  "Přidat/upravit doménu",
+    "Blog meta description":            "Meta popis blogu",
+    "A blog meta description is a concise summary or snippet of your blog site.":
+      "Meta popis blogu je stručné shrnutí vašeho blogu.",
+    /* new QR code */
+    "Enter QR name":                    "Zadejte název QR kódu",
+    "Generate your QR with ease":       "Snadno vygenerujte QR kód",
+    "Choose type":                      "Zvolte typ",
+    "QR color and shape":               "Barva a tvar QR kódu",
+    "Select QR type (dynamic URL's supported)": "Vyberte typ QR kódu (podporuje dynamické URL)",
+    "Payment":                          "Platba",
+    "Profile card":                     "Profilová karta",
+    "V card":                           "vCard",
+    "Business card":                    "Vizitka",
+    "Select QR type":                   "Vyberte typ QR kódu",
 
     /* THE APP MARKETPLACE (/integration), 11 Sep. Only the catalogue's own
        interface. App names, "By <developer>" and descriptions are the
