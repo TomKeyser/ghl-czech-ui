@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v56';
+  var VERSION = 'v57';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -374,6 +374,24 @@
        leave that status in English, and the zero-match audit will not notice:
        it will still be matching something. */
     '[id="task-title-text"]',
+    /* THE REST OF THAT WIDGET'S RECORD FIELDS. Censused 11 Sep rather than
+       guessed at -- the widget uses five ids and they do NOT all hold the same
+       kind of thing:
+         task-checkbox           empty
+         task-title-text         the task's name          BLOCKED (v45)
+         task-description-text   the task's body          BLOCKED here
+         task-contact-text       ":  <span>contact</span>" BLOCKED here; the
+                                 leading colon is punctuation, not a label,
+                                 so blocking the element costs no translation
+         task-assigned-to-text   "Assigned to: <span>X</span>" -- LEFT ALONE.
+                                 Its label and its "Unassigned" value are both
+                                 ours and translate correctly; when X is a real
+                                 person the record backstop below catches the
+                                 name, which is the case it was built for.
+       Naming task-title-text alone in v45 is the third instance this week of
+       fixing one member of a family and assuming it was the family. */
+    '[id="task-description-text"]',
+    '[id="task-contact-text"]',
     '[id="select-id"] .hr-base-selection-label',
     /* THE OPPORTUNITY CARDS THEMSELVES. Only visible once a pipeline has cards
        in it, which is why the board looked clean when the stage headings were
