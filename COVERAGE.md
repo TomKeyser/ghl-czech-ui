@@ -116,6 +116,12 @@ because this account has a single pipeline and no workflows. Zoned in v99.
 
 ## The sweep route list
 
+**The walker itself is `sweep-routes.js` in the repo** — a console snippet, not
+loaded by anything, carrying this list plus the discipline that goes with it
+(export before clearing, wait for the DOM to stop moving, report suspects
+separately). Paste it into a logged-in tab. When a module gains a page, add it
+in both places.
+
 The collector sees only screens someone opens, so the post-deploy sweep is
 only as good as its list of routes. On 11 Sep the list in use had two stale
 payments paths (`payments/transactions` and `payments/subscriptions`, which
