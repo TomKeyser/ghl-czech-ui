@@ -3922,6 +3922,60 @@
       "Připojte se a získávejte zájemce z reklam TikTok na generování zájemců přímo do CRM",
     "Auto-sync ad leads, manage DMs, and handle reviews and comments across all your Facebook Pages and Instagram.":
       "Automaticky synchronizujte zájemce z reklam, spravujte zprávy a vyřizujte recenze a komentáře na všech stránkách Facebooku a na Instagramu.",
+    /* the rest of the integrations list, lazy-loaded further down the page
+       (the sweep caught it as the route changed underneath) */
+    "Seamlessly import and sync your customer and order details from WooCommerce, while leveraging trigger automations.":
+      "Importujte a synchronizujte údaje o zákaznících a objednávkách z WooCommerce a využívejte automatizace se spouštěči.",
+    "Seamlessly import and sync your customer and order details from Shopify, while leveraging trigger automations.":
+      "Importujte a synchronizujte údaje o zákaznících a objednávkách ze Shopify a využívejte automatizace se spouštěči.",
+    "Automate ClickUp tasks directly from your workflows to automate project management with actions and triggers.":
+      "Automatizujte úkoly v ClickUp přímo z workflow a řiďte projekty pomocí akcí a spouštěčů.",
+    "Power your Notion workspace by auto-creating tasks, documents, and updates with actions and triggers.":
+      "Rozšiřte svůj prostor v Notion o automaticky vytvářené úkoly, dokumenty a aktualizace pomocí akcí a spouštěčů.",
+    "Automatically sync leads and contact updates into Google Contacts using workflows.":
+      "Automaticky synchronizujte zájemce a změny kontaktů do Kontaktů Google pomocí workflow.",
+    "Integrate with Airtable to sync records, automate data updates, and optimize operations through workflows.":
+      "Propojte Airtable, synchronizujte záznamy, automatizujte aktualizace dat a zefektivněte provoz pomocí workflow.",
+    "Manage projects and collaborate effortlessly by using Basecamp actions and triggers.":
+      "Spravujte projekty a snadno spolupracujte pomocí akcí a spouštěčů Basecamp.",
+    "Connect Typeform surveys, quizzes, and forms to automatically capture responses, trigger workflows, and run actions.":
+      "Propojte průzkumy, kvízy a formuláře Typeform, automaticky zachycujte odpovědi, spouštějte workflow a akce.",
+    "Streamline project management with automated task creation, project updates, team assignments, and workflow triggers.":
+      "Zefektivněte řízení projektů díky automatickému vytváření úkolů, aktualizacím projektů, přidělování týmu a spouštěčům workflow.",
+    "Collect responses effortlessly.":  "Sbírejte odpovědi bez námahy.",
+    "Streamline project management by connecting Workflows directly with Monday.com":
+      "Zefektivněte řízení projektů propojením workflow přímo s Monday.com",
+    "Connect to multiple AI models with open router action.":
+      "Připojte se k více modelům AI pomocí akce OpenRouter.",
+    "Connect Manus to create, manage, and automate AI-powered tasks directly from your CRM.":
+      "Propojte Manus a vytvářejte, spravujte a automatizujte úkoly s AI přímo z CRM.",
+    "Connect Fathom to capture meeting summaries, action items, and transcripts, and trigger automations from your workflows.":
+      "Propojte Fathom, zachycujte shrnutí schůzek, úkoly a přepisy a spouštějte automatizace z workflow.",
+    "Use this integration to connect your Apify account and automate data collection tasks.":
+      "Touto integrací připojíte účet Apify a automatizujete sběr dat.",
+    "Mistral AI enables fast and powerful text generation, embeddings, and vision analysis using advanced AI models for automation and workflows.":
+      "Mistral AI umožňuje rychlé a výkonné generování textu, embeddingy a analýzu obrazu pomocí pokročilých modelů AI pro automatizace a workflow.",
+    "Issue tracking and project management for software teams":
+      "Evidence požadavků a řízení projektů pro vývojářské týmy",
+    "Create, manage, and organize tasks and projects with Todoist.":
+      "Vytvářejte, spravujte a organizujte úkoly a projekty v Todoistu.",
+    "Cal.com lets you automate scheduling — trigger workflows when bookings are created, canceled, or rescheduled.":
+      "Cal.com automatizuje plánování – spouštějte workflow, když se rezervace vytvoří, zruší nebo přesune.",
+    "Connect your HubSpot account via OAuth to manage contacts, companies, and deals.":
+      "Připojte účet HubSpot přes OAuth a spravujte kontakty, firmy a obchody.",
+    "Connect Klaviyo to sync customer data, personalize email and SMS campaigns, and trigger automated marketing workflows.":
+      "Propojte Klaviyo, synchronizujte zákaznická data, personalizujte e-mailové a SMS kampaně a spouštějte automatizované marketingové workflow.",
+    "Connect Housecall Pro to create customers, manage jobs and trigger automations directly from your workflows":
+      "Propojte Housecall Pro a vytvářejte zákazníky, spravujte zakázky a spouštějte automatizace přímo z workflow",
+    "Connect your Calendly account to sync bookings, updates, and cancellations automatically.":
+      "Připojte účet Calendly a automaticky synchronizujte rezervace, změny a zrušení.",
+    "Jira is a tool to track tasks, bugs, and work progress for teams.":
+      "Jira je nástroj pro sledování úkolů, chyb a postupu práce v týmech.",
+    "Jotform is an online form builder that lets users create and share customizable forms for collecting data":
+      "Jotform je online nástroj pro tvorbu formulářů, ve kterém lze vytvářet a sdílet přizpůsobitelné formuláře pro sběr dat",
+    /* Labs cards' links */
+    "View Gallery":                     "Zobrazit galerii",
+    "Support Docs":                     "Dokumentace",
     /* WhatsApp: a subscription sales page, but inside Settings, where a Czech
        operator lands on it — so translated after all. The price button keeps
        HighLevel's own figure. */

@@ -416,7 +416,15 @@
    'CPS,CPL,ROI %,Agent Studio,https://,http://,' +
    /* integration names on Settings > Integrations */
    'Printful,Printify,Shippo,Shipstation,Clio,Google Calendar,Google Lead Ads,' +
-   'Google Merchant Center,TikTok Messaging,TikTok Lead Ads,API v2.0'
+   'Google Merchant Center,TikTok Messaging,TikTok Lead Ads,API v2.0,Canva,' +
+   'WooCommerce,ClickUp,Notion,Google Contacts,Airtable,BaseCamp,Basecamp,Typeform,' +
+      /* NOT "Linear": this list is checked before the dictionary and ignores
+      case, and "linear" is an ordinary interface word (a gradient, an
+      animation). A brand name that is also a word stays out. */
+   'Asana,Google Forms,Monday.com,OpenRouter,Manus,Fathom,Apify,Mistral AI,' +
+   'Todoist,Cal.com,HubSpot,Klaviyo,Browse AI,Housecall Pro,Jira,Jotform,' +
+   /* CodeMirror's hidden measuring line, reported on the tracking page */
+   'abc def ghi jkl mno pqr stu'
   ).split(',').forEach(function (n) { NEVER[n.toLowerCase()] = n; });
 
   /* Returns the string unchanged when it must never be translated, else null.
