@@ -90,7 +90,13 @@
          or opportunity name its owner chose. */
       ['ACT_MOVE_LINE',  /^from (.+?) → (.+?) in (.+)$/],
       ['ACT_IN_STAGE',   /^in (.+?) - (.+)$/],
-      ['ACT_OPP_NAMED',  /^Opportunity (.+)$/],
+      /* NOT an interface label. The opportunity modal's first tab is
+         "Opportunity details", and this rule turned it into "Příležitost
+         details" (found 11 Sep, v92). A dictionary entry now takes that string
+         first, and the lookahead refuses the lower-case interface words that
+         follow "Opportunity" in HighLevel's own labels. A record name is
+         whatever its owner typed, so this can only be a blocklist. */
+      ['ACT_OPP_NAMED',  /^Opportunity (?!(?:details|name|value|source|owner|status|stage|stages|pipeline|fields|settings|list|card|cards|notes|tasks|payments|appointments|created|updated|deleted|moved|won|lost|abandoned|open)\b)(.+)$/],
       /* The two compose, so the combination gets its own rule rather than
          nesting a translate() call inside the template. Passing the capture
          through {*1} would work here and would also run the dictionary over
@@ -115,6 +121,19 @@
          cannot move. */
       /* day first: "04 Sep 2026 / 07:13 PM" (tags), "9 Sep 2026, 1:47 PM"
          (knowledge base) */
+      /* "Sep 5 2026, 8:00 AM" — no comma after the day, one after the year
+         (a task's due line in the opportunity modal). Same captures as STAMP. */
+      ['STAMP_YEAR_COMMA', /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4}),\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
+      /* "Due: Sep 5 2026, 8:00 AM (PDT)" — a TASK's due line, so the task word */
+      ['DUE_TZ',         /^Due:\s*(.+?)\s+\(([A-Z]{2,5})\)$/],
+      /* "8:00 AM – 8:30 AM" — an appointment slot. Each end goes back through
+         TIME_AMPM, so the 24-hour clock is the same everywhere. */
+      ['TIME_RANGE',     /^(\d{1,2}:\d{2}\s*[AP]M)\s*[–-]\s*(\d{1,2}:\d{2}\s*[AP]M)$/i],
+      /* "Created On: Sep 4, 2026 9:34 PM (PDT)" — the task drawer's footer */
+      ['CREATED_ON_TZ',  /^Created On:\s*(.+?)\s+\(([A-Z]{2,5})\)$/],
+      /* 'Edit "Zz Test Quebec"' — the opportunity modal's title. The quoted part
+         is the record's name and passes through raw. */
+      ['EDIT_QUOTED',    /^Edit\s+"(.+)"$/],
       ['STAMP_DAY_FIRST', /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\s*[\/,]\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stampDayFirst'],
       ['STAMP_FULL',     /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(\d{4}),?\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
       /* THE TAX LINE ON AN INVOICE, 11 Sep — the business's tax NAME wrapped in

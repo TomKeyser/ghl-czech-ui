@@ -433,6 +433,10 @@
       /* "znaků" is the genitive after the maximum, right for any count */
       CHAR_COUNT:     '{1} / {2} znaků',
       N_STEPS:        '{1} {~steps:1}',
+      DUE_TZ:         'Termín: {*1} ({2})',
+      CREATED_ON_TZ:  'Vytvořeno: {*1} ({2})',
+      TIME_RANGE:     '{*1}–{*2}',
+      EDIT_QUOTED:    'Upravit „{1}“',
       N_PAGES:        '{1} {~pages:1}',
       FC_TIP_EXPECTED: 'Očekávané tržby: {*1}\nMaximální možné tržby: {*2}\nMíra očekávaných tržeb: {3} %',
       FC_TIP_TOTAL:   'Celkový potenciál: {*1}\nRozpis: {*2} (očekávané tržby) + {*3} (vyhrané tržby)',
@@ -4031,6 +4035,32 @@
     "documentType":                     "Typ dokumentu",
     "sourceName":                       "Název zdroje",
 
+    /* RECORD VIEWS, 11 Sep: the contact's side panels and the opportunity
+       modal's tabs. MY CZECH. */
+    "Opportunity details":              "Podrobnosti příležitosti",
+    "Add and edit opportunity details, tasks, notes and appointments.":
+      "Přidávejte a upravujte podrobnosti příležitosti, úkoly, poznámky a schůzky.",
+    "Book or update appointment":       "Rezervovat nebo změnit schůzku",
+    "Audit log:":                       "Protokol auditu:",
+    "Audit Logs:":                      "Protokoly auditu:",
+    /* the new-appointment dialog's two tabs */
+    "Status :":                         "Stav:",
+    "Going on vacation? Taking some time off? Block off time on your calendar to prevent clients from booking appointments. Existing appointments will still remain on your calendar.":
+      "Jedete na dovolenou? Berete si volno? Zablokujte si čas v kalendáři, aby si klienti nemohli rezervovat schůzky. Stávající schůzky v kalendáři zůstanou.",
+    "User/Calendar":                    "Uživatel/kalendář",
+    "Start time":                       "Čas začátku",
+    "End time":                         "Čas konce",
+    "Block time":                       "Zablokovat čas",
+    "No Appointments!":                 "Žádné schůzky!",
+    "It looks like you don't have any appointments scheduled. Would you like to set one up?":
+      "Zatím nemáte naplánované žádné schůzky. Chcete nějakou naplánovat?",
+    "All types":                        "Všechny typy",
+    "Manage subscriptions":             "Spravovat odběry",
+    "No Company created":               "Není vytvořena žádná společnost",
+    "Status:":                          "Stav:",
+    "No notes yet":                     "Zatím žádné poznámky",
+    "Keep track of important details by adding your first note":
+      "Zapisujte si důležité podrobnosti – přidejte první poznámku",
     /* THE DIALOG WALK, 11 Sep: every "Create…" / "Add…" button opened and
        closed unsaved — dialogs, drawers and create pages the route list cannot
        reach. MY CZECH. */
