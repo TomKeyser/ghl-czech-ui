@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v105';
+  var VERSION = 'v106';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -678,6 +678,19 @@
        the same shape -- but if this ever stops matching, that single sample is
        where to look first. */
     '.interactive-element button span.text-left',
+    /* HIGHLEVEL'S OWN "REPORT TRANSLATION ISSUE" CONTROL, v106 (task t16).
+       It sits on every screen, and we were translating its label into fluent
+       Czech — "Nahlásit chybu překladu" — on the one language where 100% of
+       the translated text is OURS. So their misdirected-report funnel looked
+       like part of our interface, and users there have been sending them
+       reports about our Czech.
+
+       Left in English deliberately, so it reads as theirs. Say so to the
+       security reviewer, or they will log it as a gap. Whether they would
+       rather we hid it entirely is the question in task t04, on its way to
+       marketplace@gohighlevel.com; this is the half we said we would do
+       regardless of their answer. */
+    '#i18n-feedback',
     /* TEXT THAT TYPES ITSELF, v100. The Voice AI welcome screen has two
        typewriter animations, and a translator cannot follow either.
 
