@@ -424,7 +424,7 @@
    'Inter,ctrlK,Kč,' +
    /* ad-report metric acronyms, a product name, and a URL scheme on its own
       in front of a domain field */
-   'CPS,CPL,ROI %,Agent Studio,https://,http://,' +
+   'CPS,CPL,ROI %,Agent Studio,Calendar AI,https://,http://,' +
    /* integration names on Settings > Integrations */
    'Printful,Printify,Shippo,Shipstation,Clio,Google Calendar,Google Lead Ads,' +
    'Google Merchant Center,TikTok Messaging,TikTok Lead Ads,API v2.0,Canva,' +

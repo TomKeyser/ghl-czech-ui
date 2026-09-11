@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v95';
+  var VERSION = 'v96';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1148,7 +1148,11 @@
   function hrColumnLetThrough(k) {
     return /date/i.test(k) || /At$/.test(k) || /status/i.test(k) || /^action/i.test(k) ||
            k === 'productType' || k === 'paymentProviderType' || /edOn$/.test(k) ||
-           /^schedule/.test(k) || k === 'steps';
+           /^schedule/.test(k) || k === 'steps' ||
+           /* the funnels list's last column: its only content is the row's
+              "Actions" button (v96). An id shown as text is untranslatable
+              anyway and its shape is never reported. */
+           k === '_id';
   }
 
   function hrColumnKey(td) {
