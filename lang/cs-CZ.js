@@ -383,6 +383,7 @@
       PER_PAGE:       '{1} / stránku',
       SHOWING_OF:     'Zobrazeno {1}–{2} z celkem {3}',
       N_HRS:          '{1} h',
+      DUR_SECS:       '{1} s',
       TOTAL_MEM:      'Celkem {1} {~members:1}',
       LAST_UPD:       'Naposledy aktualizováno: {*1}',
       BYTES_USED:     'Využito {1} {2}',
@@ -3840,6 +3841,9 @@
     "Won": "Vyhráno",
     "Lost": "Prohráno",
     "Abandoned": "Opuštěno",
+    /* the last column of the dashboard's lead-source table, beside Vyhráno /
+       Prohráno / Opuštěno: the share of opportunities won. MY CZECH. */
+    "Win%": "Úspěšnost",
     "Won revenue": "Výnos z vyhraných",
     "Conversion rate": "Míra konverze",
     "Average sales duration": "Průměrná délka obchodu",

@@ -117,6 +117,13 @@ dictionary key. It is recorded here rather than quietly rounded off.
 - One sub-account, one dataset. A screen with no records shows fewer strings.
 - Cross-origin iframes — Settings sub-pages, the workflow builder — are outside
   this measurement entirely. No DOM layer can reach them, ours or a competitor's.
+- The collector sees only what renders. Sections behind a toggle are invisible
+  until someone flips it. The product editor's online-store fields (SEO,
+  handle, collection, inventory) were off on every saved test product and
+  showed up only as a **transient** flash while the form loaded (v77).
+  **A transient miss on a form usually means a conditional section.** Walk the
+  *create* form, where HighLevel's defaults switch things on, before
+  dismissing it as noise.
 - Counts occurrences, not distinct strings. The **distinct** gap across the whole
   operator surface is about fifty strings, which is the figure to use when
   estimating work rather than describing the product.

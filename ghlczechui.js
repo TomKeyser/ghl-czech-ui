@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v77';
+  var VERSION = 'v78';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -331,7 +331,10 @@
        only because code was already in this list, and it forced every overlay to
        live in a monospace element and undo its own styling. */
     '[data-ka-ignore]',
-    'code', 'pre', 'style', 'script', 'svg',
+    /* noscript: HighLevel's "doesn't work without JavaScript" notice is text in
+       the DOM on every page, never shown, and the collector reported it on
+       every route. Added v78. */
+    'code', 'pre', 'style', 'script', 'noscript', 'svg',
     '[contenteditable="true"]', '[contenteditable=""]',
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
@@ -710,7 +713,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v53';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v54';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

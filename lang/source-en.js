@@ -194,6 +194,10 @@
       ['PER_PAGE',       /^(\d+)\s*\/\s*page$/i],
       ['SHOWING_OF',     /^Showing (\d+) to (\d+) of (\d+) results?$/i],
       ['N_HRS',          /^(\d+)\s*Hrs?$/i],
+      /* "0s" — the dashboard's average deal length with no closed deals, 11 Sep.
+         Only the seconds form has been SEEN; longer lengths ("3d 4h"?) have
+         not, so they are not guessed at here. Case-sensitive on purpose. */
+      ['DUR_SECS',       /^(\d+)s$/],
       ['TOTAL_MEM',      /^(\d+)\s+total members?$/i],
       ['REL_LONG',       /^(\d+)\s+(second|minute|hour|day|week|month)s?\s+ago$/i, '@relLong'],
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],
