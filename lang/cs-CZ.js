@@ -366,7 +366,19 @@
         'More bookings':      'Více rezervací',
         'Schedule time':      'Doba rezervace',
         'Lead Conversion':    'Konverze zájemců',
-        'Try asking:':        'Zkuste se zeptat:'
+        'Try asking:':        'Zkuste se zeptat:',
+        /* THE AGENT NAMES STAY ENGLISH, and they are written out here so they
+           count as handled rather than arriving in every sweep as gaps. The
+           pack already treats Voice AI, Content AI, Conversation AI and AI
+           Employee as product names; these four are the same thing one level
+           down. Scoped to this route rather than put in the engine's
+           never-translate set, because "Sales Agent" and "Appointment
+           Scheduler" are ordinary words anywhere else.
+           ⚠ REVIEWER: right call, or should they read in Czech? */
+        'Voice Agent':          'Voice Agent',
+        'Sales Agent':          'Sales Agent',
+        'Appointment Scheduler': 'Appointment Scheduler',
+        'AI Reputation Manager': 'AI Reputation Manager'
       }
     },
 
@@ -477,6 +489,12 @@
       CURRENT_PAGE:   'Aktuální stránka {1}',
       INCREASED_BY:   'Nárůst o {1} %',
       DECREASED_BY:   'Pokles o {1} %',
+      /* the "Ship AI" cards' count-up stats. Number first, as HighLevel lays
+         them out, and the Czech genitive plural that a percentage takes. */
+      SHIP_MISSED_PCT: '{1} % zmeškaných hovorů',
+      SHIP_CONV_PCT:   '{1} % konverzí',
+      SHIP_RESP_PCT:   '{1} % odpovědí',
+      SHIP_MORE_BOOK:  '+{1} % více rezervací',
       N_REVIEWS_PAREN: '({1} {~reviews:1})',
       /* no agreement needed: the count follows a colon or "z" is avoided */
       AGENTS_RANGE:   'Agenti {1}–{2} z {3}',
@@ -3479,9 +3497,12 @@
 
        ⚠ THREE QUESTIONS FOR THE REVIEWER, asked explicitly rather than left
        for her to notice (the lesson from the calendar's leading zero):
-         1. PERCENT SPACING. We print "62%" because that is HighLevel's own
-            output and the figures rule says leave it. Czech typography wants a
-            non-breaking space — "62 %". Which wins on a marketing page?
+         1. PERCENT SPACING. We print "62 %", with the space Czech typography
+            wants, and the same space the pack's own pattern templates already
+            use ("Nárůst o {1} %"). HighLevel prints "62%". Read the figures
+            rule as being about their CLAIMS — the number, the currency — not
+            their typography, and one page cannot say it both ways. Confirm, or
+            we switch the whole page back to the tight form.
          2. THE AGENT NAMES stay English — Voice Agent, Sales Agent,
             Appointment Scheduler, AI Reputation Manager — following the pack's
             existing treatment of Voice AI, Content AI and Conversation AI as
@@ -3501,8 +3522,8 @@
 
     /* --- ai-agents/getting-started: the hero ---------------------------- */
     "AI-powered platform":              "Platforma poháněná AI",
-    "62% of your after-hours calls":    "62% hovorů mimo pracovní dobu",
-    "78% of your chat messages":        "78% zpráv z chatu",
+    "62% of your after-hours calls":    "62 % hovorů mimo pracovní dobu",
+    "78% of your chat messages":        "78 % zpráv z chatu",
     ". Our AI Agents plug the leaks in your business, responding to every lead instantly and rescuing up to $200k in \"no-show\" revenue, completely on autopilot.":
       ". Naši AI agenti ucpou díry ve vaší firmě – okamžitě odpovídají každému zájemci a zachrání až $200k tržeb ztracených kvůli nedostaveným schůzkám, zcela automaticky.",
     "Get Started →":                    "Začít →",
@@ -3514,7 +3535,7 @@
     /* --- the comparison table ------------------------------------------- */
     "Numbers don't lie":                "Čísla nelžou",
     "80% of leads are lost in the first 5 minutes. Respond to leads instantly, beat your competition.":
-      "80% zájemců se ztrácí během prvních 5 minut. Odpovídejte okamžitě a předběhněte konkurenci.",
+      "80 % zájemců se ztrácí během prvních 5 minut. Odpovídejte okamžitě a předběhněte konkurenci.",
     "Missed Calls Every Month":         "Zmeškané hovory každý měsíc",
     "Missed Chat Conversations":        "Zmeškané konverzace v chatu",
     "Employee Availability":            "Dostupnost zaměstnanců",
@@ -3588,9 +3609,46 @@
     "Best for lead capture":            "Nejlepší pro sběr zájemců",
     "Drives more bookings":             "Přináší více rezervací",
     "Low effort win":                   "Snadná výhra",
+    /* THE FOUR CARDS BEHIND THE TABS. Only one is on screen at a time and
+       they rotate, so the first walk saw a quarter of this section. The
+       headline stat on each ("98% response rate") counts up and is handled by
+       the SHIP_* rules, not here. */
     "Turn leads into booked appointments around the clock by collecting details, proposing times, and filling your calendar automatically.":
       "Proměňte zájemce v rezervované schůzky nepřetržitě: sbírejte podrobnosti, navrhujte termíny a plňte kalendář automaticky.",
-    "+38% more bookings":               "+38% více rezervací",
+    "Never miss another call, book appointments, and have conversations with your leads. No more hold music.":
+      "Už nikdy nezmeškáte hovor, rezervujte schůzky a mluvte se svými zájemci. Konec čekací hudby.",
+    "Engage every lead the moment they reach out across SMS, email, chat, and more, then guide them to your next steps.":
+      "Zaujměte každého zájemce v okamžiku, kdy se ozve – přes SMS, e-mail, chat i jinde – a doveďte ho k dalšímu kroku.",
+    "Reply to Google and Facebook reviews with AI-drafted responses you approve before they go live.":
+      "Odpovídejte na recenze na Googlu a Facebooku návrhy od AI, které schválíte dřív, než se zveřejní.",
+    "Missed calls":                     "Zmeškané hovory",
+    "Missed chats":                     "Zmeškané chaty",
+    "Avg answer":                       "Prům. zvednutí",
+    "Avg rating":                       "Prům. hodnocení",
+    "Reply time":                       "Doba odpovědi",
+    "Conversion":                       "Konverze",
+    "Answers every inbound call automatically":
+      "Automaticky zvedá každý příchozí hovor",
+    "Books appointments in natural conversation":
+      "Rezervuje schůzky v přirozeném rozhovoru",
+    "Works during after-hours and rush periods":
+      "Funguje mimo pracovní dobu i ve špičce",
+    "Transfers to human agents when needed":
+      "V případě potřeby předá hovor člověku",
+    "Responds instantly to SMS, email, and web chat":
+      "Okamžitě odpovídá na SMS, e-maily i webový chat",
+    "Qualifies leads with smart follow-up questions":
+      "Kvalifikuje zájemce chytrými doplňujícími otázkami",
+    "Sends offers, pricing, and booking links":
+      "Posílá nabídky, ceny a odkazy na rezervaci",
+    "Seamless handoff to your sales team":
+      "Plynulé předání vašemu obchodnímu týmu",
+    "Auto-drafts personalized review replies":
+      "Sám navrhuje personalizované odpovědi na recenze",
+    "Works across Google and Facebook":  "Funguje na Googlu i Facebooku",
+    "Lets you approve before publishing": "Necháte si je schválit před zveřejněním",
+    "Boosts search ranking with fresh responses":
+      "Zlepšuje pozici ve vyhledávání díky čerstvým odpovědím",
     "Proposes available time slots automatically":
       "Automaticky navrhuje volné termíny",
     "Collects customer details before the call":

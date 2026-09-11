@@ -240,6 +240,16 @@
       ['CURRENT_PAGE',   /^Current page (\d+)$/],
       ['INCREASED_BY',   /^Increased by (\d+(?:\.\d+)?)%$/],
       ['DECREASED_BY',   /^Decreased by (\d+(?:\.\d+)?)%$/],
+      /* THE "SHIP AI" CARDS on ai-agents/getting-started, 11 Sep. Each card's
+         headline stat COUNTS UP when the card scrolls into view, so the string
+         arrives as "0% missed calls", "7% missed calls" … "98% response rate".
+         Fixed entries would translate only the last frame of each; a rule
+         translates every frame and needs no maintenance when HighLevel edits
+         the number in its marketing copy. */
+      ['SHIP_MISSED_PCT', /^(\d+)% missed calls$/i],
+      ['SHIP_CONV_PCT',   /^(\d+)% conversion rate$/i],
+      ['SHIP_RESP_PCT',   /^(\d+)% response rate$/i],
+      ['SHIP_MORE_BOOK',  /^\+(\d+)% more bookings$/i],
       ['N_REVIEWS_PAREN', /^\((\d+) Reviews?\)$/],
       ['AGENTS_RANGE',   /^(\d+)\s*-\s*(\d+) of (\d+) agents?$/],
       ['N_MANAGED',      /^(\d+) Managed Agents?$/],
