@@ -128,7 +128,9 @@
     recurrence: {
       once:  { day: 'Denně', week: 'Týdně', month: 'Měsíčně', year: 'Ročně' },
       units: { day: 'periodDays', week: 'periodWeeks', month: 'periodMonths', year: 'periodYears' },
-      each:  { few: 'Každé {n} {unit}', other: 'Každých {n} {unit}' }
+      each:  { few: 'Každé {n} {unit}', other: 'Každých {n} {unit}' },
+      /* the same schedule inside a sentence — the formatter lowercases it */
+      label: 'Opakuje se {every}'
     },
 
     /* ---- frames: the sentence shapes the formatters fill in -------------- */
@@ -349,6 +351,11 @@
       DUE_IN_DAYS:    'Splatnost za {1} {~periodDays:1}',
       /* the tax line on an invoice. {1} is the business's tax name, raw. Czech
          puts a space before % when the number stands alone ("21 %"). MY CZECH. */
+      /* recurring-invoice editor. {*N} runs the dates through the date rules:
+         "October 5, 2026" → "5. 10. 2026". MY CZECH. */
+      FIRST_INVOICE:  'První faktura bude splatná {*1} a odeslána {*2}',
+      FLAT_CUR:       'Pevná částka ({1})',
+      MAX_LATE_CUR:   'Max. poplatky z prodlení ({1})',
       TAX_INCLUDED:   '{1} ({2} % – zahrnuto v ceně)',
       TAX_ON:         '{1} ({2} % z {3})',
       /* "0 opportunities selected" — the plural agrees with the number, which is
@@ -3467,6 +3474,28 @@
     "Charge Late Fees":                 "Účtovat poplatek z prodlení",
     "Charge Processing Fees":           "Účtovat poplatky za zpracování",
     "Include Tipping":                  "Povolit spropitné",
+    "Add invoice prefix":               "Přidejte předponu faktury",
+    "Add products to your Invoice":     "Přidejte do faktury produkty",
+
+    /* THE RECURRING-INVOICE EDITOR, 11 Sep. "Odkladná lhůta" for a payment
+       grace period: CONFIRM. "days in advance" follows a number the user
+       types, so its plural is unknowable here; "dní" fits 0 and 5+, reads a
+       little stiff after 2-4. Left deliberately: "of Every" and "Every" are
+       fragments of a control whose other half is not text — translating half
+       a phrase blind is worse than leaving it. */
+    "Recurring Invoice Settings":       "Nastavení opakované faktury",
+    "Add recurring invoice start, end and frequency configurations":
+      "Nastavte začátek, konec a frekvenci opakované faktury",
+    "How often?":                       "Jak často?",
+    "Never":                            "Nikdy",
+    "Send Invoice":                     "Odeslat fakturu",
+    "days in advance":                  "dní předem",
+    "Flat Fee":                         "Pevný poplatek",
+    "Percentage of remaining amount":   "Procento ze zbývající částky",
+    "Grace Period":                     "Odkladná lhůta",
+    "Allowed Files -> PNG, CSV, PDF":   "Povolené soubory -> PNG, CSV, PDF",
+    "Note - Maximum of 10 files, not exceeding 20 Mb, can be attached":
+      "Poznámka – lze připojit nejvýše 10 souborů o velikosti do 20 MB",
 
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
        SPEAKER, 10 Sep 2026 — as were the weekday abbreviations and the

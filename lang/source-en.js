@@ -131,6 +131,12 @@
          shape nobody has observed is how the old firewall came to match
          nothing. Add them when a real account shows them. */
       ['MONEY_KC',       /^(-?)(Kč)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?$/, '@money'],
+      /* THE RECURRING-INVOICE EDITOR, 11 Sep */
+      ['RECURRING_EVERY', /^Recurring\s+Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@recurringEvery'],
+      /* the dates are HighLevel's own and go through the date rules via {*N} */
+      ['FIRST_INVOICE',  /^First invoice will be due on (.+) and sent on (.+)$/i],
+      ['FLAT_CUR',       /^Flat \(([A-Z]{3})\)$/],
+      ['MAX_LATE_CUR',   /^Max Late Fees \(([A-Z]{3})\)$/],
       /* "Every  month", "Every 3 weeks" — recurring invoice schedule, 11 Sep */
       ['EVERY_N',        /^Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@everyInterval'],
       /* "Sep 10 at 09:20 PM" — payments lists, 11 Sep */

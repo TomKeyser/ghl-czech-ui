@@ -294,6 +294,16 @@
       var sym = (N.symbols && N.symbols[m[2]]) || m[2];
       return (N.money || '{n} {sym}').replace('{n}', num).replace('{sym}', sym);
     },
+    /* "Recurring Every  month" — the recurring-invoice editor's summary line.
+       The same schedule as @everyInterval, but inside a sentence, so the
+       adverb loses its capital: "Opakuje se měsíčně", "Opakuje se každé 2
+       měsíce". The frame comes from pack.recurrence.label. */
+    recurringEvery: function (pack, m) {
+      var every = FORMATTERS.everyInterval(pack, m);
+      var R = pack.recurrence;
+      if (every === null || !R || !R.label) return null;
+      return R.label.replace('{every}', every.charAt(0).toLowerCase() + every.slice(1));
+    },
     /* "Sep 2026" — a month LABEL, so it stays a name even in numeric mode */
     monYear: function (pack, m) {
       var mo = month(pack, 'full', m[1]);

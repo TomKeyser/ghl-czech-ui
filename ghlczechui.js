@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v73';
+  var VERSION = 'v74';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -451,10 +451,24 @@
        the customer's name, the invoice number and every amount to the engine.
        Censused 11 Sep: .preview-section holds only the document card, whose
        one button ("Pay $112.00") is part of the customer's view — nothing of
-       ours sits in it. #invoice-editor-container is shared by the invoice
-       editor's new and edit modes; check the recurring and template editors
-       use it before assuming they are covered. */
-    '#invoice-editor-container .preview-section',
+       ours sits in it.
+
+       THREE EDITORS, ONE RULE (widened v74). Checked 11 Sep rather than
+       assumed: the recurring-invoice editor and the template editor are
+       DIFFERENT components with different containers —
+         #invoice-editor-container            one-off invoices, new and edit
+         #recurring-invoice-editor-container  recurring invoices
+         #invoice-template-editor-container   invoice templates
+       — but all three use the same .preview-section. v71 named only the
+       first, so the recurring editor's preview was being translated and its
+       customer block leaked a phone number. The id pattern "contains invoice,
+       ends editor-container" matches all three and no other container seen.
+       Estimates and proposals are not covered; walk them when they have data.
+
+       THE TEMPLATE EDITOR IS WHERE THIS MATTERS MOST: a user building a Czech
+       template (t64/t65) sees exactly the labels HighLevel will send — their
+       own Czech as typed, and HighLevel's fixed labels as they really are. */
+    '[id*="invoice"][id$="editor-container"] .preview-section',
     /* THE INVOICE EDITOR'S BUSINESS AND CUSTOMER BLOCKS. The customer block
        sent the customer's EMAIL AND PHONE to the engine (found 11 Sep, the
        first invoice with a real customer on it). Censused: each
@@ -462,7 +476,7 @@
        one, the customer's name, email and phone in the other — and no label
        or attribute of ours. The "Edit business details" and "Contact menu"
        buttons sit outside it and still translate. */
-    '#invoice-editor-container .business-details-preview',
+    '[id*="invoice"][id$="editor-container"] .business-details-preview',
     /* THE TAXES ATTACHED TO A PRODUCT. Each selected tax shows as a tag reading
        "{tax name} ({rate}%)" — the business's own tax name. Blocked by the id
        of the select that holds it, not by a pattern: a rule matching any
@@ -696,7 +710,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v50';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v51';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
