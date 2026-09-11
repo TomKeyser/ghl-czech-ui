@@ -167,6 +167,7 @@
       members:        { one: 'člen',      few: 'členové',   other: 'členů' },
       accounts:       { one: 'účet',      few: 'účty',      other: 'účtů' },
       apps:           { one: 'aplikace',  few: 'aplikace',  other: 'aplikací' },
+      reviews:        { one: 'recenze',   few: 'recenze',   other: 'recenzí' },
       periodMonths:   { one: 'měsíc',     few: 'měsíce',    other: 'měsíců' },
       periodDays:     { one: 'den',       few: 'dny',       other: 'dní' },
       periodWeeks:    { one: 'týden',     few: 'týdny',     other: 'týdnů' },
@@ -413,6 +414,18 @@
       DUR_SECS:       '{1} s',
       CALL_TO:        'Volat: {1}',
       MONEY_KC_PAREN: '({*1})',
+      /* percentages keep HighLevel's decimal dot, as the tax rates do — the
+         question is with the reviewer (round 2, formats). */
+      PROGRESS_PCT:   'Ukazatel průběhu {1} %',
+      MINS_CLOCK:     '{1} min',
+      CURRENT_PAGE:   'Aktuální stránka {1}',
+      INCREASED_BY:   'Nárůst o {1} %',
+      DECREASED_BY:   'Pokles o {1} %',
+      N_REVIEWS_PAREN: '({1} {~reviews:1})',
+      /* no agreement needed: the count follows a colon or "z" is avoided */
+      AGENTS_RANGE:   'Agenti {1}–{2} z {3}',
+      N_MANAGED:      'Spravovaní agenti: {1}',
+      KB_USAGE:       'Využití znalostní báze: {1} z {2}, zbývá {3}',
       N_MONTHS:       '{1} {~periodMonths:1}',
       N_DAYS:         '{1} {~periodDays:1}',
       CSS_SIZE:       '{1}{2}',
@@ -3793,6 +3806,18 @@
     "Who can install the app?":         "Kdo může aplikaci nainstalovat?",
     "Agent Contains":                   "Agent obsahuje",
     "updatedAt":                        "Aktualizováno",
+    "We've introduced Managed Agents as the new way to build agents. Your existing agents will continue to run normally, and you can still manage them from this page. For new agent creation, we recommend using Managed Agents, which can be enabled from Labs.":
+      "Zavedli jsme spravované agenty jako nový způsob vytváření agentů. Vaši stávající agenti poběží dál a můžete je nadále spravovat na této stránce. Nové agenty doporučujeme vytvářet jako spravované agenty, které lze zapnout v sekci Labs.",
+    /* follows a bold "Managed Agents" (Spravovaní agenti) in the same sentence */
+    "are prompt-based agents — give them a prompt, knowledge, web search, and integrations. Run them in chat or on triggers.":
+      "jsou agenti řízení promptem – dejte jim prompt, znalosti, vyhledávání na webu a integrace. Spouštějte je v chatu nebo pomocí spouštěčů.",
+    /* HighLevel's own unfilled placeholder, kept as they print it */
+    "Show announcement {n}":            "Zobrazit novinku {n}",
+    "No change, 0%":                    "Beze změny, 0 %",
+    "Upgrade to unlimited AI Employee plan": "Přejít na neomezený tarif AI Employee",
+    "No Reviews Found, Add review platforms by entering the page link to import reviews.":
+      "Nenalezeny žádné recenze. Přidejte platformy recenzí zadáním odkazu na stránku a recenze se naimportují.",
+    "Complete Store Setup":             "Dokončit nastavení obchodu",
 
     /* THE APP MARKETPLACE (/integration), 11 Sep. Only the catalogue's own
        interface. App names, "By <developer>" and descriptions are the

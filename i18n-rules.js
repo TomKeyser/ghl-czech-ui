@@ -410,7 +410,10 @@
    /* the rich-text editor's font name, the search box's shortcut hint, and a
       currency symbol standing alone in a price field's prefix. Every sweep
       reported all three. */
-   'Inter,ctrlK,Kč'
+   'Inter,ctrlK,Kč,' +
+   /* ad-report metric acronyms, a product name, and a URL scheme on its own
+      in front of a domain field */
+   'CPS,CPL,ROI %,Agent Studio,https://,http://'
   ).split(',').forEach(function (n) { NEVER[n.toLowerCase()] = n; });
 
   /* Returns the string unchanged when it must never be translated, else null.

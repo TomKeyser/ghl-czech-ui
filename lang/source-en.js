@@ -207,6 +207,17 @@
       ['CALL_TO',        /^Call:\s*(\+?\d[\d\s().-]{5,}\d)$/],
       /* "1 month" — a period picker's value (agent logs), 11 Sep. Whole string
          only, so it does not collide with the /payments "month" fragment. */
+      /* the sub-menu sweep, 11 Sep — counts and percentages on AI agents,
+         courses, reviews, stores and site analytics */
+      ['PROGRESS_PCT',   /^Progress bar (\d+)%$/],
+      ['MINS_CLOCK',     /^(\d{1,2}:\d{2})\s+Mins?$/],
+      ['CURRENT_PAGE',   /^Current page (\d+)$/],
+      ['INCREASED_BY',   /^Increased by (\d+(?:\.\d+)?)%$/],
+      ['DECREASED_BY',   /^Decreased by (\d+(?:\.\d+)?)%$/],
+      ['N_REVIEWS_PAREN', /^\((\d+) Reviews?\)$/],
+      ['AGENTS_RANGE',   /^(\d+)\s*-\s*(\d+) of (\d+) agents?$/],
+      ['N_MANAGED',      /^(\d+) Managed Agents?$/],
+      ['KB_USAGE',       /^Knowledge base usage: (\d+) of (\d+) used, (\d+) slots? left$/],
       ['N_MONTHS',       /^(\d+)\s+months?$/i],
       ['N_DAYS',         /^(\d+)\s+days?$/i],
       /* "16px" — the rich-text editor's font-size box. A CSS size, the same in

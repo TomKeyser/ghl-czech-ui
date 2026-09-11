@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v84';
+  var VERSION = 'v85';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -518,6 +518,22 @@
        label is ours; the value is whatever brought the contact in, which for a
        real account is a campaign name or a UTM string someone typed. */
     '#attribution-value',
+    /* THE RECORD CARD on a contact's left panel, v85: avatar, then the NAME
+       ("ZZ Test Ř"). The backstop catches it once the centre panel's name has
+       been seen, but on first paint the left panel can arrive first, and the
+       sweep recorded exactly that. HighLevel names the avatar .record-avatar;
+       its next sibling is the record's name, on any record type. */
+    '.record-avatar + *',
+    /* TAG CHIPS: the id is built from the tag's own text
+       (hr-tag-ellipsis-tag-zz-followup), and tags are user-authored. Seen on
+       the contact card and the opportunities forecast, 11 Sep. */
+    '[id^="hr-tag-ellipsis-tag-"]',
+    /* PARKED, NOT CUSTOMER DATA: the survey and quiz builders' template
+       galleries. HighLevel's sample templates, whose tags arrive truncated
+       ("Digital Mark...") and so cannot be translated. Blocked so they stop
+       filling every sweep; remove if the galleries are ever translated. */
+    '#start-with-template [id^="template-card-"] .font-bold',
+    '[id^="hr-tag-count-wrapper-template-tag-"]',
     /* THE ADS REPORTS (Google, Facebook), v84: a Bootstrap table whose body is
        campaign names and figures. Sample campaigns today ("Lawn Space
        Gardening"), a real account's own campaigns once connected. The column
@@ -758,7 +774,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v59';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v60';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1176,7 +1192,11 @@
      on every sweep. Whole-string only — "Visit https://…" is a sentence. */
   /* also a bare path, "/product/" — the fixed prefix beside a product's URL
      handle (v83). Slash-first, no spaces: no label is spelled like that. */
-  var URL_SHAPE = /^(?:(?:https?:\/\/|www\.)[^\s]+|\/[\w\-.\/]+)$/i;
+  /* and a bare domain, "app.clientclub.net" (v85): a customer's domain is
+     theirs, and HighLevel's own is untranslatable. A KNOWN TOP-LEVEL DOMAIN,
+     lower-case, on purpose: HighLevel's raw message keys have the same
+     dotted shape ("common.resize"), and those are real gaps to see. */
+  var URL_SHAPE = /^(?:(?:https?:\/\/|www\.)[^\s]+|\/[\w\-.\/]+|(?:[a-z0-9-]+\.)+(?:com|net|org|io|co|cz|sk|de|at|pl|eu|uk|us|ca|au|app|ai|dev|me|info|biz|site|online|store))$/;
 
   function looksLikeUrl(s) {
     return URL_SHAPE.test(String(s).trim());
