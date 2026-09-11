@@ -405,8 +405,9 @@
    'CZK,USD,EUR,GBP,' +
    /* accounting providers on Payments > Accounting sync, and the captcha badge */
    'Xero,Wave,Intuit,reCAPTCHA,' +
-   /* raw booleans HighLevel sometimes prints as an aria-label */
-   'true,false,' +
+   /* NOT true/false: HighLevel's own localisation maps "true" to "ano", and
+      this list would shadow it (checked with a script over the whole pack,
+      v88). The pack carries "false": "ne" beside it instead. */
    /* the rich-text editor's font name, the search box's shortcut hint, and a
       currency symbol standing alone in a price field's prefix. Every sweep
       reported all three. */

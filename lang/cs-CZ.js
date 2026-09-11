@@ -3227,6 +3227,9 @@
     "to view progress.": "pro zobrazení průběhu.",
     "Total": "Celkem",
     "true": "ano",
+    /* its pair, missing from HighLevel's corpus; seen as a raw aria-label on
+       the launchpad's Facebook button, 11 Sep */
+    "false": "ne",
     "Unfortunately something went wrong, please contact support to resolve this issue.": "Bohužel se něco pokazilo. Kontaktujte prosím podporu, která problém vyřeší.",
     "unknown error": "neznámá chyba",
     "Unselect all {totalItems} records.": "Zrušit výběr všech {totalItems} záznamů.",
