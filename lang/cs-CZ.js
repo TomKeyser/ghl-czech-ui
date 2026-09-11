@@ -192,7 +192,7 @@
       REMOVE_FILT:    'Odebrat filtr: {?1}',
       RANGE_OF:       '{1} – {2} z {3}',
       N_OPPS:         '{1} {~opportunities:1}',
-      N_MORE:         '+{1} {~more:1}',
+      N_MORE:         '{1} {~more:1}',
       /* "0 opportunities selected" — the plural agrees with the number, which is
          why this cannot be a dictionary entry: Czech needs one/few/other and
          English has two forms. */

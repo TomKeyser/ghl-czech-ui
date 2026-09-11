@@ -113,8 +113,16 @@
       ['N_OPPS',         /^(\d+)\s+opportunit(?:y|ies)$/i],
       /* the overflow indicator on a tag or list cell -- "1 more", "3 more".
          A count, so it needs the plural machinery rather than a dictionary
-         entry: Czech would otherwise read "3 další" where it wants "dalších". */
-      ['N_MORE',         /^\+?\s*(\d+)\s+more$/i],
+         entry: Czech would otherwise read "3 další" where it wants "dalších".
+
+         MATCHES THE SHAPE ACTUALLY OBSERVED, with no leading plus. An earlier
+         version accepted "+3 more" and rendered "+3 dalších" -- which put a
+         plus sign on screen that HighLevel had not written. A translation
+         layer adding punctuation of its own is the same mistake as the brand
+         set correcting "Quickbooks" to "QuickBooks". If a "+N more" variant
+         exists somewhere, the collector will report it and it gets its own
+         rule then. */
+      ['N_MORE',         /^(\d+)\s+more$/i],
       /* trailing period OPTIONAL. This greeting is typed out a character at a
          time, and the frame before the last one is the whole sentence WITHOUT
          its full stop -- the collector recorded exactly that on 11 Sep while
