@@ -163,6 +163,16 @@ reporting/{google-ads,facebook-ads,attribution,call,appointment,local-marketing-
 ai-agents/{agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,content-ai,agent-logs}
 ```
 
+**Settings** (added v86 — DOM pages only; see the iframe caveat):
+
+```
+settings/company-billing/billing  settings/phone_system  settings/whatsapp
+settings/objects  settings/fields  settings/custom_values  settings/import-data
+settings/scoring  settings/preferences  settings/domain  settings/external-tracking
+settings/lc-integrations  settings/private-integrations  settings/tags
+settings/labs  settings/audit/logs
+```
+
 Plus one saved record per editor (a product, a recurring invoice), and a
 *create* form wherever toggles hide sections (see the caveat below).
 
@@ -177,8 +187,15 @@ sample content.
 ## Honest caveats
 
 - One sub-account, one dataset. A screen with no records shows fewer strings.
-- Cross-origin iframes — Settings sub-pages, the workflow builder — are outside
-  this measurement entirely. No DOM layer can reach them, ours or a competitor's.
+- Cross-origin iframes are outside this measurement entirely. No DOM layer can
+  reach them, ours or a competitor's. **Checked 11 Sep:** of the Settings
+  pages, only company, profile, users and calendars still sit in HighLevel's
+  settings frame (`client-app-crm-settings.leadconnectorhq.com`), plus SMTP
+  in a second one. The other sixteen are ordinary DOM and are now swept
+  (phone system, WhatsApp, objects, fields, custom values, import, scoring,
+  preferences, domains, tracking, integrations, private integrations, tags,
+  Labs, audit logs, billing). The note that "Settings are iframes" was true
+  once and had quietly stopped being true.
 - The collector sees only what renders. Sections behind a toggle are invisible
   until someone flips it. The product editor's online-store fields (SEO,
   handle, collection, inventory) were off on every saved test product and

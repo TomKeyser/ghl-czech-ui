@@ -232,8 +232,10 @@ name appears nowhere inside the firewall, and `:has()` would not help either
 name is the user's own, seen only by them, and exact-match translation cannot
 alter it unless it collides with a dictionary key.
 
-**Cross-origin iframes** — Settings sub-pages, the workflow builder — are
-outside every mechanism here, and outside any DOM layer's reach.
+**Cross-origin iframes** are outside every mechanism here, and outside any
+DOM layer's reach. That now means four Settings pages (company, profile,
+users, calendars), SMTP, and the workflow builder. Most other Settings pages
+moved into the main DOM at some point, and COVERAGE.md lists which.
 
 ---
 

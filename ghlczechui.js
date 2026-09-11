@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v85';
+  var VERSION = 'v86';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -337,6 +337,11 @@
     'code', 'pre', 'style', 'script', 'noscript', 'svg',
     '[contenteditable="true"]', '[contenteditable=""]',
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
+    /* CodeMirror 6 — a different class from CM5's .CodeMirror above. Found 11
+       Sep on Settings > External tracking, where the editor shows the
+       account's own tracking key ("tk_…") inside a script tag. Code is never
+       translated, and that key is the account's. */
+    '.cm-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
     '.chat-message', '.chat-content', '[data-testid="CENTRALPANEL_NAME"]',
     /* a whole conversation-list row: the contact name, the message preview and
@@ -534,6 +539,14 @@
        filling every sweep; remove if the galleries are ever translated. */
     '#start-with-template [id^="template-card-"] .font-bold',
     '[id^="hr-tag-count-wrapper-template-tag-"]',
+    /* PARKED, NOT CUSTOMER DATA: Settings > Labs feature cards — HighLevel's
+       release notes, a new set every week, most cut off mid-word ("private
+       file fie..."). The title (twice) and the description are blocked; the
+       card's own controls — Zobrazit více, the "Activate now" tag, Odeslat
+       zpětnou vazbu — stay open. The page header carries ids and is excluded. */
+    '#Labs .card-container .hr-card-header .hr-text-3xl:not([id])',
+    '#Labs .card-container .hr-card-content p.hr-text-md.hr-text-medium:not([id])',
+    '#Labs .card-container .hr-card-content p.hr-text-sm.hr-text-regular:not([id])',
     /* THE ADS REPORTS (Google, Facebook), v84: a Bootstrap table whose body is
        campaign names and figures. Sample campaigns today ("Lawn Space
        Gardening"), a real account's own campaigns once connected. The column
@@ -774,7 +787,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v60';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v61';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

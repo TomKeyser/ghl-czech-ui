@@ -426,6 +426,8 @@
       AGENTS_RANGE:   'Agenti {1}–{2} z {3}',
       N_MANAGED:      'Spravovaní agenti: {1}',
       KB_USAGE:       'Využití znalostní báze: {1} z {2}, zbývá {3}',
+      /* "live" = switched on for everyone. MY CZECH. */
+      LABS_LIVE_IN:   'Aktivujte hned – pro všechny za {1} {~periodDays:1}',
       N_MONTHS:       '{1} {~periodMonths:1}',
       N_DAYS:         '{1} {~periodDays:1}',
       CSS_SIZE:       '{1}{2}',
@@ -3818,6 +3820,151 @@
     "No Reviews Found, Add review platforms by entering the page link to import reviews.":
       "Nenalezeny žádné recenze. Přidejte platformy recenzí zadáním odkazu na stránku a recenze se naimportují.",
     "Complete Store Setup":             "Dokončit nastavení obchodu",
+
+    /* SETTINGS, 11 Sep. Most settings pages are now ordinary DOM — only
+       profile, users, calendars and company still sit in HighLevel's
+       cross-origin settings frame. Sales pages (WhatsApp subscription) and
+       Labs' feature cards are parked. MY CZECH. */
+    /* phone system */
+    "Number Pools":                     "Skupiny čísel",
+    "Manage Numbers":                   "Spravovat čísla",
+    "Manage your Phone Numbers and their configuration here": "Zde spravujete svá telefonní čísla a jejich nastavení",
+    "Your phone system requires configuration": "Váš telefonní systém vyžaduje nastavení",
+    "Please reach out to our support team for assistance.": "Obraťte se prosím na naši podporu.",
+    "Phone System Settings":            "Nastavení telefonního systému",
+    /* external tracking (the code itself is firewalled: .cm-editor) */
+    "Use our tracking script on your external sites to bring all your analytics - all in one place, with no extra tools needed.":
+      "Vložte náš sledovací skript na své externí weby a mějte všechny analytiky na jednom místě, bez dalších nástrojů.",
+    "Installation":                     "Instalace",
+    "Troubleshoot":                     "Řešení potíží",
+    "External Tracking Script Installation": "Instalace externího sledovacího skriptu",
+    "Copy and paste this tracking code into every page of your site, just before the closing </body> tag":
+      "Zkopírujte tento sledovací kód na každou stránku svého webu, těsně před uzavírací značku </body>",
+    "Copy Script":                      "Kopírovat skript",
+    "Events Tracked:":                  "Sledované události:",
+    "Tracks when a user views any page where the script is installed.":
+      "Zaznamená, když uživatel zobrazí kteroukoli stránku se skriptem.",
+    "Form Fills / Optins":              "Vyplnění formulářů / přihlášení",
+    "Tracks when a user fills the form in any page where the script is installed. Forms should follow these requirements":
+      "Zaznamená, když uživatel vyplní formulář na kterékoli stránce se skriptem. Formuláře musí splňovat tyto požadavky",
+    "Access your external sites data":  "Přístup k datům z externích webů",
+    "External Form Submissions":        "Odeslání externích formulářů",
+    "Check your form submissions on your site where the tracking code is active.":
+      "Prohlédněte si odeslané formuláře na webu, kde je sledovací kód aktivní.",
+    "Unfold line":                      "Rozbalit řádek",
+    /* Labs: the page's own header (feature cards are parked) */
+    "Welcome to our Beta Program":      "Vítejte v našem beta programu",
+    "Test out the new features before everyone else": "Vyzkoušejte nové funkce dřív než ostatní",
+    "Experiment with our latest and greatest features before they're available to everyone. These features are in early access and may change as we develop them. Your feedback will help shape what they become.":
+      "Vyzkoušejte naše nejnovější funkce dříve, než budou dostupné všem. Jsou v předběžném přístupu a během vývoje se mohou měnit. Vaše zpětná vazba pomůže určit jejich podobu.",
+    /* billing, custom values, preferences, domains */
+    "Billing Dashboard":                "Přehled fakturace",
+    "Search values":                    "Hledat hodnoty",
+    "Add, edit and delete your custom values.": "Přidávejte, upravujte a mažte vlastní hodnoty.",
+    "Add folder":                       "Přidat složku",
+    "Add custom value":                 "Přidat vlastní hodnotu",
+    "All values":                       "Všechny hodnoty",
+    "Filter by status":                 "Filtrovat podle stavu",
+    "Loading preferences...":           "Načítají se předvolby…",
+    "Add preference management link to email footer": "Přidat do patičky e-mailu odkaz na správu předvoleb",
+    "Preference settings does not apply to transaction and notification emails.":
+      "Nastavení předvoleb se nevztahuje na transakční a oznamovací e-maily.",
+    "Subscription types":               "Typy odběru",
+    "No subscription types are available! Are you ready to create a new one?":
+      "Nejsou k dispozici žádné typy odběru. Chcete vytvořit nový?",
+    "Create subscription type":         "Vytvořit typ odběru",
+    "Connect a domain":                 "Připojit doménu",
+    "No domain found":                  "Nenalezena žádná doména",
+    "Search domains":                   "Hledat domény",
+    "We couldn't find the domain you're looking for. Try typing a different one!":
+      "Hledanou doménu jsme nenašli. Zkuste zadat jinou.",
+    "Learn more about how domains work": "Zjistěte víc o tom, jak domény fungují",
+    "Read step-by-step article guide for seamless domain management":
+      "Přečtěte si podrobný návod ke správě domén",
+    /* integrations: HighLevel's own descriptions (names are in NEVER) */
+    "Create and sell custom products with print-on-demand dropshipping":
+      "Vytvářejte a prodávejte vlastní produkty s tiskem na objednávku a dropshippingem",
+    "Seamless Fulfillment & Real-Time Shipping Rates for Your Ecommerce Stores":
+      "Bezproblémové vyřizování objednávek a aktuální ceny dopravy pro vaše e-shopy",
+    "Search Integrations":              "Hledat integrace",
+    "Google Calendar setup has moved! Connect it from My Profile or Calendar Settings > Connections to start syncing your events.":
+      "Nastavení Kalendáře Google se přesunulo. Připojte ho v Mém profilu nebo v Nastavení kalendáře > Připojení a začněte synchronizovat události.",
+    "Payments and Checkout":            "Platby a pokladna",
+    "Configure and manage all your payment provider integrations in one place. Support for Stripe, PayPal, Square, and more.":
+      "Nastavte a spravujte všechny platební brány na jednom místě. Podporujeme Stripe, PayPal, Square a další.",
+    "Integrate with Google Ads account and automatically sync leads to the CRM.":
+      "Propojte účet Google Ads a automaticky synchronizujte zájemce do CRM.",
+    "Sync Xero contacts without manual data entry or messy, time-consuming imports.":
+      "Synchronizujte kontakty z Xero bez ručního zadávání a zdlouhavých importů.",
+    "Forget about lengthy accounting processes and simplify your invoice creation with the QuickBooks":
+      "Zapomeňte na zdlouhavé účetní postupy a zjednodušte si vystavování faktur s QuickBooks",
+    "Sync data between Wave without manual data entry or messy, time-consuming imports.":
+      "Synchronizujte data s Wave bez ručního zadávání a zdlouhavých importů.",
+    "Canva helps businesses quickly create professional, on-brand designs with ease.":
+      "Canva pomáhá firmám snadno a rychle vytvářet profesionální grafiku v duchu jejich značky.",
+    "Sync your products to Google Merchant Center for Google Shopping ads and free product listings.":
+      "Synchronizujte produkty do Google Merchant Center pro reklamy v Nákupech Google a bezplatné zápisy produktů.",
+    "Connect your business account to sync messages to CRM and set up automations":
+      "Připojte firemní účet, synchronizujte zprávy do CRM a nastavte automatizace",
+    "Get instant notifications on your Slack channel. Connect to add a Slack channel.":
+      "Dostávejte okamžitá oznámení do kanálu ve Slacku. Po připojení přidejte kanál.",
+    "Sync messages and setup automations to efficiently manage and engage with potential leads":
+      "Synchronizujte zprávy a nastavte automatizace pro efektivní práci se zájemci",
+    "Connect your Google account to access features such as Drive, Sheets, Gmail, Analytics, and AdWords.":
+      "Připojte účet Google a získejte přístup k Disku, Tabulkám, Gmailu, Analytics a AdWords.",
+    "Sync data with Clio without manual data entry or messy, time-consuming imports":
+      "Synchronizujte data s Clio bez ručního zadávání a zdlouhavých importů",
+    "Connect to get leads from your LinkedIn lead generation ads into your CRM":
+      "Připojte se a získávejte zájemce z reklam LinkedIn na generování zájemců přímo do CRM",
+    "Integrate WhatsApp to connect with over 2 billion customers on their favorite messaging app, and accelerate your business growth.":
+      "Propojte WhatsApp, oslovte přes 2 miliardy zákazníků v jejich oblíbené aplikaci a urychlete růst své firmy.",
+    "Connect to get leads from your TikTok lead generation ads into your CRM":
+      "Připojte se a získávejte zájemce z reklam TikTok na generování zájemců přímo do CRM",
+    "Auto-sync ad leads, manage DMs, and handle reviews and comments across all your Facebook Pages and Instagram.":
+      "Automaticky synchronizujte zájemce z reklam, spravujte zprávy a vyřizujte recenze a komentáře na všech stránkách Facebooku a na Instagramu.",
+    /* WhatsApp: a subscription sales page, but inside Settings, where a Czech
+       operator lands on it — so translated after all. The price button keeps
+       HighLevel's own figure. */
+    "Quick Start":                      "Rychlý start",
+    "Reach out to":                     "Oslovte",
+    "3 Billion+":                       "přes 3 miliardy",
+    "Integrate WhatsApp for instant, real-time communication and reach out to your customers on their preferred platform":
+      "Propojte WhatsApp pro okamžitou komunikaci v reálném čase a oslovte zákazníky na platformě, kterou mají nejraději",
+    "What we offer?":                   "Co nabízíme?",
+    "Sync your WhatsApp Business App to manage chats in real time while leveraging Automations, Bulk Messaging, and Marketing Templates.":
+      "Synchronizujte aplikaci WhatsApp Business a spravujte chaty v reálném čase s automatizacemi, hromadným rozesíláním a marketingovými šablonami.",
+    "Automate WhatsApp replies with Conversation AI! Instantly respond, handle inquiries 24/7, and engage smarter with AI-powered messaging.":
+      "Automatizujte odpovědi na WhatsAppu pomocí Conversation AI! Odpovídejte okamžitě, vyřizujte dotazy nonstop a komunikujte chytřeji díky AI.",
+    "Transform customer engagement with WhatsApp! Automate, personalize, and manage all conversations in one place to boost conversions effortlessly.":
+      "Proměňte komunikaci se zákazníky díky WhatsAppu! Automatizujte, personalizujte a spravujte všechny konverzace na jednom místě a snadno zvyšte konverze.",
+    "PAY $29.99 & SUBSCRIBE":           "ZAPLATIT $29.99 A PŘEDPLATIT",
+    "Connect your existing WhatsApp Business App to sync chats and contacts in real time. Enjoy dual-platform management, continue using your WhatsApp Business App while taking full advantage of LeadConnector's advanced features, including Automations, Bulk Messaging, and WhatsApp Marketing Templates":
+      "Připojte svou stávající aplikaci WhatsApp Business a synchronizujte chaty a kontakty v reálném čase. Spravujte obě platformy zároveň: dál používejte aplikaci WhatsApp Business a přitom naplno využívejte pokročilé funkce LeadConnectoru, včetně automatizací, hromadného rozesílání a marketingových šablon WhatsApp",
+    "Put your messaging on auto-pilot with Conversation AI for WhatsApp! Respond to customers instantly using AI-powered replies, automate common inquiries, and keep conversations flowing 24/7. With suggestive mode or auto-pilot, your business can engage smarter, faster, and within the 24-hour customer service window. Focus on growth while Conversation AI handles the rest!":
+      "Nechte zprávy běžet na autopilota s Conversation AI pro WhatsApp! Odpovídejte zákazníkům okamžitě pomocí AI, automatizujte běžné dotazy a udržujte konverzace v chodu nonstop. V režimu návrhů nebo na autopilotu komunikuje vaše firma chytřeji, rychleji a v rámci 24hodinového okna zákaznického servisu. Věnujte se růstu a zbytek nechte na Conversation AI!",
+    "Transform customer communication with WhatsApp! Seamlessly send personalized messages, leverage powerful automations, and utilize interactive templates to drive engagement. Manage all your WhatsApp conversations in one place while boosting conversions. Unlock the potential of WhatsApp for your business today!":
+      "Proměňte komunikaci se zákazníky díky WhatsAppu! Posílejte personalizované zprávy, využívejte výkonné automatizace a interaktivní šablony pro větší zapojení. Spravujte všechny konverzace na WhatsAppu na jednom místě a zvyšujte konverze. Objevte potenciál WhatsAppu pro svou firmu ještě dnes!",
+    /* private integrations, team billing notice, objects, scoring, audit */
+    "Loading private integrations":     "Načítají se soukromé integrace",
+    "Start by creating a private integration": "Začněte vytvořením soukromé integrace",
+    "Private integrations are a simple yet secure way to integrate your account with third-party apps.":
+      "Soukromé integrace jsou jednoduchý a bezpečný způsob, jak propojit účet s aplikacemi třetích stran.",
+    "Create new integration":           "Vytvořit novou integraci",
+    "Payment Method Not Added":         "Není přidán způsob platby",
+    "A payment method is required to manage subscriptions and wallet for this account.":
+      "Ke správě předplatného a peněženky tohoto účtu je potřeba způsob platby.",
+    "Add Payment Method":               "Přidat způsob platby",
+    "Manage and access all standard and custom objects. Create, edit, and update your objects easily":
+      "Spravujte všechny standardní i vlastní objekty. Snadno je vytvářejte a upravujte",
+    "Start by clicking on create. Customize fields, relations, and more to suit your needs":
+      "Začněte kliknutím na Vytvořit. Pole, vazby a další si přizpůsobte podle potřeby",
+    "Click 'Add custom object' to begin!": "Začněte kliknutím na „Přidat vlastní objekt“!",
+    "Add new rule":                     "Přidat nové pravidlo",
+    "Use the score builder to add/subtract scores in a profile and publish it to make it live.":
+      "V nástroji pro skóre přičítejte nebo odečítejte body v profilu a zveřejněním ho spusťte.",
+    "Calculation":                      "Výpočet",
+    "documentType":                     "Typ dokumentu",
+    "sourceName":                       "Název zdroje",
 
     /* THE APP MARKETPLACE (/integration), 11 Sep. Only the catalogue's own
        interface. App names, "By <developer>" and descriptions are the

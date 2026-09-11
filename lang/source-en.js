@@ -218,6 +218,8 @@
       ['AGENTS_RANGE',   /^(\d+)\s*-\s*(\d+) of (\d+) agents?$/],
       ['N_MANAGED',      /^(\d+) Managed Agents?$/],
       ['KB_USAGE',       /^Knowledge base usage: (\d+) of (\d+) used, (\d+) slots? left$/],
+      /* Settings > Labs: a beta feature's tag, "Activate now - Live in 19 days" */
+      ['LABS_LIVE_IN',   /^Activate now - Live in (\d+) days?$/],
       ['N_MONTHS',       /^(\d+)\s+months?$/i],
       ['N_DAYS',         /^(\d+)\s+days?$/i],
       /* "16px" — the rich-text editor's font-size box. A CSS size, the same in
