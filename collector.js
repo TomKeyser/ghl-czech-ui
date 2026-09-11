@@ -50,7 +50,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'c2';
+  var VERSION = 'c3';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;         /* well under the ~5MB origin cap */
@@ -237,14 +237,32 @@
 
     if (attr || !node || node.nodeType !== 3) { record(text, node, attr); return; }
 
-    var prev = pending.get(node);
-    if (prev) clearTimeout(prev.timer);
-    var entry = { text: text };
+    /* KEYED ON THE PARENT ELEMENT, NOT THE TEXT NODE. The first attempt keyed
+       on the node and changed nothing, because the greeting does not mutate one
+       node's text -- the framework REPLACES the node on every frame, so each
+       frame arrived under a fresh key and nothing was ever debounced against
+       anything. Checked after the v52 deploy; sixty frames still in the queue.
+
+       A parent can hold several unrelated text children, so collapsing purely
+       by parent would lose real siblings. The prefix test separates the two
+       cases: an animation frame always extends (or is extended by) the one
+       before it, while a genuine sibling shares no such relationship and is
+       recorded immediately. */
+    var parent = node.parentElement;
+    if (!parent) { record(text, node, null); return; }
+
+    var prev = pending.get(parent);
+    if (prev) {
+      clearTimeout(prev.timer);
+      var sameString = text.indexOf(prev.text) === 0 || prev.text.indexOf(text) === 0;
+      if (!sameString) record(prev.text, prev.node, null);   /* a real sibling */
+    }
+    var entry = { text: text, node: node };
     entry.timer = setTimeout(function () {
-      pending.delete(node);
-      record(entry.text, node, null);
+      pending.delete(parent);
+      record(entry.text, entry.node, null);
     }, SETTLE_MS);
-    pending.set(node, entry);
+    pending.set(parent, entry);
   };
 
   /* ---------- reading it back --------------------------------------------- */
