@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v78';
+  var VERSION = 'v79';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1123,6 +1123,16 @@
     return FILE_NAME.test(String(s).trim());
   }
 
+  /* A URL, likewise, added v79: the client portal prints the account's own
+     portal address as a link, and a business's website or a booking link can
+     turn up anywhere. Untranslatable, often the customer's own, and reported
+     on every sweep. Whole-string only — "Visit https://…" is a sentence. */
+  var URL_SHAPE = /^(?:https?:\/\/|www\.)[^\s]+$/i;
+
+  function looksLikeUrl(s) {
+    return URL_SHAPE.test(String(s).trim());
+  }
+
   /* ---------- __kaDebug: read-only diagnosis surface ----------------------
      The gap picker and the errors channel both need to answer ONE question
      about a string on screen: why is this not in Czech? Everything needed to
@@ -1239,6 +1249,10 @@
       return { reason: 'file-name', text: key, attr: attr || null,
                note: 'shaped like a file name: customer data wherever it appears' };
     }
+    if (looksLikeUrl(key)) {
+      return { reason: 'url', text: key, attr: attr || null,
+               note: 'a whole URL: untranslatable, and often the customer\'s own' };
+    }
     return { reason: 'missing', text: key, attr: attr || null };
   }
 
@@ -1312,7 +1326,7 @@
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
     if (out === null) {
-      if (!isRecordMirror(raw) && !looksLikeFileName(raw)) missed(raw, node, null);
+      if (!isRecordMirror(raw) && !looksLikeFileName(raw) && !looksLikeUrl(raw)) missed(raw, node, null);
       return;
     }
     /* preserve surrounding whitespace so layout/spacing is unchanged */
@@ -1345,7 +1359,7 @@
       if (el[mark] === v) continue;              /* ours, and untouched since */
       var out = translate(v);
       if (out === null) {
-        if (!isRecordMirror(v) && !looksLikeFileName(v)) missed(v, el, a);
+        if (!isRecordMirror(v) && !looksLikeFileName(v) && !looksLikeUrl(v)) missed(v, el, a);
         continue;
       }
       if (out === v) continue;
