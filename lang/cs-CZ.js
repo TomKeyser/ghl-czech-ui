@@ -282,7 +282,24 @@
            are verbs (End = "Ukončit", a call or a session), which read wrong
            above a date picker. MY CZECH. */
         'Start':          'Začátek',
-        'End':            'Konec'
+        'End':            'Konec',
+        /* THE RECURRING SCHEDULE, walked in every mode 11 Sep. HighLevel builds
+           it from separate nodes around dropdowns and an input:
+             [Monthly] on [First] [Monday] of Every [1] month
+           Czech cannot agree with a number typed into an input, so the tail is
+           "jednou za [N] měs." — an abbreviated unit needs no plural, and it
+           reads right for 1, 3 and 12 alike. Globally "month" is "Měsíc"
+           (a dropdown label); only this route gets the abbreviation.
+           ⚠ ASK THE REVIEWER: the phrasing, and "r." for years. */
+        'of Every':       'jednou za',
+        'month':          'měs.',
+        'week':           'týd.',
+        'year':           'r.',
+        /* the schedule's End dropdown: Never / By [date] / After. Globally
+           "By" is the AUTHOR ("Autor") — here it means "by this date". */
+        'By':             'K datu',
+        /* the late-fee frequency LABEL: "Every * [1] [Month ▾]" */
+        'Every':          'Interval'
       }
     },
 
@@ -3412,6 +3429,8 @@
     "Select taxes":                     "Vyberte daně",
     /* product editor, after the account switched to CZK, 11 Sep */
     "Onetime":                          "Jednorázově",
+    /* the same word, spelled apart, in the late-fee frequency dropdown */
+    "One Time":                         "Jednorázově",
     "Create Collection":                "Vytvořit kolekci",
     "Enter the SEO title":              "Zadejte titulek pro SEO",
     "Enter the SEO Description":        "Zadejte popis pro SEO",
