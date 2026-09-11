@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v58';
+  var VERSION = 'v59';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1201,6 +1201,37 @@
        being blocked for everything -- safe to bail on the whole subtree. */
     if (blockedAttr(root)) return;
 
+    /* TEXT FIRST, ATTRIBUTES SECOND, AND THE ORDER IS LOAD-BEARING.
+
+       The text walk is what POPULATES the record set: every node the firewall
+       rejects is noted as customer data on the way past. The attribute pass
+       then CONSULTS that set to recognise a wrapper attribute mirroring a
+       record below it.
+
+       Run attributes first -- as this did until v59 -- and on the FIRST pass
+       over a freshly rendered screen every such attribute is reported before
+       the records underneath it exist. Measured on the dashboard: the tasks
+       widget puts each task's title in the CHECKBOX's aria-label, and all
+       three were recorded by the collector on pass one, then correctly
+       suppressed on every pass after. A gap that appears once and never again
+       is the worst kind to chase, because by the time anyone looks it has
+       stopped happening.
+
+       Nothing else depends on the order: doTextNode and doAttrs touch
+       different things and neither reads the other's output. */
+
+    /* text nodes (form controls excluded -- their text is customer data) */
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!blockedText(n.parentElement)) return NodeFilter.FILTER_ACCEPT;
+        /* the firewall rejected it, so it is customer data -- remember it */
+        noteRecord(n.textContent);
+        return NodeFilter.FILTER_REJECT;
+      }
+    });
+    var n;
+    while ((n = w.nextNode())) doTextNode(n);
+
     /* attributes on the root and everything under it (form controls included) */
     doAttrs(root);
     var withAttrs = root.querySelectorAll('[placeholder],[title],[aria-label]');
@@ -1218,18 +1249,6 @@
         if (!blockedAttr(fields[v])) doValues(fields[v]);
       }
     }
-
-    /* text nodes (form controls excluded -- their text is customer data) */
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) {
-        if (!blockedText(n.parentElement)) return NodeFilter.FILTER_ACCEPT;
-        /* the firewall rejected it, so it is customer data -- remember it */
-        noteRecord(n.textContent);
-        return NodeFilter.FILTER_REJECT;
-      }
-    });
-    var n;
-    while ((n = w.nextNode())) doTextNode(n);
   }
 
   /* ---------- batched observer ------------------------------------------ */

@@ -41,6 +41,7 @@
      __kaCollect.stats()      what has been seen, by route
      __kaCollect.top(40)      the 40 most-sighted missing strings
      __kaCollect.suspect()    strings that look like customer data — firewall holes
+     __kaCollect.transient()  frames whose element vanished — animation noise
      __kaCollect.download()   one JSON
      __kaCollect.clear()      start again
 
@@ -50,7 +51,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'c4';
+  var VERSION = 'c5';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;         /* well under the ~5MB origin cap */
@@ -199,7 +200,7 @@
     return lastWord.length > 0 && lastWord.length < 4;
   }
 
-  function record(text, node, attr) {
+  function record(text, node, attr, transient) {
     var id = (attr ? attr + '|' : '') + text;
     var rec = store.picks[id];
     var route = routeOf();
@@ -216,6 +217,19 @@
         where: whereOf(node, attr),
         suspect: suspectOf(text),
         truncated: looksTruncated(text),
+        /* THE HOLDING ELEMENT WAS GONE BY THE TIME THE SETTLE WINDOW CLOSED.
+           Almost always an animation frame whose component swapped itself out:
+           the Calendars greeting types itself into a <p> and then REPLACES that
+           <p> with the finished one, so the last frame we hold is orphaned and
+           the finished sentence -- which we translate correctly -- never reaches
+           the miss hook at all.
+
+           MARKED, NOT DROPPED, for the same reason truncated strings are. A
+           disconnected element is strong evidence of a transient, not proof: a
+           real gap inside a toast or a modal that closed looks identical from
+           here. Excluded from top() so it cannot crowd the queue, still in
+           all() and in transient() so nothing vanishes silently. */
+        transient: !!transient,
         first: new Date().toISOString()
       };
     }
@@ -274,6 +288,15 @@
          queue, and a string that genuinely still misses is unaffected. */
       try {
         var dbg = window.__kaDebug;
+        /* THE HOLDING ELEMENT IS GONE. Measured on the Calendars greeting: the
+           typewriter fills a <p>, then the component REPLACES that <p> with the
+           finished one, so the parent we are holding is detached and there is
+           nothing left to ask about. Record it MARKED rather than dropping it
+           -- see the transient field in record(). */
+        if (dbg && dbg.why && parent && !parent.isConnected) {
+          record(entry.text, entry.node, null, true);
+          return;
+        }
         if (dbg && dbg.why && parent.isConnected) {
           var anyOutstanding = false;
           for (var c = parent.firstChild; c && !anyOutstanding; c = c.nextSibling) {
@@ -335,8 +358,9 @@
     /* strings the DOM had already cut off — no dictionary entry can match a
        fragment, and there is one per column width */
     truncated: function () { return all().filter(function (r) { return r.truncated; }); },
+    transient: function () { return all().filter(function (r) { return r.transient; }); },
     top: function (n) {
-      var list = all().filter(function (r) { return !r.suspect && !r.truncated; }).slice(0, n || 30);
+      var list = all().filter(function (r) { return !r.suspect && !r.truncated && !r.transient; }).slice(0, n || 30);
       /* console.table gives a readable grid; fall back to the array if not there */
       if (console.table) console.table(list.map(function (r) {
         return { seen: r.seen, text: r.text.slice(0, 70), attr: r.attr || '', routes: r.routes.length };

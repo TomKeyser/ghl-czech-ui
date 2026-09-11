@@ -25,7 +25,7 @@ sat in *HighLevel's* namespace, reading as though they had set it.
 | `__kaStatus` | engine | Diagnosis: state, locale, localeSource, platformLang, packSource, audience, userType, translatingHere, notTranslatingBecause, reverted, terms/curated/fromApi. |
 | `__kaDebug` | engine | Read-only. `why(node[,attr])`, `dead()`, `records()`, `translate`, `zones`, `attrs`, `maxLen`. |
 | `__kaOnMiss` | **a collector registers it** | The engine calls it at its two miss sites if present. Absent by default. |
-| `__kaCollect` | collector.js | `stats() top() suspect() truncated() all() download() clear()` |
+| `__kaCollect` | collector.js | `stats() top() suspect() truncated() transient() all() download() clear()` |
 | `__kaCollectActive` | collector.js | Double-load guard. |
 | `__kaPickerActive`, `__kaPickerVersion` | gap-picker.js | |
 
