@@ -166,6 +166,7 @@
       segments:       { one: 'segment',   few: 'segmenty',  other: 'segmentů' },
       members:        { one: 'člen',      few: 'členové',   other: 'členů' },
       accounts:       { one: 'účet',      few: 'účty',      other: 'účtů' },
+      apps:           { one: 'aplikace',  few: 'aplikace',  other: 'aplikací' },
       periodMonths:   { one: 'měsíc',     few: 'měsíce',    other: 'měsíců' },
       periodDays:     { one: 'den',       few: 'dny',       other: 'dní' },
       periodWeeks:    { one: 'týden',     few: 'týdny',     other: 'týdnů' },
@@ -300,6 +301,11 @@
         'By':             'K datu',
         /* the late-fee frequency LABEL: "Every * [1] [Month ▾]" */
         'Every':          'Interval'
+      },
+      /* the app marketplace's price tag, beside "Zdarma": a PAID app, never a
+         settled invoice. Feminine, agreeing with aplikace. MY CZECH. */
+      '/integration': {
+        'Paid':           'Placená'
       }
     },
 
@@ -405,6 +411,7 @@
       LAST_UPD:       'Naposledy aktualizováno: {*1}',
       BYTES_USED:     'Využito {1} {2}',
       N_ACCOUNTS:     '{1} {~accounts:1}',
+      N_APPS:         '{1} {~apps:1}',
       ABBR_PAREN:     '{=1} ({2})'
     }
   };
@@ -3465,6 +3472,98 @@
     "Successfully saved":               "Úspěšně uloženo",
     "Tax will be exclusive or inclusive based on the Global settings (Payments > Settings) i.e. every time Global settings change, the tax behavior for this product would change. To keep it unlinked to Global Settings, select 'Yes' or 'No' from below options.":
       "Daň bude zahrnuta v ceně nebo připočtena podle globálního nastavení (Platby > Nastavení), tj. při každé změně globálního nastavení se změní i daňové chování tohoto produktu. Chcete-li ho od globálního nastavení oddělit, vyberte níže „Ano“ nebo „Ne“.",
+
+    /* THE PAYMENTS SUB-PAGES the sweep never reached, 11 Sep: its route list
+       had two stale paths and skipped fifteen sub-pages. Now read off the
+       payments menu itself. MY CZECH throughout. */
+    /* accounting sync */
+    "Add or manage accounting integrations to sync invoices, contacts, and financial data.":
+      "Přidejte nebo spravujte napojení na účetní systémy a synchronizujte faktury, kontakty a finanční údaje.",
+    "Set-up an accounting provider.":   "Nastavte poskytovatele účetnictví.",
+    "Connect now to begin syncing invoices, contacts, and financial data.":
+      "Připojte se a začněte synchronizovat faktury, kontakty a finanční údaje.",
+    "Seamlessly sync invoices, payments, and customer details with QuickBooks for accurate bookkeeping and real-time financial insights.":
+      "Synchronizujte faktury, platby a údaje o zákaznících s QuickBooks pro přesné účetnictví a finanční přehled v reálném čase.",
+    "Connect with Xero to sync your contacts from Xero into your CRM. Also, push invoices created here to your accounting platform and automatically sync the statuses.":
+      "Propojte Xero a synchronizujte kontakty z Xero do CRM. Faktury vytvořené zde se navíc odešlou do vašeho účetního systému a jejich stavy se synchronizují automaticky.",
+    "Connect with Wave to sync your contacts from Wave into your CRM. Also, push invoices created here to your accounting platform and enter status manually.":
+      "Propojte Wave a synchronizujte kontakty z Wave do CRM. Faktury vytvořené zde se navíc odešlou do vašeho účetního systému a stav zadáte ručně.",
+    /* documents & contracts */
+    "Documents & Contracts Templates":  "Šablony dokumentů a smluv",
+    "Create documents and contracts templates for automation and consistency.":
+      "Vytvářejte šablony dokumentů a smluv pro automatizaci a jednotnost.",
+    "Public Documents":                 "Veřejné dokumenty",
+    "Content Library":                  "Knihovna obsahu",
+    "Ready to create a fresh template?": "Chcete vytvořit novou šablonu?",
+    /* abandoned checkouts. "Placed by" is whoever placed the order. */
+    "Incomplete online checkouts that were not processed.":
+      "Nedokončené online objednávky, které nebyly zpracovány.",
+    "Configure notifications":          "Nastavit oznámení",
+    "Placed by":                        "Objednavatel",
+    "Recovery status":                  "Stav obnovení",
+    "No abandoned checkouts yet":       "Zatím žádné opuštěné košíky",
+    "Checkouts appear here when customers leave items behind and either provide their email or are members signed in.":
+      "Košíky se tu zobrazí, když zákazník nechá zboží v košíku a zadal svůj e-mail nebo byl přihlášen jako člen.",
+    "Amount sort":                      "Řadit podle částky",
+    "Placed by sort":                   "Řadit podle objednavatele",
+    "Date sort":                        "Řadit podle data",
+    "Items sort":                       "Řadit podle položek",
+    /* more raw column keys HighLevel prints as a column header's aria-label */
+    "createdAt":                        "Vytvořeno",
+    "emailStatus":                      "Stav e-mailu",
+    "recoveryStatus":                   "Stav obnovení",
+    "dateUpdated":                      "Datum aktualizace",
+    "steps":                            "Kroky",
+    "_id":                              "ID",
+    /* collections, inventory, product reviews */
+    "Arrange your products in different collections": "Uspořádejte produkty do kolekcí",
+    "Collection Name":                  "Název kolekce",
+    "Product count":                    "Počet produktů",
+    "No collections to show yet":       "Zatím žádné kolekce k zobrazení",
+    "Manage your Product Inventory":    "Spravujte skladové zásoby produktů",
+    "SKU":                              "SKU",
+    "Product Reviews and Ratings":      "Recenze a hodnocení produktů",
+    "Manage and store Reviews and ratings at one place":
+      "Spravujte a uchovávejte recenze a hodnocení na jednom místě",
+    /* a tab, "Unapproved (0)" — COUNT_PAREN supplies the count. Neuter, as
+       "Approved" is already "Schváleno". */
+    "Unapproved":                       "Neschváleno",
+    "Author":                           "Autor",
+    "Review Details":                   "Podrobnosti recenze",
+    "Product & Store Name":             "Název produktu a obchodu",
+    "No Reviews to show":               "Žádné recenze k zobrazení",
+    /* receipt settings ("Účtenky" already names the page) */
+    "Define the number to be used when creating the first receipt. The number will automatically increment with each receipt created":
+      "Určete číslo první účtenky. S každou další účtenkou se automaticky zvýší",
+    "Name used while sending receipt notifications. If left blank, business name will be used":
+      "Jméno použité při odesílání oznámení o účtence. Pokud pole necháte prázdné, použije se název firmy",
+    "Email address used while sending receipt notifications. If left blank, business email will be used":
+      "E-mailová adresa použitá při odesílání oznámení o účtence. Pokud pole necháte prázdné, použije se e-mail firmy",
+    /* launchpad */
+    "(The new user(s) will have the same permissions like yours except the ability to add new users.)":
+      "(Noví uživatelé budou mít stejná oprávnění jako vy, kromě možnosti přidávat další uživatele.)",
+
+    /* THE APP MARKETPLACE (/integration), 11 Sep. Only the catalogue's own
+       interface. App names, "By <developer>" and descriptions are the
+       developers' words and sit behind the firewall (app-card rules). */
+    "All Apps":                         "Všechny aplikace",
+    "Installed Apps":                   "Nainstalované aplikace",
+    "App Reselling":                    "Přeprodej aplikací",
+    "Earnings":                         "Výdělky",
+    "Support Tickets":                  "Požadavky na podporu",
+    "Apps":                             "Aplikace",
+    "Search Apps":                      "Hledat aplikace",
+    "App Contains":                     "Aplikace obsahuje",
+    "Business Niche":                   "Obor podnikání",
+    "Built By":                         "Vývojář",
+    "Free to Install":                  "Instalace zdarma",
+    "Get more out of your CRM. Explore apps & integrate them with your account seamlessly.":
+      "Vytěžte ze svého CRM víc. Objevte aplikace a snadno je propojte se svým účtem.",
+    "Apps catalog":                     "Katalog aplikací",
+    "Marketplace sections":             "Sekce katalogu",
+    "Tab content":                      "Obsah karty",
+    "Filters navigation":               "Navigace filtrů",
+    "Pagination navigation":            "Stránkování",
 
     /* TAX SETTINGS, 11 Sep — walked with two real Czech VAT rates in place.
        GLOSSARY: a "Tax ID" is the DIČ (daňové identifikační číslo) — never

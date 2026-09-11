@@ -203,6 +203,8 @@
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],
       ['BYTES_USED',     /^([\d.,]+)\s*(Bytes|B|KB|MB|GB|TB)\s+used$/i],
       ['N_ACCOUNTS',     /^(\d+)\s+Accounts?$/i],
+      /* "1665 Apps" — the marketplace's result count, 11 Sep */
+      ['N_APPS',         /^(\d+)\s+Apps?$/i],
       ['DATE_RANGE',     /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s*-\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateRange'],
       ['ABBR_PAREN',     /^(.+?)\s*\(\s*([A-Z]{2,6})\s*\)$/]
     ]

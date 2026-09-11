@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v80';
+  var VERSION = 'v81';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -494,6 +494,16 @@
        walk), and an alt holding a name WITH an extension cannot match a
        dictionary word anyway. */
     '.file-name',
+    /* THE APP MARKETPLACE (/integration), v81. Each card's name, "By
+       <developer>" and description are the DEVELOPER's words: third-party
+       content, and translating "Restaurant Menu" or "Spintax For Workflow"
+       would rename someone else's product. HighLevel's data-testid names the
+       parts, which beats any styling class. The header holds name + developer;
+       the description is the clamped paragraph. The footer — price tag,
+       "Zdarma", "Free to Install" — is ours and stays open. Censused 11 Sep:
+       everything else in the grid is ratings or our own text. */
+    '[data-testid="app-card-header"]',
+    '[data-testid="app-card"] p.line-clamp-2',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -713,7 +723,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v55';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v56';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

@@ -402,7 +402,11 @@
    /* ISO currency codes — identifiers, identical in every language. Added
       11 Sep when the test account switched to CZK and "CZK" / "USD" began
       turning up in the harvest queue as gaps. */
-   'CZK,USD,EUR,GBP'
+   'CZK,USD,EUR,GBP,' +
+   /* accounting providers on Payments > Accounting sync, and the captcha badge */
+   'Xero,Wave,Intuit,reCAPTCHA,' +
+   /* raw booleans HighLevel sometimes prints as an aria-label */
+   'true,false'
   ).split(',').forEach(function (n) { NEVER[n.toLowerCase()] = n; });
 
   /* Returns the string unchanged when it must never be translated, else null.
