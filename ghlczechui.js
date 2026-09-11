@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v74';
+  var VERSION = 'v75';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1089,6 +1089,27 @@
     return !!RECORDS[String(s).trim()];
   }
 
+  /* A FILE NAME IS CUSTOMER DATA BY ITS SHAPE. Added v75. "Adam_Sandler.jpg"
+     turned up in Media Storage (blocked by .file-name in v73), then again as
+     an ATTACHMENT on a recurring invoice — in bare Tailwind classes with no
+     anchor at all. Chasing every place a file name can appear with a styling
+     selector is how the one-member-of-a-family misses keep happening.
+
+     The shape is reliable where a person's name is not: no path, no leading
+     or trailing space, ending in a known extension. HighLevel's interface
+     never uses a bare file name as a label. "Allowed Files -> PNG, CSV, PDF"
+     does not end in one; "Upload .csv" has a space before the dot and is
+     refused, so a real label can not be silenced by accident.
+
+     Same contract as the rest of the backstop: it suppresses REPORTING only.
+     A file name cannot be translated anyway — no dictionary word ends in
+     ".jpg" — so there is nothing to stop on that side. */
+  var FILE_NAME = /^[^\s\/\\][^\/\\\n]{0,150}[^\s\/\\.]\.(?:jpe?g|png|gif|webp|svg|bmp|tiff?|heic|pdf|csv|txt|docx?|xlsx?|pptx?|odt|ods|zip|rar|mp3|wav|m4a|mp4|mov|avi|webm)$/i;
+
+  function looksLikeFileName(s) {
+    return FILE_NAME.test(String(s).trim());
+  }
+
   /* ---------- __kaDebug: read-only diagnosis surface ----------------------
      The gap picker and the errors channel both need to answer ONE question
      about a string on screen: why is this not in Czech? Everything needed to
@@ -1138,7 +1159,8 @@
 
   /* why(node[, attr]) -> { reason, ... }
      reasons: not-ready | empty | too-long | iframe | content-zone |
-              data-picker | record-mirror | missing | translated        */
+              data-picker | record-mirror | file-name | missing |
+              translated                                                */
   function why(node, attr) {
     if (!node) return { reason: 'no-node' };
     if (!DICT) return { reason: 'not-ready' };
@@ -1199,6 +1221,10 @@
     if (isRecordMirror(key)) {
       return { reason: 'record-mirror', text: key, attr: attr || null,
                note: 'same string was blocked by a content zone elsewhere on this page' };
+    }
+    if (looksLikeFileName(key)) {
+      return { reason: 'file-name', text: key, attr: attr || null,
+               note: 'shaped like a file name: customer data wherever it appears' };
     }
     return { reason: 'missing', text: key, attr: attr || null };
   }
@@ -1273,7 +1299,7 @@
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
     if (out === null) {
-      if (!isRecordMirror(raw)) missed(raw, node, null);
+      if (!isRecordMirror(raw) && !looksLikeFileName(raw)) missed(raw, node, null);
       return;
     }
     /* preserve surrounding whitespace so layout/spacing is unchanged */
@@ -1306,7 +1332,7 @@
       if (el[mark] === v) continue;              /* ours, and untouched since */
       var out = translate(v);
       if (out === null) {
-        if (!isRecordMirror(v)) missed(v, el, a);
+        if (!isRecordMirror(v) && !looksLikeFileName(v)) missed(v, el, a);
         continue;
       }
       if (out === v) continue;

@@ -59,6 +59,20 @@ the miss path, after `translate()` has already returned null.
 Bounded at 800 strings, minimum length 3, per page load, never persisted.
 `__kaDebug.records()` returns the **count**, never the strings.
 
+**Two more ways the backstop learns what is customer data** (v70, v75):
+
+- **Input values.** A text input's value is customer data by definition, and
+  nearly every edit screen repeats the record's name in a header or breadcrumb.
+  Values are noted before the text walk, skipping any value we wrote ourselves.
+- **The shape of a file name.** No path, no leading space, a known extension:
+  `Adam_Sandler.jpg`, `smlouva-final_v2.pdf`. It turned up in Media Storage and
+  then as an invoice attachment in bare styling classes with no anchor. The
+  shape is reliable where a person's name is not; our interface never uses a
+  bare file name as a label. `why()` reports it as `file-name`. A label like
+  "Upload .csv" has a space before the dot and is not caught.
+
+Both suppress reporting only, like the rest of the backstop.
+
 **Order is load-bearing.** The text walk populates the record set; the attribute
 pass consults it. Running attributes first — as the engine did until v59 — meant
 that on the first pass over a freshly rendered screen, every wrapper attribute
