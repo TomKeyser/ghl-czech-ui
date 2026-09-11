@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v100';
+  var VERSION = 'v101';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
