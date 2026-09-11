@@ -24,7 +24,7 @@
      worse than an English one. See bootData()/activate() below, and check
      window.__kaStatus to diagnose.
 
-   GATED to the sub-accounts listed in ONLY_LOCATIONS below â€” as of v29 the two
+   GATED to the sub-accounts listed in ONLY_LOCATIONS below — as of v29 the two
    test accounts, NOT the whole agency. Off those paths the layer still loads
    and reports "active", but walk() declines to touch the DOM, so the screen
    stays English with no error. If translation is missing, check the gate
@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v103';
+  var VERSION = 'v104';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -149,7 +149,7 @@
      reverted. If AppUtils never answers we fall back to translating, because
      doing nothing is the more visible failure -- and STATUS records that it
      was a fallback rather than an answer.                                   */
-  var audience = null;                  /* null unknown Â· true yes Â· false no */
+  var audience = null;                  /* null unknown · true yes · false no */
   var AUDIENCE_TIMEOUT_MS = 6000;
 
   function agencyToo() {
@@ -203,10 +203,10 @@
     STATUS.notTranslatingBecause = STATUS.translatingHere ? null : (
       !allowedHere()   ? 'sub-account is not in ONLY_LOCATIONS' :
       !sourceMatches() ? 'platform language is "' + platformLang() + '", but this pack ' +
-                         'translates from "' + PACK_SOURCE + '" â€” set the platform language ' +
+                         'translates from "' + PACK_SOURCE + '" — set the platform language ' +
                          'back to English for this sub-account' :
       audience === null ? 'waiting to find out who is logged in'
-                        : 'agency user â€” the platform language is left alone'
+                        : 'agency user — the platform language is left alone'
     );
   }
 
@@ -242,7 +242,7 @@
          })).filter(Boolean)
   */
   /* FILLED FROM THE LANGUAGE PACK at activate(). It used to hold a Czech
-     literal, which would have CSS-injected 'RychlÃ½ start' into a Spanish UI --
+     literal, which would have CSS-injected 'Rychlý start' into a Spanish UI --
      language content that escaped the v28 migration because it is CSS rather
      than dictionary. Empty until a pack supplies pack.pseudo. */
   var PSEUDO = [];
@@ -250,7 +250,7 @@
   /* PLAIN CSS RULES FROM THE PACK (pack.css), for typography a language needs
      that HighLevel's styling fights. The case that forced it, 11 Sep: the
      invoice status cell is text-transform: capitalize, which title-cases every
-     word. Right for English, wrong for Czech â€” "ÄŒÃ¡steÄnÄ› Uhrazeno", "Splatnost
+     word. Right for English, wrong for Czech — "Částečně Uhrazeno", "Splatnost
      Za 1 Den". Language-specific, so it comes from the pack, never the engine.
 
      SAME STYLE ELEMENT AS THE PSEUDO RULES, deliberately: revertAll() already
@@ -260,7 +260,7 @@
 
   /* RENAMED 11 Sep from 'ghl-cs-pseudo', which escaped the v32 namespace sweep:
      an element id Keytone creates, in HighLevel's prefix, and missing from
-     NAMESPACE.md. Internal â€” nothing outside this file reads it. */
+     NAMESPACE.md. Internal — nothing outside this file reads it. */
   var PACK_STYLE_ID = 'ka-pack-css';
 
   function injectPackCss() {
@@ -337,9 +337,9 @@
     'code', 'pre', 'style', 'script', 'noscript', 'svg',
     '[contenteditable="true"]', '[contenteditable=""]',
     '.ql-editor', '.ProseMirror', '.CodeMirror', '.monaco-editor',
-    /* CodeMirror 6 â€” a different class from CM5's .CodeMirror above. Found 11
+    /* CodeMirror 6 — a different class from CM5's .CodeMirror above. Found 11
        Sep on Settings > External tracking, where the editor shows the
-       account's own tracking key ("tk_â€¦") inside a script tag. Code is never
+       account's own tracking key ("tk_…") inside a script tag. Code is never
        translated, and that key is the account's. */
     '.cm-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
@@ -368,11 +368,11 @@
        Header cells are untouched, so column titles still translate. */
     '.tabulator-cell:not([tabulator-field*="date" i]):not([tabulator-field*="time" i]):not([tabulator-field*="activity" i]):not([tabulator-field*="created" i]):not([tabulator-field*="updated" i])',
     /* the dashboard widget tables (.hr-data-table__body-cell) are NOT listed
-       here any more â€” see hrCellBlocked(), v90. Their cells carry no column key,
+       here any more — see hrCellBlocked(), v90. Their cells carry no column key,
        so a selector could only block every cell, dates included ("Mar 18, 2025
        11:05 PM" on the funnels list stayed English). The column is now read
        from the header cell, with the same let-through as the tables below. */
-    /* THE INVOICE LIST â€” and any other table built on the same component. Found
+    /* THE INVOICE LIST — and any other table built on the same component. Found
        11 Sep, the first day the account had real invoices: the customer's
        INITIALS were protected (.hr-avatar__text) but their NAME reached the
        engine, along with the invoice title, number and amount. The same
@@ -382,20 +382,20 @@
        every column EXCEPT the ones known to hold our text, instead of listing
        the ones that hold theirs. Each cell names its column in data-col-key
        (name, invoiceNumber, contactDetails.name, issueDate, amount, status,
-       actions) â€” semantic, from HighLevel's column config, not styling. A
+       actions) — semantic, from HighLevel's column config, not styling. A
        column added later is protected by default.
 
        LET THROUGH, and nothing else:
          *date* / *At     dates and timestamps (issueDate, startDate,
-                          updatedAt, createdAt, fulfilledAt) â€” formatted by us.
+                          updatedAt, createdAt, fulfilledAt) — formatted by us.
                           $="At" is CASE-SENSITIVE on purpose: it matches the
                           camelCase timestamp suffix and not a word like "format".
          *status*         our vocabulary ("Status" too, hence the i flag)
-         action*          the row menu â€” "action" on some screens, "actions"
+         action*          the row menu — "action" on some screens, "actions"
          productType, paymentProviderType
                           NAMED EXPLICITLY, not *type*: the transactions table
                           has an entitySourceType column that holds the SOURCE
-                          INVOICE'S NAME ("New Invoice") â€” record data wearing
+                          INVOICE'S NAME ("New Invoice") — record data wearing
                           a type-shaped key. A blanket *type* would leak it.
          *edOn            timestamps spelt with "On" (lastIssuedOn). ADDED v69,
                           and it is the cost described below showing up the
@@ -404,7 +404,7 @@
                           "Date" or "At". "edOn" rather than "On", so a record
                           column like "addOn" is not let through with it.
          schedule*        the recurrence text HighLevel generates ("Every
-                          month") â€” ours to translate. Also ADDED v69, also
+                          month") — ours to translate. Also ADDED v69, also
                           found blocked and silent.
 
        TWO CLASS PREFIXES, ONE COMPONENT. hr-data-table-td is HighLevel's copy
@@ -413,10 +413,10 @@
        product names through n-. Measured on 11 Sep, n- sits under every
        payments list: products, transactions, orders, subscriptions, payment
        links, coupons, proposals. The fifth instance of naming one member of a
-       family â€” see FIREWALL.md.
+       family — see FIREWALL.md.
 
-       âš  THE COST, STATED PLAINLY: a column holding OUR text under a key not
-       listed above stays English, AND NOTHING REPORTS IT â€” blocked text never
+       ⚠ THE COST, STATED PLAINLY: a column holding OUR text under a key not
+       listed above stays English, AND NOTHING REPORTS IT — blocked text never
        reaches the collector. The only signal is a person seeing English in a
        table. The gap picker then says "content-zone" with this selector, and
        the fix is one more :not() here. That trade is deliberate: an unlisted
@@ -424,33 +424,33 @@
     ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key]:not([data-col-key*="date" i]):not([data-col-key$="At"]):not([data-col-key*="status" i]):not([data-col-key^="action" i]):not([data-col-key="productType"]):not([data-col-key="paymentProviderType"]):not([data-col-key$="edOn"]):not([data-col-key^="schedule"])',
     /* THE PRODUCT EDITOR'S PRICE LIST: each price has a NAME the business gave
        it ("zz digital goods price name"), and it reached the engine. Censused
-       11 Sep â€” the .price-scroll container holds only three kinds of text: the
+       11 Sep — the .price-scroll container holds only three kinds of text: the
        price name (span.truncate), the currency marks ($, USD), and two input
        placeholders rendered as spans ("Compare-at price", "Available
        Quantity") which are OURS. So block the name alone, not the container.
 
        .price-scroll is semantic; .truncate is a Tailwind utility and could go
        in a restyle. If it does, this rule matches nothing and the name leaks
-       again â€” the collector flags it, which is failing open, not silently. */
+       again — the collector flags it, which is failing open, not silently. */
     '.price-scroll span.truncate',
     /* THE PRODUCT EDITOR'S TOOLBAR repeats the product's name between Back and
        Save. Found v69's check, 11 Sep. The Back label and the name share a
        styling class (span.text-gray-800), so the class would take Back with
        it. What separates them is STRUCTURE, not position: Back sits inside a
        <button>, the name is a bare span directly under its toolbar group. So
-       '> span' â€” a direct child â€” takes the name and leaves every button.
+       '> span' — a direct child — takes the name and leaves every button.
 
        Scoped to #createProducts (both create and edit use it). Other editors
        probably share this toolbar; widen only after looking at one, since a
        toolbar group elsewhere may hold a bare span of OUR text. */
     '#createProducts .hl-toolbar-group > span',
-    /* THE INVOICE PREVIEW â€” left untranslated ON PURPOSE. Tom's decision,
+    /* THE INVOICE PREVIEW — left untranslated ON PURPOSE. Tom's decision,
        11 Sep: "keep the preview English. If they want the invoice in Czech the
        user will need to build a template."
 
        WHY IT IS A DECISION AND NOT A GAP: the editor shows a live preview of
        the document the CUSTOMER receives, and that document is never touched
-       by this layer â€” the engine only switches on under /location/<id>, and a
+       by this layer — the engine only switches on under /location/<id>, and a
        customer's invoice link is not such a path. Translating the preview
        would show a Czech invoice while an English one goes out: the one
        mistake a person running a business must never be shown. Left alone,
@@ -461,40 +461,40 @@
        IT IS ALSO A FIREWALL RULE. The preview carried the business address,
        the customer's name, the invoice number and every amount to the engine.
        Censused 11 Sep: .preview-section holds only the document card, whose
-       one button ("Pay $112.00") is part of the customer's view â€” nothing of
+       one button ("Pay $112.00") is part of the customer's view — nothing of
        ours sits in it.
 
        THREE EDITORS, ONE RULE (widened v74). Checked 11 Sep rather than
        assumed: the recurring-invoice editor and the template editor are
-       DIFFERENT components with different containers â€”
+       DIFFERENT components with different containers —
          #invoice-editor-container            one-off invoices, new and edit
          #recurring-invoice-editor-container  recurring invoices
          #invoice-template-editor-container   invoice templates
-       â€” but all three use the same .preview-section. v71 named only the
+       — but all three use the same .preview-section. v71 named only the
        first, so the recurring editor's preview was being translated and its
        customer block leaked a phone number. The id pattern "contains invoice,
        ends editor-container" matches all three and no other container seen.
        Estimates and proposals are not covered; walk them when they have data.
 
        THE TEMPLATE EDITOR IS WHERE THIS MATTERS MOST: a user building a Czech
-       template (t64/t65) sees exactly the labels HighLevel will send â€” their
+       template (t64/t65) sees exactly the labels HighLevel will send — their
        own Czech as typed, and HighLevel's fixed labels as they really are. */
     '[id*="invoice"][id$="editor-container"] .preview-section',
     /* THE INVOICE EDITOR'S BUSINESS AND CUSTOMER BLOCKS. The customer block
        sent the customer's EMAIL AND PHONE to the engine (found 11 Sep, the
        first invoice with a real customer on it). Censused: each
-       .business-details-preview holds only record data â€” the business name in
-       one, the customer's name, email and phone in the other â€” and no label
+       .business-details-preview holds only record data — the business name in
+       one, the customer's name, email and phone in the other — and no label
        or attribute of ours. The "Edit business details" and "Contact menu"
        buttons sit outside it and still translate. */
     '[id*="invoice"][id$="editor-container"] .business-details-preview',
     /* THE TAXES ATTACHED TO A PRODUCT. Each selected tax shows as a tag reading
-       "{tax name} ({rate}%)" â€” the business's own tax name. Blocked by the id
+       "{tax name} ({rate}%)" — the business's own tax name. Blocked by the id
        of the select that holds it, not by a pattern: a rule matching any
        "X (N%)" string would also swallow unrelated screens and hide real gaps
        from the collector. #taxSelect names what it holds. */
     '#taxSelect .n-tag',
-    /* FILE NAMES in Media Storage â€” "Adam_Sandler.jpg" reached the engine the
+    /* FILE NAMES in Media Storage — "Adam_Sandler.jpg" reached the engine the
        day product images were uploaded (11 Sep). A file name is whatever the
        business called its file: customer data. span.file-name is a semantic
        class. The same name also sits in each thumbnail's alt text; that copy
@@ -507,12 +507,12 @@
        content, and translating "Restaurant Menu" or "Spintax For Workflow"
        would rename someone else's product. HighLevel's data-testid names the
        parts, which beats any styling class. The header holds name + developer;
-       the description is the clamped paragraph. The footer â€” price tag,
-       "Zdarma", "Free to Install" â€” is ours and stays open. Censused 11 Sep:
+       the description is the clamped paragraph. The footer — price tag,
+       "Zdarma", "Free to Install" — is ours and stays open. Censused 11 Sep:
        everything else in the grid is ratings or our own text. */
     '[data-testid="app-card-header"]',
     '[data-testid="app-card"] p.line-clamp-2',
-    /* THE AI AGENT TEMPLATES marketplace, v84 â€” the same case in a different
+    /* THE AI AGENT TEMPLATES marketplace, v84 — the same case in a different
        component: each bot card's title, name, author and description belong to
        whoever published the agent ("Clara", "GenZAutomates"). The author's
        LABEL beside the name is ours, so only the truncated name is blocked. */
@@ -522,12 +522,12 @@
     '[data-testid="bot-card-body"] p.line-clamp-2',
     /* install counts ("318.8K"): figures, not words, and noise in every sweep */
     '[data-testid="bot-card-usage"]',
-    /* A CONTACT'S ATTRIBUTION SOURCE, v84: "PrvnÃ­ zdroj atribuce: CRM UI". The
+    /* A CONTACT'S ATTRIBUTION SOURCE, v84: "První zdroj atribuce: CRM UI". The
        label is ours; the value is whatever brought the contact in, which for a
        real account is a campaign name or a UTM string someone typed. */
     '#attribution-value',
     /* THE RECORD CARD on a contact's left panel, v85: avatar, then the NAME
-       ("ZZ Test Å˜"). The backstop catches it once the centre panel's name has
+       ("ZZ Test Ř"). The backstop catches it once the centre panel's name has
        been seen, but on first paint the left panel can arrive first, and the
        sweep recorded exactly that. HighLevel names the avatar .record-avatar;
        its next sibling is the record's name, on any record type. */
@@ -542,11 +542,11 @@
        filling every sweep; remove if the galleries are ever translated. */
     '#start-with-template [id^="template-card-"] .font-bold',
     '[id^="hr-tag-count-wrapper-template-tag-"]',
-    /* PARKED, NOT CUSTOMER DATA: Settings > Labs feature cards â€” HighLevel's
+    /* PARKED, NOT CUSTOMER DATA: Settings > Labs feature cards — HighLevel's
        release notes, a new set every week, most cut off mid-word ("private
        file fie..."). The title (twice) and the description are blocked; the
-       card's own controls â€” Zobrazit vÃ­ce, the "Activate now" tag, Odeslat
-       zpÄ›tnou vazbu â€” stay open. The page header carries ids and is excluded. */
+       card's own controls — Zobrazit více, the "Activate now" tag, Odeslat
+       zpětnou vazbu — stay open. The page header carries ids and is excluded. */
     '#Labs .card-container .hr-card-header .hr-text-3xl:not([id])',
     '#Labs .card-container .hr-card-content p.hr-text-md.hr-text-medium:not([id])',
     '#Labs .card-container .hr-card-content p.hr-text-sm.hr-text-regular:not([id])',
@@ -561,7 +561,7 @@
        element holds rather than how it looks.
 
        PRECISELY THIS ELEMENT, NOT THE CARD AROUND IT. The stage header also
-       contains data-stage-total-<uuid>, which reads "1 pÅ™Ã­leÅ¾itost" because our
+       contains data-stage-total-<uuid>, which reads "1 příležitost" because our
        plural rule already handles it. Blocking the card would take the
        translation away with the data. */
     '[id^="data-stage-name-"]',
@@ -572,13 +572,13 @@
        translatable. Found by the harvest walk once the noise was cleared. */
     '.hl_location-text',
     /* DASHBOARD WIDGETS. Task titles are whatever the user called the task
-       ("zz call the prospect"), and HighLevel gives each one the same id â€”
-       task-title-text â€” on every row, so an attribute selector catches them all.
+       ("zz call the prospect"), and HighLevel gives each one the same id —
+       task-title-text — on every row, so an attribute selector catches them all.
 
        The widget's pipeline filter sits in a dropdown whose id is the generic
        "select-id". Checked before scoping to it: that id appears ONLY on the
        dashboard, across opportunities, reporting, tasks, payments and social
-       planner â€” so blocking its selected label costs no enum value elsewhere.
+       planner — so blocking its selected label costs no enum value elsewhere.
        If it ever turns up on another screen holding a status, this rule will
        leave that status in English, and the zero-match audit will not notice:
        it will still be matching something. */
@@ -610,7 +610,7 @@
        is let back through by ZONE_PHRASES below. */
     '[id*="-select-pipeline_"] .hr-base-selection-label',
     /* AND THE REST OF THAT FAMILY, v98. The same widget row has pickers for
-       workflows, campaigns, users and Google Business pages â€” all of them
+       workflows, campaigns, users and Google Business pages — all of them
        RECORDS, all of them showing the record's name once one is chosen. They
        read "All" / "All users" / "Please Select" until then, which ZONE_PHRASES
        lets through. Their option MENUS are portalled out of the select and no
@@ -630,11 +630,11 @@
     '#views-bar .lists .view-label',
     /* THE OPPORTUNITY CARDS THEMSELVES. Only visible once a pipeline has cards
        in it, which is why the board looked clean when the stage headings were
-       fixed in v45 â€” an empty board has no records to leak.
+       fixed in v45 — an empty board has no records to leak.
 
        Each card carries a two-cell table per field: the LABEL in the first cell
-       ("NÃ¡zev firmy:", ours, translated) and the VALUE in the second (the
-       customer's). `td + td` takes every value cell and no label â€” measured on
+       ("Název firmy:", ours, translated) and the VALUE in the second (the
+       customer's). `td + td` takes every value cell and no label — measured on
        the live board: 15 values matched, 0 labels.
 
        The title is the only link inside a card's content. */
@@ -704,14 +704,14 @@
   var BLOCKED_ATTR = CONTENT_ZONES.join(',');
 
   /* ATTRIBUTE-ONLY ZONES, v81: an element whose OWN attributes hold a record
-     while its children are ours. CONTENT_ZONES cannot express that â€” they
+     while its children are ours. CONTENT_ZONES cannot express that — they
      work through closest(), so a zone on a container silences everything
      inside it. Matched with matches(), never closest(): the element itself,
      not its descendants.
 
      The product editor's toolbar carries the product's name as its title
-     ("ZZ digital goods") and holds ZpÄ›t / Zahodit / UloÅ¾it, which must
-     translate. The record backstop usually catches the title â€” but only once
+     ("ZZ digital goods") and holds Zpět / Zahodit / Uložit, which must
+     translate. The record backstop usually catches the title — but only once
      the name has been seen in a zone, and on the first paint the toolbar can
      arrive first. The collector recorded exactly that single leak. */
   var SELF_ATTR_ZONES = [
@@ -728,12 +728,12 @@
 
      Some zones mix HighLevel's text with the customer's in one component, and
      no selector separates them: the "All" smart-list tab is the same element
-     as a list the user named "ZZ few". Checked on the live DOM first â€” no
+     as a list the user named "ZZ few". Checked on the live DOM first — no
      class, attribute or position tells them apart (users can reorder lists).
 
      So each zone may name EXACT English phrases that are translated even
      inside it. Everything else in the zone stays blocked, text AND
-     attributes â€” this lets text nodes through, never attributes.
+     attributes — this lets text nodes through, never attributes.
 
      WHY IT IS SAFE ENOUGH: people create records in their own language, so a
      Czech business does not call a smart list "All". The residual risk is an
@@ -833,11 +833,11 @@
   var TRANSLATE_PREFILLS = true;
 
   /* Longest string the layer will touch, measured on the ENGLISH SOURCE, not
-     on the Czech output â€” the guard runs before translate().
+     on the Czech output — the guard runs before translate().
      400, not 160: 23 translated strings have an English source longer than 160
      and were silently skipped in every language (longest 334 chars,
-     reputationâ€¦reviewsAIAgents.createStarterModalContent). A length cap is a
-     SILENT coverage hole â€” nothing errors, the text simply stays English â€” so
+     reputation…reviewsAIAgents.createStarterModalContent). A length cap is a
+     SILENT coverage hole — nothing errors, the text simply stays English — so
      check this first whenever a translation that IS in the dictionary fails to
      appear on screen. 400 clears the longest known string with ~20% headroom
      while still excluding genuine prose and customer data. Re-measure if the
@@ -862,13 +862,13 @@
      case-specific entry (e.g. an all-caps badge) can override the general one. */
 
   /* Czech numerals take three forms, unlike English's two:
-       1 poloÅ¾ka | 2-4 poloÅ¾ky | 0, 5+ poloÅ¾ek
-     Getting this wrong ("3 poloÅ¾ek") reads as broken Czech to a native
+       1 položka | 2-4 položky | 0, 5+ položek
+     Getting this wrong ("3 položek") reads as broken Czech to a native
      speaker, so counted nouns go through here. */
 
 
   /* ===================================================================
-     LANGUAGE DATA â€” loaded at runtime, not baked into this file
+     LANGUAGE DATA — loaded at runtime, not baked into this file
 
      WHAT MOVED OUT: the 5,029-entry glossary, the 52 pattern regexes, the
      four month tables and czPlural all used to live here, which made this
@@ -885,7 +885,7 @@
          and GitHub Pages can actually cache 340 KB instead of refetching it
          on every full page load. Bump DATA_VERSION when the pack changes.
 
-     FAILURE MODE â€” THE IMPORTANT PART: if anything fails to load, is
+     FAILURE MODE — THE IMPORTANT PART: if anything fails to load, is
      missing, or is malformed, the layer DOES NOTHING. start() is never
      called, the MutationObserver is never attached, and not one DOM node is
      touched. A half-translated interface is worse than an English one: it
@@ -934,14 +934,14 @@
      the URL is for testing.
 
        1. ?cslang=<locale>  explicit override. PERSISTED, because HighLevel is
-                            an SPA and rewrites the url on navigation â€” without
+                            an SPA and rewrites the url on navigation — without
                             storing it the choice would evaporate on the first
                             click, which is exactly what happened before v31.
        2. ?cslang=0         clears a persisted override, back to the loader's
                             choice. Mirrors ?nocs=0 deliberately: one pattern to
                             remember, not two.
        3. window.__kaLang  set by the loader in the agency's Custom JS box.
-                            THIS IS THE NORMAL WAY TO CHOOSE A LANGUAGE â€”
+                            THIS IS THE NORMAL WAY TO CHOOSE A LANGUAGE —
                             one line, no urls, no per-browser state.
        4. DEFAULT_LOCALE
 
@@ -960,12 +960,12 @@
     var known = Object.keys(AVAILABLE).join(', ');
     var qs = window.location.search;
 
-    /* 2 â€” clear, before we read anything stored */
+    /* 2 — clear, before we read anything stored */
     if (/[?&]cslang=0(?:&|$)/.test(qs)) {
       try { localStorage.removeItem(LANG_KEY); } catch (e) {}
       console.info('[lang] cleared the stored language override; using the loader default');
     } else {
-      /* 1 â€” explicit override, remembered so it survives SPA navigation */
+      /* 1 — explicit override, remembered so it survives SPA navigation */
       var m = /[?&]cslang=([A-Za-z]{2}(?:-[A-Za-z]{2})?)(?:&|$)/.exec(qs);
       var want = m && m[1];
       if (want) {
@@ -974,11 +974,11 @@
           STATUS.localeSource = 'url (?cslang=, remembered)';
           return want;
         }
-        console.warn('[lang] unknown ?cslang=' + want + ' â€” ignoring it. Available: ' + known);
+        console.warn('[lang] unknown ?cslang=' + want + ' — ignoring it. Available: ' + known);
       }
     }
 
-    /* 3 â€” a previous ?cslang=, still in force */
+    /* 3 — a previous ?cslang=, still in force */
     var stored = null;
     try { stored = localStorage.getItem(LANG_KEY); } catch (e) {}
     if (stored) {
@@ -988,10 +988,10 @@
       }
       /* pack was removed, or someone edited localStorage by hand */
       try { localStorage.removeItem(LANG_KEY); } catch (e) {}
-      console.warn('[lang] stored language "' + stored + '" is not available any more â€” cleared it');
+      console.warn('[lang] stored language "' + stored + '" is not available any more — cleared it');
     }
 
-    /* 4 â€” the loader's choice: the normal path */
+    /* 4 — the loader's choice: the normal path */
     var fromLoader = window.__kaLang;
     if (fromLoader) {
       if (validLocale(fromLoader)) {
@@ -1027,7 +1027,7 @@
   var ROUTE_PATH = null;
   var ROUTE_MAP = null;
 
-  /* A PACK ENTRY is a plain string, or â€” v97 â€” a VOLATILE entry:
+  /* A PACK ENTRY is a plain string, or — v97 — a VOLATILE entry:
        { t: "Czech", seen: "2026-09-11", ttl: 30 }
      for content that churns (Settings > Labs: HighLevel's beta cards change
      about daily). It expires `ttl` days after it was last SEEN; `seen` is
@@ -1056,7 +1056,7 @@
        key by key and inherits the rest (v93). Until v93 only the single longest
        match applied, so a narrow route could not correct one word without
        re-listing its parent's whole vocabulary. The recurring list's row menu
-       needed "End" as a verb (UkonÄit) while its editor needs the noun (Konec),
+       needed "End" as a verb (Ukončit) while its editor needs the noun (Konec),
        both under /payments. */
     var keys = [];
     for (var k in by) {
@@ -1094,14 +1094,14 @@
 
        SOME ENGLISH WORDS ARE ONE WORD IN ENGLISH AND TWO IN CZECH, and which
        one is right depends on the DOMAIN, not the sentence. "Overdue" is the
-       case that forced this: a task is "po termÃ­nu" (past its deadline) and an
+       case that forced this: a task is "po termínu" (past its deadline) and an
        invoice is "po splatnosti" (past its maturity) -- the accounting term.
        There is no word that covers both, and using the task word on an invoice
        reads wrong to anyone who runs a business, which is exactly our user.
 
-       âš  THIS FAILURE CLASS IS INVISIBLE TO EVERY TOOL WE HAVE, and that is why
+       ⚠ THIS FAILURE CLASS IS INVISIBLE TO EVERY TOOL WE HAVE, and that is why
        the machinery exists before the bug does. The collector only sees MISSES.
-       "Overdue" -> "Po termÃ­nu" on an invoice screen is a confident HIT: the
+       "Overdue" -> "Po termínu" on an invoice screen is a confident HIT: the
        gap picker paints it green, the coverage figure counts it as translated,
        and it ships at 98.6% while being wrong. Nothing reports it but a person
        who reads Czech and knows accounting.
@@ -1139,7 +1139,7 @@
   function disable(why) {
     STATUS.state = 'disabled';
     STATUS.error = why;
-    console.warn('[cs-CZ] language layer DISABLED â€” ' + why +
+    console.warn('[cs-CZ] language layer DISABLED — ' + why +
       '. The interface is left in English; nothing was partially translated. ' +
       'Details: window.__kaStatus');
   }
@@ -1157,13 +1157,13 @@
 
   /* Everything arrived: validate hard before touching the DOM. */
   function activate(locale) {
-    /* RENAMED v76 to the ka prefix â€” these three escaped the v32 sweep because
+    /* RENAMED v76 to the ka prefix — these three escaped the v32 sweep because
        they are set by the DATA files, which the sweep never grepped. The old
        names are read as a FALLBACK for one release: the engine file can sit in
        a browser's cache for ~10 minutes after a deploy while the data files
        load fresh, and an old engine meeting new names (or the reverse) would
        find nothing and switch the layer off. The data files set BOTH names for
-       the same reason. Remove the old names once no cached copy can remain â€”
+       the same reason. Remove the old names once no cached copy can remain —
        see NAMESPACE.md. */
     var R = window.__kaRules || window.I18nRules;
     var SS = window.__kaSource || window.GhlSourceRules;
@@ -1191,9 +1191,9 @@
     /* LOOKUP is the case-insensitive fallback and it is FIRST-WINS, so the
        insertion order below is DATA, not tidiness. Several English strings
        share a lowercase form with deliberately different translations
-       ("Close"/"close", "Success"/"SUCCESS" -> ÃšspÄ›ch/Hotovo). Curated must
+       ("Close"/"close", "Success"/"SUCCESS" -> Úspěch/Hotovo). Curated must
        be inserted first, and neither half may be re-sorted -- doing so once
-       silently rendered "CLOSE (ESC)" as "zavÅ™Ã­t (ESC)". */
+       silently rendered "CLOSE (ESC)" as "zavřít (ESC)". */
     LOOKUP = {};
     var halves = [P.dict, api], h, kk, lower;
     for (h = 0; h < halves.length; h++) {
@@ -1267,7 +1267,7 @@
 
   /* HIGHLEVEL'S WIDGET TABLES, v90. Their body cells (td.hr-data-table__body-cell)
      carry no data-col-key, unlike the invoice-list tables. The column's key
-     lives on the HEADER cell, as its aria-label ("dateUpdated", "steps") â€” which
+     lives on the HEADER cell, as its aria-label ("dateUpdated", "steps") — which
      this engine itself translates, so the original is read from the property
      doAttrs leaves behind (__kaAttrSrc_aria-label).
 
@@ -1386,7 +1386,7 @@
 
   /* A FILE NAME IS CUSTOMER DATA BY ITS SHAPE. Added v75. "Adam_Sandler.jpg"
      turned up in Media Storage (blocked by .file-name in v73), then again as
-     an ATTACHMENT on a recurring invoice â€” in bare Tailwind classes with no
+     an ATTACHMENT on a recurring invoice — in bare Tailwind classes with no
      anchor at all. Chasing every place a file name can appear with a styling
      selector is how the one-member-of-a-family misses keep happening.
 
@@ -1397,8 +1397,8 @@
      refused, so a real label can not be silenced by accident.
 
      Same contract as the rest of the backstop: it suppresses REPORTING only.
-     A file name cannot be translated anyway â€” no dictionary word ends in
-     ".jpg" â€” so there is nothing to stop on that side. */
+     A file name cannot be translated anyway — no dictionary word ends in
+     ".jpg" — so there is nothing to stop on that side. */
   var FILE_NAME = /^[^\s\/\\][^\/\\\n]{0,150}[^\s\/\\.]\.(?:jpe?g|png|gif|webp|svg|bmp|tiff?|heic|pdf|csv|txt|docx?|xlsx?|pptx?|odt|ods|zip|rar|mp3|wav|m4a|mp4|mov|avi|webm)$/i;
 
   function looksLikeFileName(s) {
@@ -1408,8 +1408,8 @@
   /* A URL, likewise, added v79: the client portal prints the account's own
      portal address as a link, and a business's website or a booking link can
      turn up anywhere. Untranslatable, often the customer's own, and reported
-     on every sweep. Whole-string only â€” "Visit https://â€¦" is a sentence. */
-  /* also a bare path, "/product/" â€” the fixed prefix beside a product's URL
+     on every sweep. Whole-string only — "Visit https://…" is a sentence. */
+  /* also a bare path, "/product/" — the fixed prefix beside a product's URL
      handle (v83). Slash-first, no spaces: no label is spelled like that. */
   /* and a bare domain, "app.clientclub.net" (v85): a customer's domain is
      theirs, and HighLevel's own is untranslatable. A KNOWN TOP-LEVEL DOMAIN,
@@ -1427,7 +1427,7 @@
   var OBJECT_ID = /^[0-9a-f]{24}$/i;
 
   /* And a bare phone number or e-mail address, v84: the contact screen's call
-     button carries "Call: +420â€¦" as its label (translated by a pattern that
+     button carries "Call: +420…" as its label (translated by a pattern that
      passes the number through), and the bare forms turn up wherever a contact
      is shown. Reporting them would put a customer's number in the harvest. */
   /* not an ISO date: "2026-09-10" has the same characters, and an untranslated
@@ -1619,7 +1619,7 @@
        a surface whose whole purpose is to be read by tooling. */
     records: function () { return RECORDS_N; },
     /* WHICH domain overrides are active on this screen, and what they change.
-       Without this, "why is it 'Po splatnosti' here and 'Po termÃ­nu' on tasks?"
+       Without this, "why is it 'Po splatnosti' here and 'Po termínu' on tasks?"
        has no answer short of reading the pack. */
     routeOverrides: function () {
       var m = routeOverrides();
@@ -1657,7 +1657,7 @@
     /* Skip if we already wrote this exact value (survives Vue re-renders) */
     if (node.__kaDone === node.textContent) return;
     var raw = node.textContent;
-    /* Length guard â€” see MAX_LEN. Raised 80 -> 160 (empty-state sentences)
+    /* Length guard — see MAX_LEN. Raised 80 -> 160 (empty-state sentences)
        -> 400 (long warnings and tooltips). Applies to the English source. */
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
@@ -1810,23 +1810,23 @@
       return;
     }
 
-    /* INPUT VALUES ARE RECORDS â€” note them before anything else reads the page.
+    /* INPUT VALUES ARE RECORDS — note them before anything else reads the page.
        Added v70, from the product editor: its toolbar repeats the product's
        NAME beside Save and Discard, and that copy reached the engine as a gap.
-       Nearly every edit screen does this â€” the record's name echoed in a
+       Nearly every edit screen does this — the record's name echoed in a
        header, a breadcrumb, a title. The input holding it is already blocked,
        but nothing told the record backstop that its value IS a record, so the
        echo looked like ordinary untranslated text.
 
        A text input's value is customer data by definition, so it goes in the
-       record set â€” except values WE wrote (__kaVal), which are our own Czech.
+       record set — except values WE wrote (__kaVal), which are our own Czech.
        BEFORE the text walk, for the reason the walk order is load-bearing:
        otherwise the header copy is reported on the first pass, before its
        input has been seen.
 
        Like the rest of the backstop this suppresses REPORTING, not
        translation. Stopping the echo being translated still needs a selector
-       â€” see '#createProducts .hl-toolbar-group > span' in CONTENT_ZONES. */
+       — see '#createProducts .hl-toolbar-group > span' in CONTENT_ZONES. */
     var recFields = root.querySelectorAll('input,textarea');
     for (var rf = -1; rf < recFields.length; rf++) {
       var fe = rf < 0 ? root : recFields[rf];
@@ -1968,9 +1968,9 @@
        loaded, and which language?" is the first question every support
        conversation starts with. Full detail in window.__kaStatus. */
     console.info('[' + STATUS.locale + '] language layer ' + VERSION +
-      ' active â€” ' + STATUS.terms + ' terms (' + STATUS.curated + ' curated, ' +
+      ' active — ' + STATUS.terms + ' terms (' + STATUS.curated + ' curated, ' +
       STATUS.fromApi + ' from HighLevel), data ' + DATA_VERSION +
-      ' â€” language from ' + STATUS.localeSource +
+      ' — language from ' + STATUS.localeSource +
       '. Override with ?cslang=<locale>, clear with ?cslang=0, disable with ?nocs=1');
 
     /* "Active" is true of the LAYER, not of this SCREEN. Off-gate, everything
