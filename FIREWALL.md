@@ -243,6 +243,43 @@ If it does change, the measurement above says write `:has(.some-class)`, never
 
 ---
 
+## Designed, not built: HighLevel's own phrases inside a zone
+
+Decided with Tom on 11 Sep 2026 (design mode, no code yet). Some zones mix
+HighLevel's own text with customer data in the same component, and no
+selector separates them. The fix is a **per-zone allowlist of exact phrases**
+that are translated even inside the zone. Everything else in the zone stays
+blocked.
+
+**Why this is acceptable:** the users create their records in their own
+language. A Czech business does not name a smart list "All" or a pipeline "No
+pipeline available", so an exact English interface phrase inside a zone is
+almost certainly HighLevel's, not theirs. (Tom's reasoning.)
+
+**How it's bounded:**
+- **Scoped to one zone per phrase.** "All" is allowed only in the smart-list
+  tabs, never globally inside zones. That keeps the blast radius to the one
+  place where the phrase is known to be HighLevel's.
+- **Exact, whole-string match** from the dictionary. No rules, no partial
+  matches.
+- **The residual risk is named, not hidden: snapshots.** An agency snapshot
+  built in English (a US template) brings English record names with it: the
+  test account's own "ZZ New Lead" came from one. A snapshot record named
+  exactly like an allowlisted phrase in the same zone would be translated. The
+  per-zone scoping and the shortness of the list keep that unlikely. Check a
+  new phrase against common snapshot vocabulary before adding it.
+
+**First entries:**
+
+| Zone | Phrases | Effect |
+|---|---|---|
+| Smart-list tabs (`#views-bar .view-label`, **newly zoned**) | "All", "Add Smart List" | Closes the known gap below *and* keeps HighLevel's two labels translated |
+| Dashboard pipeline picker (`[id="select-id"] .hr-base-selection-label`) | "No pipeline available" | The empty-state placeholder translates; pipeline names stay blocked |
+
+Before building it, confirm on the live page that option 1 (a structural
+difference between HighLevel's entries and the user's) really isn't available.
+Structure beats text wherever it exists.
+
 ## Known gaps
 
 **Smart-list view names**, `#views-bar .view-label` on the contacts screen
