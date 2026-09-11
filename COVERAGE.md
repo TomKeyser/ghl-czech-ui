@@ -177,6 +177,14 @@ settings/labs  settings/audit/logs
 button, so these are opened and closed **unsaved** (Escape, then Zrušit).
 Afterwards, check the lists: the v89 walk left nothing behind.
 
+**Row menus** (v93). Open each list's first-row "…" menu and read it. **Only
+click an element that declares itself a menu trigger** (`aria-haspopup`, a
+dropdown class). The first row-menu walk clicked "whatever is in the last
+cell". On Tax settings that was the **delete** icon, and on Tags the edit
+pencil. Escape cancelled both, and both lists were checked afterwards and
+found intact, but a blind click in an action column is one confirm-click away
+from deleting a record.
+
 ```
 contacts/smart_list/All  → Přidat kontakt        opportunities/list → Přidat příležitost
 tasks                    → Přidat úkol           businesses/list    → Přidat společnost

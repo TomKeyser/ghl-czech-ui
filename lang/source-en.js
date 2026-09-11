@@ -262,6 +262,13 @@
          every language; the rule exists so it stops reading as a gap. No "%":
          Czech writes "50 %", so a percentage is not an identity. */
       ['CSS_SIZE',       /^(\d+(?:\.\d+)?)(px|pt|em|rem)$/],
+      /* identities, so a sweep shows only real gaps: a time-zone offset
+         ("GMT -07:00"), a time-zone abbreviation in brackets ("(PDT)"), and a
+         chart axis in thousands ("1k", "3k") — all written the same in Czech
+         interfaces, or at least understood. */
+      ['TZ_OFFSET',      /^(GMT\s?[+-]\d{2}:\d{2})$/],
+      ['TZ_ABBR',        /^(\([A-Z]{2,5}\))$/],
+      ['AXIS_K',         /^(\d+(?:\.\d+)?k)$/],
       ['TOTAL_MEM',      /^(\d+)\s+total members?$/i],
       ['REL_LONG',       /^(\d+)\s+(second|minute|hour|day|week|month)s?\s+ago$/i, '@relLong'],
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],
