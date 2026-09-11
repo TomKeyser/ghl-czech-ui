@@ -105,6 +105,19 @@
        Set to 'genitive' to get the v27 rendering back ("31. srpna 2026").   */
     dateStyle: 'numeric',
 
+    /* ---- recurrence: a recurring invoice's schedule ("Every  month") -----
+       An interval of ONE is an adverb — "Měsíčně", not "Každý 1 měsíc".
+       Counted intervals inflect twice: the "each" word follows the plural
+       category as well as the unit. 2-4 takes "každé" with the few form,
+       5+ takes "každých" with the genitive plural:
+         Každé 2 měsíce · Každé 3 týdny · Každých 5 měsíců · Každých 10 let
+       MY CZECH — goes with the invoice batch. */
+    recurrence: {
+      once:  { day: 'Denně', week: 'Týdně', month: 'Měsíčně', year: 'Ročně' },
+      units: { day: 'periodDays', week: 'periodWeeks', month: 'periodMonths', year: 'periodYears' },
+      each:  { few: 'Každé {n} {unit}', other: 'Každých {n} {unit}' }
+    },
+
     /* ---- frames: the sentence shapes the formatters fill in -------------- */
     frames: {
       ago: 'před {n} {unit}',
@@ -140,6 +153,8 @@
       accounts:       { one: 'účet',      few: 'účty',      other: 'účtů' },
       periodMonths:   { one: 'měsíc',     few: 'měsíce',    other: 'měsíců' },
       periodDays:     { one: 'den',       few: 'dny',       other: 'dní' },
+      periodWeeks:    { one: 'týden',     few: 'týdny',     other: 'týdnů' },
+      periodYears:    { one: 'rok',       few: 'roky',      other: 'let' },
 
       /* instrumental case — "před 3 hodinami", not "před 3 hodiny". Czech
          requires it after "před", which is exactly the kind of thing a
@@ -3291,6 +3306,60 @@
     "Menu options":                     "Možnosti nabídky",
     "Invoice Status":                   "Stav faktury",
     "Payment Mode":                     "Způsob platby",
+
+    /* Recurring invoices, 11 Sep. "Vystaveno" is the seller's word for issuing
+       an invoice — accounts receivable, see the glossary rule. */
+    "Automatically send invoices to customers at scheduled frequency":
+      "Automaticky odesílat faktury zákazníkům v nastaveném intervalu",
+    "Recurring Invoice Name":           "Název opakované faktury",
+    "Last Issued On":                   "Naposledy vystaveno",
+
+    /* THE PRODUCT EDITOR, 11 Sep — the largest untranslated screen found so
+       far (53 gaps against 38 translated on first open). A newer surface:
+       HighLevel's localisation corpus has almost nothing for it. Words chosen
+       to match what the pack already says: Daň/Daně, Cena, Produkt, Název
+       produktu, Další informace. NOT YET NATIVE-CONFIRMED. */
+    "Discard":                          "Zahodit",
+    "Edit Product":                     "Upravit produkt",
+    "Product Information":              "Informace o produktu",
+    "Pricing":                          "Ceny",
+    "Variants":                         "Varianty",
+    "Additional Information":           "Další informace",
+    "Include in Online store":          "Zahrnout do e-shopu",
+    "Use this field to optionally store a long form explanation of the product being sold for your own rendering purposes.":
+      "Do tohoto pole můžete volitelně uložit podrobný popis prodávaného produktu pro vlastní účely zobrazení.",
+    "Enable Product Label":             "Zapnout štítek produktu",
+    "Product Tax Code":                 "Daňový kód produktu",
+    "Select a tax category":            "Vyberte daňovou kategorii",
+    "Include tax in prices":            "Zahrnout daň do cen",
+    "Define if product prices should be inclusive or exclusive of tax by default.":
+      "Určete, zda mají ceny produktu ve výchozím nastavení zahrnovat daň, nebo ne.",
+    "As per Global Settings":           "Podle globálního nastavení",
+    "Tax will be included in the purchase price. The price shown to the customer will include the tax amount.":
+      "Daň bude zahrnuta v kupní ceně. Cena zobrazená zákazníkovi bude obsahovat částku daně.",
+    "Tax will not be included in the purchase price. The price shown to the customer will not include the tax amount.":
+      "Daň nebude zahrnuta v kupní ceně. Cena zobrazená zákazníkovi nebude obsahovat částku daně.",
+    "Attach Tax rates":                 "Připojit daňové sazby",
+    "Useful if you don't use Automatic taxes": "Hodí se, pokud nepoužíváte automatické daně",
+    "Additional options":               "Další možnosti",
+    "Product Media":                    "Média produktu",
+    "SVG, PNG, JPG, GIF (max. 800x400px) or MP4 (max. 10MB)":
+      "SVG, PNG, JPG, GIF (max. 800x400 px) nebo MP4 (max. 10 MB)",
+    "Prices":                           "Ceny",
+    /* compare-at = the struck-through "was" price shown beside the real one */
+    "Compare-at price":                 "Původní cena",
+    "Available QTY":                    "Dostupné množství",
+    "Available Quantity":               "Dostupné množství",
+    "Add another price":                "Přidat další cenu",
+    "Add options like size or color":   "Přidejte možnosti, jako je velikost nebo barva",
+    "Add a variant":                    "Přidat variantu",
+    "Internal Product Id:":             "Interní ID produktu:",
+    "Created:":                         "Vytvořeno:",
+    "Updated:":                         "Aktualizováno:",
+    "Integration":                      "Integrace",
+    "Product Id":                       "ID produktu",
+    "Last Synced At":                   "Naposledy synchronizováno",
+    "Enter product name":               "Zadejte název produktu",
 
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
        SPEAKER, 10 Sep 2026 — as were the weekday abbreviations and the

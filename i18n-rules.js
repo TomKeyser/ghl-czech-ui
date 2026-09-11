@@ -247,6 +247,26 @@
       return ((pack.frames && pack.frames.dateTime) || '{date} {time}')
         .replace('{date}', date).replace('{time}', time);
     },
+    /* "Every  month" / "Every 3 weeks" — a recurring invoice's schedule. The
+       double space is HighLevel's: an interval of 1 renders as nothing.
+
+       TWO SHAPES, because many languages have a one-word adverb for an
+       interval of one ("Měsíčně", monthly) and a counted phrase otherwise.
+       In Czech even the counted phrase inflects twice — the "each" word AND
+       the unit follow the plural category: "Každé 2 měsíce", "Každých 5
+       měsíců". So the pack supplies the adverbs, the unit's plural table, and
+       one "each" frame per category. */
+    everyInterval: function (pack, m) {
+      var R = pack.recurrence;
+      if (!R) return null;
+      var n = m[1] ? parseInt(m[1], 10) : 1;
+      var unit = String(m[2]).toLowerCase();
+      if (n === 1) return (R.once && R.once[unit]) || null;
+      var word = R.units && R.units[unit] ? pluralForm(pack, R.units[unit], n) : null;
+      var each = R.each && (R.each[category(pack.locale, n)] || R.each.other);
+      if (word === null || !each) return null;
+      return each.replace('{n}', String(n)).replace('{unit}', word);
+    },
     /* "Sep 2026" — a month LABEL, so it stays a name even in numeric mode */
     monYear: function (pack, m) {
       var mo = month(pack, 'full', m[1]);

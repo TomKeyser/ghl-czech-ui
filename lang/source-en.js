@@ -107,6 +107,15 @@
       ['CAL_HOUR',       /^(\d{1,2})\s*(AM|PM)$/i, '@hourLabel'],
       ['CAL_DAY_RANGE',  /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s*[–-]\s*(\d{1,2}),\s*(\d{4})$/i, '@dayRangeInMonth'],
       ['STAMP',          /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
+      /* "September 10, 2026 09:20 PM" — the product editor's Created/Updated,
+         11 Sep. The FULL month name and no comma after the year, so STAMP
+         cannot see it. Same formatter: monthIndex reads the first three
+         letters, so "September" and "Sep" land on the same month. A separate
+         rule rather than a widened STAMP, so the reviewed output of that one
+         cannot move. */
+      ['STAMP_FULL',     /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(\d{4}),?\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
+      /* "Every  month", "Every 3 weeks" — recurring invoice schedule, 11 Sep */
+      ['EVERY_N',        /^Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@everyInterval'],
       /* "Sep 10 at 09:20 PM" — payments lists, 11 Sep */
       ['MON_DAY_TIME',   /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+at\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@monDayTime'],
       ['MON_YEAR',       /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@monYear'],

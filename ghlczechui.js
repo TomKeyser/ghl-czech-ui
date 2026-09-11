@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v68';
+  var VERSION = 'v69';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -386,6 +386,15 @@
                           has an entitySourceType column that holds the SOURCE
                           INVOICE'S NAME ("New Invoice") — record data wearing
                           a type-shaped key. A blanket *type* would leak it.
+         *edOn            timestamps spelt with "On" (lastIssuedOn). ADDED v69,
+                          and it is the cost described below showing up the
+                          same day: the recurring-invoice list's issue date was
+                          silently blocked because its key ended in "On", not
+                          "Date" or "At". "edOn" rather than "On", so a record
+                          column like "addOn" is not let through with it.
+         schedule*        the recurrence text HighLevel generates ("Every
+                          month") — ours to translate. Also ADDED v69, also
+                          found blocked and silent.
 
        TWO CLASS PREFIXES, ONE COMPONENT. hr-data-table-td is HighLevel's copy
        of Naive UI's n-data-table-td, and both carry data-col-key. v67 named only
@@ -401,7 +410,18 @@
        table. The gap picker then says "content-zone" with this selector, and
        the fix is one more :not() here. That trade is deliberate: an unlisted
        column is more likely to hold a customer's words than ours. */
-    ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key]:not([data-col-key*="date" i]):not([data-col-key$="At"]):not([data-col-key*="status" i]):not([data-col-key^="action" i]):not([data-col-key="productType"]):not([data-col-key="paymentProviderType"])',
+    ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key]:not([data-col-key*="date" i]):not([data-col-key$="At"]):not([data-col-key*="status" i]):not([data-col-key^="action" i]):not([data-col-key="productType"]):not([data-col-key="paymentProviderType"]):not([data-col-key$="edOn"]):not([data-col-key^="schedule"])',
+    /* THE PRODUCT EDITOR'S PRICE LIST: each price has a NAME the business gave
+       it ("zz digital goods price name"), and it reached the engine. Censused
+       11 Sep — the .price-scroll container holds only three kinds of text: the
+       price name (span.truncate), the currency marks ($, USD), and two input
+       placeholders rendered as spans ("Compare-at price", "Available
+       Quantity") which are OURS. So block the name alone, not the container.
+
+       .price-scroll is semantic; .truncate is a Tailwind utility and could go
+       in a restyle. If it does, this rule matches nothing and the name leaks
+       again — the collector flags it, which is failing open, not silently. */
+    '.price-scroll span.truncate',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -621,7 +641,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v46';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v47';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
