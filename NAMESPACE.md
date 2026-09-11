@@ -78,6 +78,29 @@ Bounded at 800 strings, per page load, never persisted. `__kaDebug.records()`
 returns the **count**, never the strings — the whole point is that customer data
 does not reach tooling, and a debug surface exists to be read by tooling.
 
+## What we rewrite on HighLevel's page
+
+Decided with Tom on 11 Sep 2026 (design, v97).
+
+- **Text on screen, `placeholder`, `title` and `aria-label`, and nothing else.**
+  Never `id`, `class`, `data-*`, `name`, `href` or `value`. (Prefilled values
+  are a separate switch, TRANSLATE_PREFILLS, and are off.)
+- **Everything the viewer can perceive is translated, and screen readers
+  count.** So `aria-label` is translated too, **including HighLevel's raw keys**
+  printed there (`dateUpdated`, `common.resize`). A blind Czech user should hear
+  Czech. An earlier proposal to leave key-shaped values untouched was
+  **rejected**.
+- **Rewritten, never removed.** A translated attribute keeps its English
+  original in `__kaAttrSrc_<name>`, and a text node keeps it in `__kaSrc`, so a
+  full revert is always possible. Our own code reads the original where it
+  needs the key (`hrCellBlocked()`).
+- **The risk this accepts:** HighLevel's own code may read an attribute we
+  translated (for sorting, tests or analytics) and get Czech. **The safety net is
+  an audit, not a blanket exemption:** search HighLevel's loaded scripts for
+  selectors that match on `aria-label=` or `title=` values, and exercise
+  sorting, filters and row actions on translated screens. Any attribute found
+  to be a handle goes on an exemption list. **Audit pending.**
+
 ## The attribute contract
 
 **`data-ka-ignore`** — any Keytone UI injected into the page sets this on its
