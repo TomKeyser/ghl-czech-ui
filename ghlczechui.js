@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v55';
+  var VERSION = 'v56';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -405,8 +405,14 @@
        blocking the class wholesale.
 
        .avatar_img, NOT .hl_header--avatar: the anchor around it carries the
-       aria-label "Open profile menu", which IS ours to translate. */
-    '.avatar_img',
+       aria-label "Open profile menu", which IS ours to translate.
+
+       TWO avatar components, so two selectors: .avatar_img is HighLevel's older
+       header avatar, .hr-avatar__text the design-system one used in lists and
+       on opportunity cards. Naming only the first left five initials leaking on
+       the list view in v55 -- the same one-of-two mistake as the pipeline
+       dropdown, found in the same walk. */
+    '.avatar_img', '.hr-avatar__text',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
