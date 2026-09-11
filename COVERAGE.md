@@ -249,6 +249,22 @@ churns about daily, and its cards arrive cut off with "…". Also left alone: th
 galleries, whose names and truncated tags ("Digital Mark...") are HighLevel's
 sample content.
 
+### The sweep after all of it — engine v106, data v73, 11 September
+
+Twenty-one routes walked with the collector cleared first. **Sixteen strings,
+zero suspects, nothing truncated** — and every one of the sixteen is something
+we decline to translate on purpose:
+
+| | |
+|---|---|
+| John Doe · Sara Smith · Lumen Studio · SS · LS | HighLevel's demo content on the AI sales page |
+| 14.7M+ · 860K+ · 18.7M+ · 27M+ · 24x7 · ~34 min · 0.8s | their marketing figures, kept exactly |
+| `()=>(0,a.h)("span",null,d("listView.bulkActions.delete"))` | **their bug** — a component definition rendering as an aria-label. It is in the goodwill e-mail (t57) |
+| Threads | deliberately out of the brand set: it is also an ordinary word |
+| 👍 1.2k | a sample engagement count in the social planner |
+
+`Kč0/M` is gone from this list, which is the one thing that changed.
+
 ### The three invoice editors — checked, 11 September
 
 The template editor is `#invoice-template-editor-container`, **not** the
