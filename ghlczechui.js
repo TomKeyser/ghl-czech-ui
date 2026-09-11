@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v97';
+  var VERSION = 'v98';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -602,6 +602,20 @@
     '[id="task-description-text"]',
     '[id="task-contact-text"]',
     '[id="select-id"] .hr-base-selection-label',
+    /* THE OTHER DASHBOARD WIDGETS' PIPELINE PICKERS, v98. Censused while
+       building ZONE_PHRASES: each reporting widget has its own select, id
+       "reporting_<widget>-select-pipeline_<widgetId>". They read "All
+       pipelines" by default, which we translate, and a pipeline's NAME the
+       moment a user picks one, which we must not. Zoned here; "All pipelines"
+       is let back through by ZONE_PHRASES below. */
+    '[id*="-select-pipeline_"] .hr-base-selection-label',
+    /* SMART-LIST TABS on the contacts screen, v98. Each tab's label is the
+       name the user gave the list ("ZZ few"), and HighLevel's own "All" tab is
+       structurally identical to them: same element, same classes, same
+       attributes. ".lists" is load-bearing: "Add Smart List" sits OUTSIDE it,
+       so it keeps translating without any allowlist. "All" comes back through
+       ZONE_PHRASES. */
+    '#views-bar .lists .view-label',
     /* THE OPPORTUNITY CARDS THEMSELVES. Only visible once a pipeline has cards
        in it, which is why the board looked clean when the stage headings were
        fixed in v45 — an empty board has no records to leak.
@@ -678,6 +692,59 @@
      `option` is NOT in this list -- native dropdown options are translated,
      but only outside the data pickers listed in DATA_PICKERS below. */
   var BLOCKED_TEXT = CONTENT_ZONES.concat(['input', 'textarea', 'select']).join(',');
+
+  /* HIGHLEVEL'S OWN PHRASES INSIDE A ZONE, v98. Designed with Tom 11 Sep
+     (FIREWALL.md, "HighLevel's own phrases inside a zone").
+
+     Some zones mix HighLevel's text with the customer's in one component, and
+     no selector separates them: the "All" smart-list tab is the same element
+     as a list the user named "ZZ few". Checked on the live DOM first — no
+     class, attribute or position tells them apart (users can reorder lists).
+
+     So each zone may name EXACT English phrases that are translated even
+     inside it. Everything else in the zone stays blocked, text AND
+     attributes — this lets text nodes through, never attributes.
+
+     WHY IT IS SAFE ENOUGH: people create records in their own language, so a
+     Czech business does not call a smart list "All". The residual risk is an
+     English SNAPSHOT bringing a record named exactly like a phrase into the
+     same zone. Scoping each phrase to one zone and keeping the list short is
+     the mitigation: check a new phrase against common snapshot vocabulary
+     before adding it.
+
+     A phrase applies only when its zone is the ONLY thing blocking the node:
+     inside any other zone as well, it stays blocked. */
+  var ZONE_PHRASES = [
+    { zone: '#views-bar .lists .view-label', phrases: ['All'] },
+    { zone: '[id="select-id"] .hr-base-selection-label', phrases: ['No pipeline available'] },
+    { zone: '[id*="-select-pipeline_"] .hr-base-selection-label', phrases: ['All pipelines'] }
+  ];
+  (function () {
+    var base = CONTENT_ZONES.concat(['input', 'textarea', 'select']);
+    for (var i = 0; i < ZONE_PHRASES.length; i++) {
+      var zp = ZONE_PHRASES[i];
+      zp.others = base.filter(function (s) { return s !== zp.zone; }).join(',');
+      zp.set = Object.create(null);
+      for (var j = 0; j < zp.phrases.length; j++) zp.set[zp.phrases[j]] = 1;
+    }
+  })();
+  var PHRASE_ZONES = ZONE_PHRASES.map(function (z) { return z.zone; }).join(',');
+
+  /* true when a text node sits in a blocked element only because of a
+     phrase zone, and its text is one of that zone's phrases (or our own
+     translation of one, written on an earlier pass) */
+  function zonePhrase(n) {
+    var el = n && n.parentElement;
+    if (!el || !el.closest || !PHRASE_ZONES || !el.closest(PHRASE_ZONES)) return false;
+    for (var i = 0; i < ZONE_PHRASES.length; i++) {
+      var zp = ZONE_PHRASES[i];
+      if (!el.closest(zp.zone)) continue;
+      if (el.closest(zp.others) || hrCellBlocked(el)) return false;
+      if (n.__kaDone !== undefined && n.__kaDone === n.textContent) return true;
+      return zp.set[String(n.textContent).trim()] === 1;
+    }
+    return false;
+  }
 
   /* Dropdowns whose options are RECORDS, not fixed enums: assignees, users,
      contacts, calendars, pipelines, tags. A person or record in one of these
@@ -1440,6 +1507,9 @@
         return { reason: 'content-zone', zone: zoneOf(el, true) || 'hr-data-table column',
                  on: describe(el.closest(BLOCKED_ATTR) || el), text: key };
       }
+    } else if (isText && zonePhrase(node)) {
+      /* HighLevel's phrase inside a zone: falls through to translate() like
+         any other node, which is exactly what the walk does with it */
     } else {
       if (el.closest(BLOCKED_TEXT)) {
         return { reason: 'content-zone', zone: zoneOf(el, false),
@@ -1501,6 +1571,8 @@
     describe: describe,
     dead: dead,
     zones: CONTENT_ZONES,
+    /* the phrases each zone lets through, v98: [{ zone, phrases }] */
+    phrases: ZONE_PHRASES.map(function (z) { return { zone: z.zone, phrases: z.phrases.slice() }; }),
     attrs: ATTRS,
     maxLen: MAX_LEN,
     /* HOW MANY record strings the firewall has caught on this page, not WHICH.
@@ -1679,7 +1751,7 @@
     if (!shouldTranslate()) return;
 
     if (root.nodeType === 3) {
-      if (blockedText(root.parentElement)) noteRecord(root.textContent);
+      if (blockedText(root.parentElement) && !zonePhrase(root)) noteRecord(root.textContent);
       else doTextNode(root);
       return;
     }
@@ -1687,8 +1759,19 @@
     /* BLOCKED_ATTR is the looser list, so being blocked for attributes means
        being blocked for everything -- safe to bail on the whole subtree.
        closest() only, NOT blockedAttr(): an attribute-only zone blocks the
-       element's own attributes, and bailing here would silence its children. */
-    if (root.closest && root.closest(BLOCKED_ATTR)) return;
+       element's own attributes, and bailing here would silence its children.
+       EXCEPT a zone's own phrases (v98): when the re-rendered root is inside a
+       phrase zone, its text nodes still get the phrase check. */
+    if (root.closest && root.closest(BLOCKED_ATTR)) {
+      if (PHRASE_ZONES && root.closest(PHRASE_ZONES)) {
+        var pw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), pn;
+        while ((pn = pw.nextNode())) {
+          if (zonePhrase(pn)) doTextNode(pn);
+          else noteRecord(pn.textContent);
+        }
+      }
+      return;
+    }
 
     /* INPUT VALUES ARE RECORDS — note them before anything else reads the page.
        Added v70, from the product editor: its toolbar repeats the product's
@@ -1738,6 +1821,8 @@
     var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         if (!blockedText(n.parentElement)) return NodeFilter.FILTER_ACCEPT;
+        /* HighLevel's own phrase inside a zone (ZONE_PHRASES, v98) */
+        if (zonePhrase(n)) return NodeFilter.FILTER_ACCEPT;
         /* the firewall rejected it, so it is customer data -- remember it */
         noteRecord(n.textContent);
         return NodeFilter.FILTER_REJECT;
