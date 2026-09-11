@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v70';
+  var VERSION = 'v71';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -433,6 +433,28 @@
        probably share this toolbar; widen only after looking at one, since a
        toolbar group elsewhere may hold a bare span of OUR text. */
     '#createProducts .hl-toolbar-group > span',
+    /* THE INVOICE PREVIEW — left untranslated ON PURPOSE. Tom's decision,
+       11 Sep: "keep the preview English. If they want the invoice in Czech the
+       user will need to build a template."
+
+       WHY IT IS A DECISION AND NOT A GAP: the editor shows a live preview of
+       the document the CUSTOMER receives, and that document is never touched
+       by this layer — the engine only switches on under /location/<id>, and a
+       customer's invoice link is not such a path. Translating the preview
+       would show a Czech invoice while an English one goes out: the one
+       mistake a person running a business must never be shown. Left alone,
+       the preview is truthful. A user who wants Czech invoices writes Czech
+       into their own invoice template, and this rule then shows that text
+       exactly as the customer will see it.
+
+       IT IS ALSO A FIREWALL RULE. The preview carried the business address,
+       the customer's name, the invoice number and every amount to the engine.
+       Censused 11 Sep: .preview-section holds only the document card, whose
+       one button ("Pay $112.00") is part of the customer's view — nothing of
+       ours sits in it. #invoice-editor-container is shared by the invoice
+       editor's new and edit modes; check the recurring and template editors
+       use it before assuming they are covered. */
+    '#invoice-editor-container .preview-section',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
