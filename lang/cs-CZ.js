@@ -321,7 +321,52 @@
       },
       /* the same price tag on an agent template: masculine, agreeing with agent */
       '/ai-agents': {
-        'Paid':           'Placený'
+        'Paid':           'Placený',
+        /* THE SALES PAGES' SENTENCE FRAGMENTS, 11 Sep. HighLevel splits its
+           headlines across nodes so it can style one word, which leaves us
+           translating half a sentence at a time. Each fragment is here rather
+           than in the dictionary because alone it means nothing, or means
+           something else: "Estimate" is a cenová nabídka on the payments
+           screens, "Losing" is a verb here and an adjective anywhere else.
+
+           THE WHOLE SENTENCES THEY BUILD, so the next person can check the
+           word order rather than reverse-engineer it:
+             Vaše firma | ztrácí | zákazníky každý den
+             Právě teď vám uniká | 62% … | a ignorujete | 78% … | . Naši AI…
+             Váš | <role, untranslated> | je připraven.
+           MY CZECH, all of it. */
+        'Your Business is':   'Vaše firma',
+        'Losing':             'ztrácí',
+        'Customers Every Day': 'zákazníky každý den',
+        "Right now, you're missing": 'Právě teď vám uniká',
+        'and ignoring':       'a ignorujete',
+        /* the voice-ai hero. The role between them is typed a character at a
+           time and stays English (zoned, engine v100) — so every Czech word
+           around it must work with an English masculine noun: "Váš AI
+           receptionist je připraven." Each role HighLevel rotates through is
+           masculine, which is what makes one fixed ending safe here. */
+        'Your':               'Váš',
+        'is ready.':          'je připraven.',
+        /* the comparison table's own words */
+        'Human Agent':        'Lidský pracovník',
+        'Revenue Impact':     'Dopad na tržby',
+        'Estimate':           'Odhad',
+        'Very High':          'Velmi vysoký',
+        'Medium–High':        'Střední až vysoký',
+        /* headline halves: the plain part and the styled part */
+        'Never miss a call,': 'Nezmeškejte žádný hovor,',
+        'ever again':         'už nikdy',
+        'Turn leads into':    'Proměňte zájemce v',
+        'revenue, on autopilot': 'tržby, a to automaticky',
+        'Book more appointments,': 'Rezervujte více schůzek,',
+        'automatically':      'automaticky',
+        'Build a 5-star reputation': 'Budujte pětihvězdičkovou pověst',
+        'on autopilot':       'automaticky',
+        /* the agent card's stat labels, under +38% and <1m */
+        'More bookings':      'Více rezervací',
+        'Schedule time':      'Doba rezervace',
+        'Lead Conversion':    'Konverze zájemců',
+        'Try asking:':        'Zkuste se zeptat:'
       }
     },
 
@@ -3417,6 +3462,223 @@
     "totalLeads":                       "Celkem zájemců",
     "totalValues":                      "Celkové hodnoty",
     "winPercentage":                    "Úspěšnost v %",
+
+    /* ======================================================================
+       HIGHLEVEL'S OWN SALES PAGES, 11 Sep 2026. ALL OF IT MY CZECH — NOT
+       NATIVE-CONFIRMED. Goes to the reviewer's pass 3 as one batch.
+
+       WHY WE TRANSLATE SALES COPY AT ALL (Tom, 11 Sep): which menu items a
+       client sees is the AGENCY OWNER'S choice, so anything a sub-account user
+       can open must be translatable. These three pages are what a menu item
+       shows before its feature is switched on: ai-agents/getting-started,
+       the ai-agents/voice-ai welcome, and wordpress/dashboard.
+
+       THE RULE FOR FIGURES: every number and price stays EXACTLY as HighLevel
+       prints it — 62%, $200k, +$12k–$28k/mo, 14.7M+ — and only the words
+       around them are translated. Their marketing claims are theirs.
+
+       ⚠ THREE QUESTIONS FOR THE REVIEWER, asked explicitly rather than left
+       for her to notice (the lesson from the calendar's leading zero):
+         1. PERCENT SPACING. We print "62%" because that is HighLevel's own
+            output and the figures rule says leave it. Czech typography wants a
+            non-breaking space — "62 %". Which wins on a marketing page?
+         2. THE AGENT NAMES stay English — Voice Agent, Sales Agent,
+            Appointment Scheduler, AI Reputation Manager — following the pack's
+            existing treatment of Voice AI, Content AI and Conversation AI as
+            product names. Right, or should they read in Czech?
+         3. THE UNITS beside kept figures: "mo" -> "měs.", "hrs/day" ->
+            "hod./den", "sec" -> "s".
+
+       CLOCK TIMES IN THE DEMO CHAT ARE LOCALISED, not kept: "4 PM" reads
+       "16:00", the same 24-hour rule the calendar already uses. A time is
+       formatting, not one of HighLevel's figures.
+
+       SAMPLE NAMES ARE LEFT ALONE — John Doe, Sara Smith, Lumen Studio,
+       Johnson HVAC, Ford XLT. They are HighLevel's demo content, like the
+       survey-builder template gallery, and a name is a name in any language.
+       They sit inside sentences we DO translate, which is why those sentences
+       carry the names verbatim. */
+
+    /* --- ai-agents/getting-started: the hero ---------------------------- */
+    "AI-powered platform":              "Platforma poháněná AI",
+    "62% of your after-hours calls":    "62% hovorů mimo pracovní dobu",
+    "78% of your chat messages":        "78% zpráv z chatu",
+    ". Our AI Agents plug the leaks in your business, responding to every lead instantly and rescuing up to $200k in \"no-show\" revenue, completely on autopilot.":
+      ". Naši AI agenti ucpou díry ve vaší firmě – okamžitě odpovídají každému zájemci a zachrání až $200k tržeb ztracených kvůli nedostaveným schůzkám, zcela automaticky.",
+    "Get Started →":                    "Začít →",
+    "Get started →":                    "Začít →",
+    "Review replied":                   "Recenze zodpovězena",
+    "Booking confirmed":                "Rezervace potvrzena",
+    "Calls handled":                    "Vyřízených hovorů",
+
+    /* --- the comparison table ------------------------------------------- */
+    "Numbers don't lie":                "Čísla nelžou",
+    "80% of leads are lost in the first 5 minutes. Respond to leads instantly, beat your competition.":
+      "80% zájemců se ztrácí během prvních 5 minut. Odpovídejte okamžitě a předběhněte konkurenci.",
+    "Missed Calls Every Month":         "Zmeškané hovory každý měsíc",
+    "Missed Chat Conversations":        "Zmeškané konverzace v chatu",
+    "Employee Availability":            "Dostupnost zaměstnanců",
+    "Response Time":                    "Doba odezvy",
+    "Review Response Rate":             "Míra odpovědí na recenze",
+    "Lead Conversion Rate":             "Míra konverze zájemců",
+    /* the units beside kept figures. "8 hrs/day" is theirs; "hod./den" is the
+       Czech abbreviation, and needs no plural form. */
+    "8 hrs/day":                        "8 hod./den",
+    "<1 sec":                           "<1 s",
+    "+$12k–$28k/mo":                    "+$12k–$28k/měs.",
+    "+$8k–$18k/mo":                     "+$8k–$18k/měs.",
+    "+$6k–$14k/mo":                     "+$6k–$14k/měs.",
+    "+$4k–$10k/mo":                     "+$4k–$10k/měs.",
+    "+$2k–$6k/mo":                      "+$2k–$6k/měs.",
+    "+$15k–$40k/mo":                    "+$15k–$40k/měs.",
+
+    /* --- the four agent sections ---------------------------------------- */
+    "Never lose a reservation again. Your Voice Agent picks up every call to your restaurant 24x7—handling bookings, answering menu questions, confirming dietary accommodations, and managing waitlists in natural conversation, even during the dinner rush when your staff is slammed.":
+      "Už nikdy nepřijdete o rezervaci. Váš Voice Agent zvedne každý hovor do vaší restaurace 24x7 – přijímá rezervace, odpovídá na dotazy k jídelnímu lístku, potvrzuje dietní požadavky a spravuje čekací listinu v přirozeném rozhovoru, i během večerní špičky, kdy je personál zavalený.",
+    "Ready to test":                    "Připraveno k testu",
+    "Tap the orb or the button below to place a live test call to your Voice Agent.":
+      "Klepněte na kouli nebo na tlačítko níže a zavolejte svému Voice Agentu naživo.",
+    "Start test call":                  "Spustit testovací hovor",
+    "Turn leads from any channel into more sales or appointments around the clock, with a goal-oriented AI Employee personalized to your business and your customers.":
+      "Proměňte zájemce z libovolného kanálu v další prodeje nebo schůzky, nepřetržitě, s cílevědomým AI Employee přizpůsobeným vaší firmě a vašim zákazníkům.",
+    /* the demo conversations. Scripted by HighLevel, so they are interface
+       text rather than anybody's data — but the names inside them are not
+       translated, and the clock times are localised. */
+    "Hey, I'm looking for a new Ford XLT in black with remote tailgate.":
+      "Dobrý den, hledám nový Ford XLT v černé s dálkovým ovládáním zadních dveří.",
+    "Hi there, good news, we have two of those on the lot. Do you want to come by for a test drive today?":
+      "Dobrý den, dobrá zpráva – dva takové máme na place. Chcete se dnes zastavit na zkušební jízdu?",
+    "That sounds good. Can you send me pricing details?":
+      "To zní dobře. Můžete mi poslat ceník?",
+    "Also, what is the fastest way to get started?":
+      "A jak nejrychleji začít?",
+    "Absolutely. I sent over pricing details and the quickest next step is to book a 15-minute onboarding call.":
+      "Jistě. Ceník jsem vám poslal a nejrychlejší další krok je domluvit si 15minutový úvodní hovor.",
+    "Turn leads into new business around the clock by automatically collecting appointment details, driving more bookings, and identifying opportunities to optimize schedules.":
+      "Proměňte zájemce v nové zakázky nepřetržitě: automaticky sbírejte podrobnosti o schůzkách, získávejte více rezervací a hledejte příležitosti, jak lépe naplánovat čas.",
+    "Need to reschedule my appointment. Do you have anything after 4 PM today?":
+      "Potřebuji přeložit schůzku. Máte dnes něco po 16:00?",
+    "Yes, I can move you to 4:30 PM today. Should I confirm that slot?":
+      "Ano, mohu vás přesunout na dnes 16:30. Mám ten termín potvrdit?",
+    "4:30 PM works.":                   "16:30 se hodí.",
+    "Please text me the address too.":  "Pošlete mi prosím adresu i SMS.",
+    "Done. Your appointment is set for 4:30 PM, and I just sent the address to your phone.":
+      "Hotovo. Schůzku máte na 16:30 a adresu jsem právě poslal na váš telefon.",
+    "Show up higher on Google by automatically responding to reviews with personalized and professional replies, while retaining full control over which reviews are addressed.":
+      "Buďte na Googlu výš: na recenze automaticky odpovídají personalizované a profesionální odpovědi a vy máte plnou kontrolu nad tím, na které recenze se reaguje.",
+    "Review Response Agent":            "Agent pro odpovědi na recenze",
+    "AI-crafted replies for customer feedback":
+      "Odpovědi na zpětnou vazbu zákazníků připravené AI",
+    "The technicians was super nice and the prices were great. They were easy to schedule with and able to see me the same day.":
+      "Technici byli moc milí a ceny skvělé. Termín se domluvil snadno a přijeli ještě týž den.",
+    "AI Agent · Auto-reply":            "AI agent · Automatická odpověď",
+    "We're glad you enjoyed your experience with us, Sara! We appreciate your business and thank you for choosing Johnson HVAC.":
+      "Jsme rádi, že jste byla spokojená, Saro! Vážíme si vaší přízně a děkujeme, že jste si vybrala Johnson HVAC.",
+
+    /* --- the trust strip and the "Ship AI" section ----------------------- */
+    "Trusted across the platform":      "Důvěřují nám napříč platformou",
+    "Appointments Booked":              "Rezervovaných schůzek",
+    "Hours Saved":                      "Ušetřených hodin",
+    "Revenue Uplift":                   "Nárůst tržeb",
+    "Messages Sent":                    "Odeslaných zpráv",
+    "Find the right agents for your business":
+      "Najděte agenty, kteří se hodí pro vaši firmu",
+    "Ship AI, any way you want":        "Nasaďte AI, jak potřebujete",
+    "Fastest setup":                    "Nejrychlejší nastavení",
+    "Best for lead capture":            "Nejlepší pro sběr zájemců",
+    "Drives more bookings":             "Přináší více rezervací",
+    "Low effort win":                   "Snadná výhra",
+    "Turn leads into booked appointments around the clock by collecting details, proposing times, and filling your calendar automatically.":
+      "Proměňte zájemce v rezervované schůzky nepřetržitě: sbírejte podrobnosti, navrhujte termíny a plňte kalendář automaticky.",
+    "+38% more bookings":               "+38% více rezervací",
+    "Proposes available time slots automatically":
+      "Automaticky navrhuje volné termíny",
+    "Collects customer details before the call":
+      "Sbírá údaje o zákazníkovi před hovorem",
+    "Sends reminders to reduce no-shows":
+      "Posílá připomínky, aby se snížil počet nedostavení",
+    "Syncs with your existing calendar":
+      "Synchronizuje se s vaším stávajícím kalendářem",
+    "Deploy now →":                     "Nasadit →",
+    "AI hub with orbiting Agent icons and live activity stats":
+      "Centrum AI s obíhajícími ikonami agentů a živými statistikami",
+    "5 star review":                    "Pětihvězdičková recenze",
+
+    /* --- ai-agents/voice-ai: the welcome screen -------------------------- */
+    /* The hero's ROTATING ROLE and the typed hint beneath the orb are not
+       here and never will be: both are typed a character at a time, so the
+       engine would see "sal", "sales assi", "sales assistant" and translate
+       whichever frame happened to match a dictionary word — which it already
+       did, flashing "Prodeje" mid-word. Both are zoned in the engine (v100).
+       See COVERAGE.md, "Animated text". */
+    "Just describe your business. We'll build the right agents for you.":
+      "Stačí popsat vaši firmu. Správné agenty vám sestavíme my.",
+    "Create from scratch":              "Vytvořit od nuly",
+    "Explore templates":                "Prozkoumat šablony",
+    "Prefer to build it yourself?":     "Chcete si to postavit sami?",
+    "What services do you have?":       "Jaké služby nabízíte?",
+    "Qualify a lead":                   "Kvalifikovat zájemce",
+    "Route after-hours calls":          "Směrovat hovory mimo pracovní dobu",
+    "Handle customer support":          "Řešit zákaznickou podporu",
+    "Click to talk to your AI agent":   "Kliknutím si promluvte se svým AI agentem",
+    "Voice AI demo – Tap to talk":      "Ukázka Voice AI – klepnutím promluvíte",
+    "The problem right now":            "Problém právě teď",
+    "What changes with Voice AI":       "Co se s Voice AI změní",
+    "Already happening at scale":       "Už teď ve velkém",
+    "Show The problem right now":       "Zobrazit: Problém právě teď",
+    "Show What changes with Voice AI":  "Zobrazit: Co se s Voice AI změní",
+    "Show Already happening at scale":  "Zobrazit: Už teď ve velkém",
+    "of your calls go unanswered — every single one is a lost customer":
+      "hovorů zůstane bez odpovědi – a každý z nich je ztracený zákazník",
+    "of callers who hit voicemail will never call back":
+      "volajících, kteří skončí u hlasové schránky, už nikdy nezavolají",
+    "in revenue lost per missed lead, every month":
+      "ztracených tržeb na každého zmeškaného zájemce, každý měsíc",
+    "of calls answered — 24/7, zero hold time, zero voicemails":
+      "zodpovězených hovorů – 24/7, žádné čekání, žádné hlasové schránky",
+    "of callers prefer AI over being put on hold or hitting voicemail":
+      "volajících dá přednost AI před čekáním na lince nebo hlasovou schránkou",
+    "languages your AI speaks — it sounds like your audience":
+      "jazyků, kterými vaše AI mluví – zní jako vaše publikum",
+    "appointments booked automatically — while businesses sleep":
+      "schůzek rezervovaných automaticky – zatímco firmy spí",
+    "hours saved for businesses already using Voice AI":
+      "hodin ušetřených firmám, které Voice AI už používají",
+    "to go live — your competitors already have":
+      "do spuštění – vaše konkurence to už zvládla",
+    "Ready-Made Agents":                "Hotoví agenti",
+    "Pick your industry. Go live in minutes.":
+      "Vyberte svůj obor. Spusťte to během pár minut.",
+    "No scripting. No setup calls. Just pick the one that fits, tweak the name, and start taking calls.":
+      "Žádné skriptování. Žádné nastavovací hovory. Jen vyberte ten, který sedí, upravte jméno a začněte přijímat hovory.",
+    "Browse all marketplace templates": "Procházet všechny šablony z Marketplace",
+
+    /* --- wordpress/dashboard: the hosting pitch -------------------------- */
+    "Lightning Fast WordPress Hosting": "Bleskově rychlý WordPress hosting",
+    "Unlimited Bandwidth":              "Neomezený přenos dat",
+    "Instant 1-Click Migrations":       "Okamžité migrace na jedno kliknutí",
+    "Free SSL & Global CDN":            "SSL zdarma a globální CDN",
+    "Automated Daily Backups":          "Automatické denní zálohy",
+    "Activate WordPress":               "Aktivovat WordPress",
+    "Why Choose Us?":                   "Proč zvolit nás?",
+    "Fortified Security Architecture":  "Zpevněná bezpečnostní architektura",
+    "Protect every client site with Imunify360—advanced firewalls, real-time threat blocking, and proactive malware defense.":
+      "Chraňte každý klientský web pomocí Imunify360 – pokročilé firewally, blokování hrozeb v reálném čase a proaktivní obrana proti malwaru.",
+    "Seamless Client Onboarding":       "Hladké převzetí klientů",
+    "Migrate any WordPress site with zero downtime using our automated, one-click onboarding system.":
+      "Přeneste jakýkoli web na WordPressu bez výpadku pomocí našeho automatického systému na jedno kliknutí.",
+    "Accelerated Go-to-Market":         "Rychlejší uvedení na trh",
+    "Launch fully configured WordPress sites in seconds with pre-optimized, niche-specific templates.":
+      "Spouštějte plně nastavené weby na WordPressu během několika sekund díky předoptimalizovaným šablonám pro konkrétní obory.",
+    "Unified Command Center":           "Jedno místo pro správu",
+    "Manage domains, plugins, updates, and environments for all clients from a single unified dashboard.":
+      "Spravujte domény, pluginy, aktualizace a prostředí všech klientů z jediné přehledové obrazovky.",
+    "Global Edge Network":              "Globální edge síť",
+    "Deliver instant worldwide performance with automatic SSL and an enterprise-grade CDN on every site.":
+      "Doručujte okamžitý výkon po celém světě díky automatickému SSL a CDN na podnikové úrovni u každého webu.",
+    "Data Resilience & Recovery":       "Odolnost dat a obnova",
+    "Stay protected with automated daily backups and one-click restoration for complete peace of mind.":
+      "Zůstaňte chráněni díky automatickým denním zálohám a obnově na jedno kliknutí – pro naprostý klid.",
 
     /* Invoice list, 11 Sep — the first screen with real invoices on it. The
        row menu's aria-label, and the two sections of the Filters popover,

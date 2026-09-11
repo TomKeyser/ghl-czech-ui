@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v99';
+  var VERSION = 'v100';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -678,6 +678,24 @@
        the same shape -- but if this ever stops matching, that single sample is
        where to look first. */
     '.interactive-element button span.text-left',
+    /* TEXT THAT TYPES ITSELF, v100. The Voice AI welcome screen has two
+       typewriter animations, and a translator cannot follow either.
+
+       The hero's role is retyped a character at a time — "sal", "sales assi",
+       "sales assistant" — and the engine translates whichever FRAME happens to
+       match a dictionary word. Measured on the live page: it was flashing
+       "Prodeje" and "Schůzka" in the middle of an English word. No entry can
+       fix that, because the key is a fragment whose length changes 20 times a
+       second.
+
+       The hint beneath the orb is worse: it types the SUB-ACCOUNT'S OWN NAME
+       one word per element — "ZZ" "My" "Gym's" "AI" "assistant" — so it is
+       both an animation and customer data, and word-by-word translation could
+       not produce Czech word order anyway.
+
+       Zoned, so the sentence around them stays Czech and the moving part stays
+       still. See COVERAGE.md, "Animated text". */
+    '.welcome-hero__highlight', '.typewriter-cursor', '.hint-word',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -876,7 +894,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v69';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v70';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

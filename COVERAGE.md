@@ -203,15 +203,45 @@ settings/scoring → Přidat nové pravidlo
 Plus one saved record per editor (a product, a recurring invoice), and a
 *create* form wherever toggles hide sections (see the caveat below).
 
-**HighLevel's own sales pages — DECIDED 11 Sep: translate them (not built
-yet).** `ai-agents/getting-started` is about 100 strings of sales copy and
-demo chats, and it's the landing page of the "AI agenti" menu item.
-`ai-agents/voice-ai` shows a welcome pitch until the first agent exists, and
-`wordpress/dashboard` is a hosting pitch until WordPress is activated. Tom's
-reasoning: which menu items a client sees is the **agency owner's** choice, so
-anything visible must be translatable. Keep every figure and price exactly as
-HighLevel prints it ("62 %", "$29.99") and translate only the words around
-them. Their review goes to the reviewer's pass 3.
+**HighLevel's own sales pages — BUILT 11 Sep**, data v70. About 185 strings
+across `ai-agents/getting-started` (the landing page of the "AI agenti" menu
+item, sales copy plus four demo conversations), the `ai-agents/voice-ai`
+welcome shown until the first agent exists, and the `wordpress/dashboard`
+hosting pitch shown until WordPress is activated. Tom's reasoning: which menu
+items a client sees is the **agency owner's** choice, so anything visible must
+be translatable.
+
+Every figure and price is kept **exactly** as HighLevel prints it — `62%`,
+`$200k`, `14.7M+` — and only the words around them are translated, including
+the units (`/mo` → `/měs.`, `hrs/day` → `hod./den`). Clock times inside the
+demo chat *are* localised (`4 PM` → `16:00`): a time is formatting, not one of
+their claims. HighLevel's sample names — John Doe, Sara Smith, Lumen Studio,
+Johnson HVAC — are left in place inside the sentences around them.
+
+All of it is my Czech. It goes to the reviewer's **pass 3** as one batch, with
+three questions asked explicitly in the pack: percent spacing (`62%` vs the
+Czech `62 %`), whether the agent names should stay English as the pack already
+treats Voice AI and Content AI, and the unit abbreviations.
+
+### Animated text — the one thing on those pages we do not translate
+
+The Voice AI hero types its role a character at a time: `sal`, `sales assi`,
+`sales assistant`. The engine sees every frame, and translated whichever one
+happened to match a dictionary word — it was flashing **"Prodeje"** and
+**"Schůzka"** in the middle of an English word, live, before this was found.
+No dictionary entry can fix that: the key is a fragment whose length changes
+twenty times a second.
+
+The hint under the orb is the same mechanism carrying **the sub-account's own
+name** — "ZZ" "My" "Gym's" "AI" "assistant", one word per element — so it is
+customer data *and* an animation, and word-by-word replacement could not
+produce Czech word order in any case.
+
+Both are zoned (`.welcome-hero__highlight`, `.typewriter-cursor`,
+`.hint-word`), so the sentence around them reads Czech and the moving part
+holds still: *"Váš AI receptionist je připraven."* The Czech either side is
+written to work with an English masculine noun in the middle, which is what
+every role HighLevel rotates through happens to be.
 
 **Settings › Labs cards stay blocked** until pack entries can expire (the
 format exists since v97, unused) and there's a way to learn what's live. Labs
