@@ -22,6 +22,36 @@
    native speaker) that Czech should render numeric dates — that is a separate,
    deliberate behaviour change, made after equivalence was proven, not folded
    into the refactor where it would have masked real regressions.
+
+   ── GLOSSARY RULE: A LEAD IS A "ZÁJEMCE". DECIDED 11 Sep 2026 ──────────────
+   Confirmed with a native speaker. "Leady" is out of the pack entirely; every
+   form declines from zájemce, and any new entry follows it:
+
+     sg  nom zájemce · gen zájemce · dat zájemci · acc zájemce · ins zájemcem
+     pl  nom zájemci · gen zájemců · dat zájemcům · acc zájemce · loc zájemcích
+
+   WHY IT WAS WORTH A DECISION RATHER THAN A PREFERENCE: the pack was split
+   against itself — "Lead" read "Zájemce" while "Leads" read "Leady", the
+   singular native and the plural an English loanword. A user meeting both
+   reads two products. The native reviewer had met every other anglicism in the
+   pack in Prague offices and considered them ordinary Czech business
+   vocabulary; leady was the ONE pair she had never encountered at work, which
+   is what marked it as agency-marketing jargon rather than general business
+   Czech.
+
+   THIS ALSO SETS PRECEDENT FOR SLOVAK AND POLISH. The term appears across
+   Reporting, Opportunities and the dashboards, so it has to be consistent
+   everywhere or it looks like two products in one screen.
+
+   TWO THINGS TO CHECK WHEN ADDING A LEAD STRING: the CASE (acc pl of an
+   animate masculine is "zájemce", not "zájemci" — "proměňte návštěvníky v
+   zájemce"), and the SPACE. Column headers and buttons are why the long
+   "potenciální zákazníci" was rejected: 22 characters against 8.
+
+   NOT COVERED BY THIS RULE, deliberately: "Lead Connector" and "Lead Ads" are
+   PRODUCT NAMES (HighLevel's and Meta's) and stay in English — LeadConnector
+   is in the brand set in i18n-rules.js. "leads to"/"leading to" in English
+   source strings is the VERB and translates as "vede na"/"vedoucí k".
 ============================================================================= */
 
 (function (root) {
@@ -3143,10 +3173,8 @@
        being invisible they are the lowest-value batch to send back. Flag them
        with the next visible batch rather than on their own.
 
-       "zájemc-" not "lead-": the pack is currently inconsistent about this
-       ("Lead": "Zájemce" but "Leads": "Leady"), which is the very split the
-       reviewer raised. These new entries follow the native form; the existing
-       pair still needs deciding. */
+       "zájemc-" not "lead-", and that is now the RULE rather than a provisional
+       choice -- see the glossary note at the top of this file. */
     "titleOpportunityStatus":           "Stav příležitostí",
     "titleOpportunityValue":            "Hodnota příležitostí",
     "titleOpportunityFunnel":           "Trychtýř příležitostí",
@@ -3274,7 +3302,7 @@
     "Report Translation Issue": "Nahlásit chybu překladu",
     "Setup Guide": "Průvodce nastavením",
     "Foundational setup": "Základní nastavení",
-    "Marketing & lead generation": "Marketing a získávání kontaktů",
+    "Marketing & lead generation": "Marketing a získávání zájemců",
     "Sales & conversations": "Prodej a konverzace",
     "Website & monetization": "Web a monetizace",
     "Ecommerce": "E-commerce",
@@ -3482,7 +3510,7 @@
     "Total sale value": "Celková hodnota obchodů",
     "Total values": "Celkové hodnoty",
     "Total revenue": "Celkové výnosy",
-    "Total leads": "Celkem leadů",
+    "Total leads": "Celkem zájemců",
     "Total pending": "Celkem čekajících",
     "Total pending actions": "Celkem čekajících akcí",
     "Total spent": "Celkem utraceno",
@@ -3574,7 +3602,7 @@
     "Appointment report": "Report schůzek",
     "Call report": "Report hovorů",
     "Attribution report": "Report atribuce",
-    "Lead source report": "Report zdrojů leadů",
+    "Lead source report": "Přehled zdrojů zájemců",
     "Google Ads report": "Report Google Ads",
     "Google Analytics report": "Report Google Analytics",
     "Facebook Ads report": "Report Facebook Ads",
@@ -3852,7 +3880,7 @@
     "Customizer": "Přizpůsobení",
     "Fingerprint Image": "Obrázek otisku prstu",
     "Create a New Pipeline to Get Started!": "Začněte vytvořením nového obchodního kanálu!",
-    "Organize Deals, track Progress, and turn Leads into Customers with a clear view of every Stage.": "Organizujte obchody, sledujte průběh a měňte leady v zákazníky s přehledem o každé fázi.",
+    "Organize Deals, track Progress, and turn Leads into Customers with a clear view of every Stage.": "Organizujte obchody, sledujte průběh a měňte zájemce v zákazníky s přehledem o každé fázi.",
     "Create New Pipeline": "Vytvořit nový obchodní kanál",
     "No pipeline available": "Není k dispozici žádný obchodní kanál",
     "Create my first booking calendar": "Vytvořit první rezervační kalendář",
@@ -3868,7 +3896,7 @@
     "Standard objects": "Standardní objekty",
     "Contains list of all businesses, their details, and contact information.": "Obsahuje seznam všech firem, jejich údajů a kontaktních informací.",
     "Contains list of all deals, their stages, statuses and pipeline progress.": "Obsahuje seznam všech obchodů, jejich fází, stavů a průběhu.",
-    "Contains list of all leads, their details, and specifications": "Obsahuje seznam všech leadů, jejich údajů a specifikací",
+    "Contains list of all leads, their details, and specifications": "Obsahuje seznam všech zájemců, jejich údajů a specifikací",
     "Additional Settings": "Další nastavení",
     "Email Settings": "Nastavení e-mailu",
     "Email notifications": "E-mailová oznámení",
@@ -3942,7 +3970,7 @@
     "Opportunity name": "Název příležitosti",
     "Pipeline": "Obchodní kanál",
     "Stage": "Fáze",
-    "Lead value": "Hodnota leadu",
+    "Lead value": "Hodnota zájemce",
     "Opportunity source": "Zdroj příležitosti",
     "Lost reason": "Důvod prohry",
     "Forecast expected close date": "Předpokládané datum uzavření",
@@ -4209,7 +4237,7 @@
     "Payment settings navigation": "Navigace nastavení plateb",
     "Receipts settings": "Nastavení účtenek",
     "Tax settings": "Nastavení daní",
-    "Create and manage funnels to generate leads, appointments and receive payments.": "Vytvářejte a spravujte trychtýře pro získávání leadů, schůzek a plateb.",
+    "Create and manage funnels to generate leads, appointments and receive payments.": "Vytvářejte a spravujte trychtýře pro získávání zájemců, schůzek a plateb.",
     "Start by creating a funnel": "Začněte vytvořením trychtýře",
     "All your funnels and folders will live here.": "Zde najdete všechny své trychtýře a složky.",
     "Build websites to showcase your products and build a trusted brand.": "Vytvářejte weby pro prezentaci produktů a budování důvěryhodné značky.",
@@ -4244,7 +4272,7 @@
     "Start by creating a webinar": "Začněte vytvořením webináře",
     "Create and manage webinar funnels to register prospects and customers for your webinars!": "Vytvářejte trychtýře pro registraci zájemců a zákazníků na vaše webináře!",
     "Easy-peasy powerful forms": "Snadné a výkonné formuláře",
-    "Transform website visitors into valuable leads": "Proměňte návštěvníky webu v cenné leady",
+    "Transform website visitors into valuable leads": "Proměňte návštěvníky webu v cenné zájemce",
     "Easily build forms with our drag-and-drop interface": "Snadno tvořte formuláře přetažením prvků",
     "Set up workflows to instantly engage users once they submit their forms": "Nastavte postupy, které osloví uživatele hned po odeslání formuláře",
     "Access real-time analytics to measure and improve your forms' performance": "Sledujte analytiku v reálném čase a zlepšujte výkon formulářů",
@@ -4269,7 +4297,7 @@
     "Multi & one-question-at-a-time surveys": "Dotazníky s více otázkami i po jedné",
     "Design surveys with flexibility: display several questions per slide or reveal one question at a time for a more engaging experience": "Zobrazte více otázek najednou, nebo je odkrývejte po jedné pro poutavější průchod",
     "Quizzes that do the thinking": "Kvízy, které myslí za vás",
-    "Turn curious visitors into qualified, scored leads": "Proměňte zvědavé návštěvníky v kvalifikované leady se skóre",
+    "Turn curious visitors into qualified, scored leads": "Proměňte zvědavé návštěvníky v kvalifikované zájemce se skóre",
     "Build interactive quizzes with drag-and-drop questions": "Tvořte interaktivní kvízy přetažením otázek",
     "Show personalized results the instant a quiz is submitted": "Zobrazte personalizované výsledky ihned po odeslání kvízu",
     "Trigger workflows automatically from every score and category": "Spouštějte postupy automaticky podle skóre a kategorie",
@@ -4278,7 +4306,7 @@
     "What's your main goal?": "Jaký je váš hlavní cíl?",
     "Grow my email list": "Rozšířit e-mailový seznam",
     "Book more sales calls": "Domluvit více obchodních hovorů",
-    "Qualify inbound leads": "Kvalifikovat příchozí leady",
+    "Qualify inbound leads": "Kvalifikovat příchozí zájemce",
     "Category": "Kategorie",
     "Growth": "Růst",
     "Score": "Skóre",
@@ -4310,7 +4338,7 @@
     "Extensive question types": "Široká nabídka typů otázek",
     "Single & multiple choice, dropdowns, rating, file upload and more": "Jedna i více možností, rozbalovací seznamy, hodnocení, nahrání souboru a další",
     "Webchat for your website": "Webový chat pro váš web",
-    "Configure a chat widget to convert your website visitors to leads": "Nastavte chatovací widget a proměňte návštěvníky webu v leady",
+    "Configure a chat widget to convert your website visitors to leads": "Nastavte chatovací widget a proměňte návštěvníky webu v zájemce",
     "Updated on": "Aktualizováno",
     "Chat type": "Typ chatu",
     "Create your first chat widget": "Vytvořte svůj první chatovací widget",
@@ -4884,7 +4912,7 @@
     "Detailed performance analytics": "Podrobná analytika výkonu",
     "View clear reporting at the campaign, ad group, ad and keyword levels to track ROI.": "Přehledné reporty na úrovni kampaně, reklamní sestavy, reklamy i klíčového slova pro sledování ROI.",
     "Seamless conversion tracking": "Bezproblémové sledování konverzí",
-    "Set up pixels and event tracking effortlessly to measure leads, sales and conversions.": "Snadno nastavte pixely a sledování událostí pro měření leadů, prodejů a konverzí.",
+    "Set up pixels and event tracking effortlessly to measure leads, sales and conversions.": "Snadno nastavte pixely a sledování událostí pro měření zájemců, prodejů a konverzí.",
     "Granular campaign structure": "Podrobná struktura kampaní",
     "Create multiple ad groups and ads within a campaign for testing and better performance insights.": "Vytvářejte v rámci kampaně více reklamních sestav a reklam pro testování a lepší přehled o výkonu.",
     "Easy scaling & management": "Snadné škálování a správa",
@@ -5286,7 +5314,7 @@
     "Cost": "Náklady",
     "Revenue": "Tržby",
     "Sales": "Prodeje",
-    "Leads": "Leady",
+    "Leads": "Zájemci",
     "Average revenue": "Průměrné tržby",
     "Results": "Výsledky",
     "Management fee %": "Poplatek za správu %",
@@ -5294,7 +5322,7 @@
     "Select date & time": "Vyberte datum a čas",
     "Type to search": "Pište pro hledání",
     "Cost per sale": "Cena za prodej",
-    "Cost per lead": "Cena za lead",
+    "Cost per lead": "Cena za zájemce",
     "Google Ads Reporting": "Reporting Google Ads",
     "Facebook Ads Reporting": "Reporting Facebook Ads",
     "Ads Date Picker": "Výběr data pro reklamy",
@@ -5330,7 +5358,7 @@
     "Marketing campaign": "Marketingová kampaň",
     "Call flow": "Průběh hovoru",
     "Landing page": "Vstupní stránka",
-    "Qualified lead": "Kvalifikovaný lead",
+    "Qualified lead": "Kvalifikovaný zájemce",
     "Select phone number": "Vyberte telefonní číslo",
     "Refresh data": "Obnovit data",
     "Download list of calls": "Stáhnout seznam hovorů",
