@@ -50,7 +50,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'c3';
+  var VERSION = 'c4';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;         /* well under the ~5MB origin cap */
@@ -260,6 +260,41 @@
     var entry = { text: text, node: node };
     entry.timer = setTimeout(function () {
       pending.delete(parent);
+      /* ASK THE ENGINE AGAIN BEFORE COMMITTING. The settle window catches an
+         animation whose frames keep MISSING, but not one whose FINISHED text
+         we translate -- the last frame never reaches this hook at all, so no
+         later miss ever supersedes the half-typed one and it is recorded for
+         good. Measured on the Calendars greeting after v58: the queue held
+         "...or choose an option belo", one character short, while the finished
+         sentence was already correctly in Czech on screen.
+
+         So re-read the parent at commit time and drop the record if what is
+         there now is handled. That closes the class rather than the instance:
+         ANY animated string whose final form we translate stops polluting the
+         queue, and a string that genuinely still misses is unaffected. */
+      try {
+        var dbg = window.__kaDebug;
+        if (dbg && dbg.why && parent.isConnected) {
+          var anyOutstanding = false;
+          for (var c = parent.firstChild; c && !anyOutstanding; c = c.nextSibling) {
+            if (c.nodeType !== 3) continue;
+            if (!(c.textContent || '').trim()) continue;
+            if (dbg.why(c).reason === 'missing') anyOutstanding = true;
+          }
+          /* NOTHING UNDER THIS PARENT IS STILL A GAP, so the frame we are
+             holding settled into something handled -- drop it.
+
+             DO NOT compare the pending text against what is there now: by this
+             point the node holds the CZECH, which is not an extension of the
+             English prefix and never will be. The question is not "did this
+             string grow" but "does this parent still have a gap in it".
+
+             Errs toward RECORDING: an unrelated sibling that genuinely misses
+             keeps the record alive. Losing a real gap is the expensive
+             mistake; one redundant row is not. */
+          if (!anyOutstanding) return;
+        }
+      } catch (e) { /* diagnosis must never cost us a record */ }
       record(entry.text, entry.node, null);
     }, SETTLE_MS);
     pending.set(parent, entry);
