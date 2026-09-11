@@ -84,7 +84,10 @@ Decided with Tom on 11 Sep 2026 (design, v97).
 
 - **Text on screen, `placeholder`, `title` and `aria-label`, and nothing else.**
   Never `id`, `class`, `data-*`, `name`, `href` or `value`. (Prefilled values
-  are a separate switch, TRANSLATE_PREFILLS, and are off.)
+  are a separate switch, `TRANSLATE_PREFILLS`. **It is ON** — this line said
+  "off" until 11 Sep and was simply wrong. What that means, and the 25-in-59
+  collision measurement against snapshot vocabulary, is written beside the
+  switch in the engine. The decision about it is task t63.)
 - **Everything the viewer can perceive is translated, and screen readers
   count.** So `aria-label` is translated too, **including HighLevel's raw keys**
   printed there (`dateUpdated`, `common.resize`). A blind Czech user should hear

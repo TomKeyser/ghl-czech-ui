@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v104';
+  var VERSION = 'v105';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -829,7 +829,38 @@
        3. Whole-string glossary match only, and each element is rewritten once.
 
      Residual risk Tom accepted: a real record whose value happens to equal a
-     glossary term exactly (a list literally named "New") would be rewritten. */
+     glossary term exactly (a list literally named "New") would be rewritten.
+
+     ⚠ THAT RISK IS NOW MEASURED, 11 Sep, and it is not small. Tom's own
+     observation narrows it first: a Czech user TYPES IN CZECH, and every key
+     in this pack is English, so their own values never match. What remains is
+     English values somebody ELSE entered — and in this product that is the
+     normal case, not an edge one: the agency configures the account, and
+     SNAPSHOTS (HighLevel's account templates) are authored in English.
+
+     So the question is how much snapshot vocabulary this dictionary contains.
+     Measured against 59 record names typical of a HighLevel snapshot —
+     pipeline stages, product names, tags, calendar names:
+
+       25 of 59 collide.  New Lead · Lead · Won · Lost · Abandoned ·
+       Contacted · Booked · Closed · New · Open · Pending · Scheduled ·
+       Completed · Monthly · Yearly · Appointment · Membership · Website ·
+       Support · Sales · General · Default · Customer · Setup · Installation
+
+     A Czech user opening an English-built pipeline stage called "New Lead" in
+     an edit form would see "Nový zájemce" — and SAVE it that way, because
+     doValues dispatches input/change so the framework takes the new value.
+
+     THE LIVE ACCOUNTS MEASURE NOTHING HERE, and that is worth saying: every
+     record in the test sub-accounts is prefixed "ZZ", so nothing can collide
+     by construction. A sweep of 259 record values across eight routes found
+     only HighLevel's OWN defaults colliding ("New Invoice", "New smart list").
+     The 25 above are the honest number.
+
+     DECISION OPEN (task t63, Tom's): translate only HighLevel's own defaults
+     from a short list — which is exactly what was asked for — or turn this
+     off. The measurement says "leave it as is" is not the cheap option it
+     looked like. */
   var TRANSLATE_PREFILLS = true;
 
   /* Longest string the layer will touch, measured on the ENGLISH SOURCE, not
