@@ -175,7 +175,9 @@
       COUNT_COLON:    '{=1}: {2}',
       COUNT_PAREN:    '{=1} ({2})',
       COLS_RATIO:     '{1}/{2} sloupců',
-      PLUS_MORE:      '+{1} dalších',
+      /* WAS a hardcoded 'dalších', so '+1 more' read '+1 dalších'. Now uses
+         the plural table added for N_MORE: +1 další / +3 další / +5 dalších. */
+      PLUS_MORE:      '+{1} {~more:1}',
       PAGE_OF:        'Stránka {1} z {2}',
       SHOW_PAGE:      'Zobrazit stránku {1}',
       SELECT_ALL_N:   'Vybrat vše {1}',

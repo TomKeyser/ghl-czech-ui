@@ -115,13 +115,16 @@
          A count, so it needs the plural machinery rather than a dictionary
          entry: Czech would otherwise read "3 další" where it wants "dalších".
 
-         MATCHES THE SHAPE ACTUALLY OBSERVED, with no leading plus. An earlier
-         version accepted "+3 more" and rendered "+3 dalších" -- which put a
-         plus sign on screen that HighLevel had not written. A translation
-         layer adding punctuation of its own is the same mistake as the brand
-         set correcting "Quickbooks" to "QuickBooks". If a "+N more" variant
-         exists somewhere, the collector will report it and it gets its own
-         rule then. */
+         NO LEADING PLUS HERE: the "+N more" variant already had its own rule,
+         PLUS_MORE, twenty lines above this one -- and I added this without
+         looking, then briefly made it accept "+3 more" too and render a plus
+         sign HighLevel had not written. The census lesson from the same day's
+         firewall work, repeated in the pack: BEFORE ADDING A RULE, GREP FOR
+         THE WORD. Two rules matching overlapping shapes is how one of them
+         silently stops firing.
+
+         The visible good that came of it: PLUS_MORE had a hardcoded "dalších"
+         and read "+1 dalších". It now shares this rule's plural table. */
       ['N_MORE',         /^(\d+)\s+more$/i],
       /* trailing period OPTIONAL. This greeting is typed out a character at a
          time, and the frame before the last one is the whole sentence WITHOUT
