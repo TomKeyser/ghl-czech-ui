@@ -461,5 +461,7 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  else root.I18nRules = api;
+  /* __kaRules is the name; I18nRules is the pre-v76 alias, kept one release so a
+     cached engine still finds it. Remove with the fallback in activate(). */
+  else { root.__kaRules = api; root.I18nRules = api; }
 })(typeof window !== 'undefined' ? window : globalThis);

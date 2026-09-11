@@ -3476,6 +3476,10 @@
     "Include Tipping":                  "Povolit spropitné",
     "Add invoice prefix":               "Přidejte předponu faktury",
     "Add products to your Invoice":     "Přidejte do faktury produkty",
+    /* invoice templates list, empty state, 11 Sep */
+    "Create templates for invoices and estimates for automation and consistency":
+      "Vytvářejte šablony faktur a cenových nabídek pro automatizaci a jednotnost",
+    "No invoice templates to show yet": "Zatím žádné šablony faktur k zobrazení",
 
     /* THE RECURRING-INVOICE EDITOR, 11 Sep. "Odkladná lhůta" for a payment
        grace period: CONFIRM. "days in advance" follows a number the user
@@ -5721,5 +5725,9 @@
   pack.reviewFirst = ["Manage","Map","Submissions","Search for a sub-account","Bulk WhatsApp","Change","By","here","Connecting...","Failed","Error","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Manual"];
 
   if (typeof module !== 'undefined' && module.exports) module.exports = pack;
-  else { root.GhlLangPacks = root.GhlLangPacks || {}; root.GhlLangPacks['cs-CZ'] = pack; }
+  /* __kaPacks is the name; GhlLangPacks is the pre-v76 alias for one release. */
+  else {
+    root.__kaPacks = root.__kaPacks || {}; root.__kaPacks['cs-CZ'] = pack;
+    root.GhlLangPacks = root.GhlLangPacks || {}; root.GhlLangPacks['cs-CZ'] = pack;
+  }
 })(typeof window !== 'undefined' ? window : globalThis);

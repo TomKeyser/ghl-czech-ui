@@ -205,5 +205,9 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = source;
-  else { root.GhlSourceRules = root.GhlSourceRules || {}; root.GhlSourceRules.en = source; }
+  /* __kaSource is the name; GhlSourceRules is the pre-v76 alias for one release. */
+  else {
+    root.__kaSource = root.__kaSource || {}; root.__kaSource.en = source;
+    root.GhlSourceRules = root.GhlSourceRules || {}; root.GhlSourceRules.en = source;
+  }
 })(typeof window !== 'undefined' ? window : globalThis);

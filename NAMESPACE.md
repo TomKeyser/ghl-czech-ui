@@ -28,6 +28,19 @@ sat in *HighLevel's* namespace, reading as though they had set it.
 | `__kaCollect` | collector.js | `stats() top() suspect() truncated() transient() all() download() clear()` |
 | `__kaCollectActive` | collector.js | Double-load guard. |
 | `__kaPickerActive`, `__kaPickerVersion` | gap-picker.js | |
+| `__kaRules` | i18n-rules.js | The language-free pattern engine and formatters. |
+| `__kaSource` | lang/source-*.js | Source-language rule tables, keyed by language (`__kaSource.en`). |
+| `__kaPacks` | lang/<locale>.js | Target language packs, keyed by locale (`__kaPacks['cs-CZ']`). |
+
+**Renamed v76, 11 Sep 2026, from `I18nRules`, `GhlSourceRules` and
+`GhlLangPacks`.** They escaped the v32 sweep because the DATA files set them, and
+that sweep only grepped the engine. For one release the data files set **both**
+names and the engine reads the new name with the old as fallback: the engine
+file can sit in a browser's cache for about ten minutes after a deploy while the
+data files load fresh, and a mismatch would switch the layer off. **Remove the
+old names in a later release** — the aliases in i18n-rules.js, source-en.js,
+cs-CZ.js and es.js, and the fallback in `activate()` — once no cached engine
+older than v76 can remain.
 
 ## Node properties
 
