@@ -201,11 +201,19 @@ settings/scoring → Přidat nové pravidlo
 Plus one saved record per editor (a product, a recurring invoice), and a
 *create* form wherever toggles hide sections (see the caveat below).
 
-**Parked, deliberately:** HighLevel's own sales pages. `ai-agents/getting-started`
-is about 100 strings of sales copy and demo chats, `ai-agents/voice-ai`
-shows a welcome pitch until the first agent exists, and `wordpress/dashboard`
-is a hosting pitch until WordPress is activated. Translating them is a product
-decision, not a gap. Also left alone: the survey and quiz builders' template
+**HighLevel's own sales pages — DECIDED 11 Sep: translate them (not built
+yet).** `ai-agents/getting-started` is about 100 strings of sales copy and
+demo chats, and it's the landing page of the "AI agenti" menu item.
+`ai-agents/voice-ai` shows a welcome pitch until the first agent exists, and
+`wordpress/dashboard` is a hosting pitch until WordPress is activated. Tom's
+reasoning: which menu items a client sees is the **agency owner's** choice, so
+anything visible must be translatable. Keep every figure and price exactly as
+HighLevel prints it ("62 %", "$29.99") and translate only the words around
+them. Their review goes to the reviewer's pass 3.
+
+**Settings › Labs cards stay blocked** until pack entries can expire (the
+format exists since v97, unused) and there's a way to learn what's live. Labs
+churns about daily, and its cards arrive cut off with "…". Also left alone: the survey and quiz builders' template
 galleries, whose names and truncated tags ("Digital Mark...") are HighLevel's
 sample content.
 
