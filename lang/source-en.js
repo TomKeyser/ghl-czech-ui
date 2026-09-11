@@ -111,6 +111,10 @@
       /* must precede N_OPPS, which would otherwise never see the longer string */
       ['N_OPPS_SEL',     /^(\d+)\s+opportunit(?:y|ies)\s+selected$/i],
       ['N_OPPS',         /^(\d+)\s+opportunit(?:y|ies)$/i],
+      /* the overflow indicator on a tag or list cell -- "1 more", "3 more".
+         A count, so it needs the plural machinery rather than a dictionary
+         entry: Czech would otherwise read "3 další" where it wants "dalších". */
+      ['N_MORE',         /^\+?\s*(\d+)\s+more$/i],
       /* trailing period OPTIONAL. This greeting is typed out a character at a
          time, and the frame before the last one is the whole sentence WITHOUT
          its full stop -- the collector recorded exactly that on 11 Sep while

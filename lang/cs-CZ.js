@@ -69,6 +69,9 @@
       products:       { one: 'produkt',   few: 'produkty',  other: 'produktů' },
       invoices:       { one: 'faktura',   few: 'faktury',   other: 'faktur' },
       opportunities:  { one: 'příležitost', few: 'příležitosti', other: 'příležitostí' },
+      /* the list/tag overflow count. NOT native-confirmed -- added 11 Sep,
+         after the review closed. */
+      more:           { one: 'další',     few: 'další',     other: 'dalších' },
       pipelines:      { one: 'obchodní kanál', few: 'obchodní kanály', other: 'obchodních kanálů' },
       unsavedChanges: { one: 'neuloženou změnu', few: 'neuložené změny', other: 'neuložených změn' },
       new:            { one: 'nový',      few: 'nové',      other: 'nových' },
@@ -189,6 +192,7 @@
       REMOVE_FILT:    'Odebrat filtr: {?1}',
       RANGE_OF:       '{1} – {2} z {3}',
       N_OPPS:         '{1} {~opportunities:1}',
+      N_MORE:         '+{1} {~more:1}',
       /* "0 opportunities selected" — the plural agrees with the number, which is
          why this cannot be a dictionary entry: Czech needs one/few/other and
          English has two forms. */
