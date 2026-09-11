@@ -124,6 +124,13 @@
          and "% on" do not turn up by accident. */
       ['TAX_INCLUDED',   /^(.+)\s\((\d+(?:\.\d+)?)%\s-\sincluded in prices\)$/i],
       ['TAX_ON',         /^(.+)\s\((\d+(?:\.\d+)?)%\son\s(.+)\)$/i],
+      /* "Kč4,526.87", "Kč0.00", "-Kč12.00" — a CZK amount as HighLevel renders
+         it once an account's currency is CZK (measured 11 Sep). Anchored, so
+         "Kč0 (20.00%) - 1" and friends are left alone. Only Kč for now: EUR and
+         the rest have not been SEEN in this layout, and a rule written for a
+         shape nobody has observed is how the old firewall came to match
+         nothing. Add them when a real account shows them. */
+      ['MONEY_KC',       /^(-?)(Kč)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?$/, '@money'],
       /* "Every  month", "Every 3 weeks" — recurring invoice schedule, 11 Sep */
       ['EVERY_N',        /^Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@everyInterval'],
       /* "Sep 10 at 09:20 PM" — payments lists, 11 Sep */

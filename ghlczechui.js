@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v72';
+  var VERSION = 'v73';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -469,6 +469,14 @@
        "X (N%)" string would also swallow unrelated screens and hide real gaps
        from the collector. #taxSelect names what it holds. */
     '#taxSelect .n-tag',
+    /* FILE NAMES in Media Storage — "Adam_Sandler.jpg" reached the engine the
+       day product images were uploaded (11 Sep). A file name is whatever the
+       business called its file: customer data. span.file-name is a semantic
+       class. The same name also sits in each thumbnail's alt text; that copy
+       is caught by the record backstop (noted here first, read later in the
+       walk), and an alt holding a name WITH an extension cannot match a
+       dictionary word anyway. */
+    '.file-name',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -688,7 +696,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v49';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v50';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

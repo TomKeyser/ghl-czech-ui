@@ -268,6 +268,32 @@
       if (word === null || !each) return null;
       return each.replace('{n}', String(n)).replace('{unit}', word);
     },
+    /* "Kč4,526.87" — a CZK amount in HighLevel's format. HighLevel knows the
+       currency is Czech and still writes the number the American way: symbol
+       first, comma thousands, dot decimal. Czech writes "4 526,87 Kč". Tom,
+       11 Sep: "Kč4,526.87 is a disaster" — reported upstream, see the action
+       list.
+
+       ONLY REACHES TEXT THAT IS ALREADY OURS (Tom's decision, option 1): the
+       invoice list's summary tiles, editor totals. Amount COLUMNS stay behind
+       the firewall untouched — a blocked node never reaches this function —
+       so lists keep HighLevel's format until that is decided separately.
+
+       The shape comes from pack.number: the thousands separator, the decimal
+       mark, and where the symbol goes. Czech uses a NON-BREAKING space both
+       between thousands and before the symbol, so "4 526,87 Kč" never wraps
+       across a line. The digits are regrouped, never recomputed — nothing
+       here does arithmetic on money. */
+    money: function (pack, m) {
+      var N = pack.number;
+      if (!N) return null;
+      var whole = String(m[3]).replace(/,/g, '');
+      if (!/^\d+$/.test(whole)) return null;
+      var grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, N.group);
+      var num = m[1] + grouped + (m[4] !== undefined && m[4] !== '' ? N.decimal + m[4] : '');
+      var sym = (N.symbols && N.symbols[m[2]]) || m[2];
+      return (N.money || '{n} {sym}').replace('{n}', num).replace('{sym}', sym);
+    },
     /* "Sep 2026" — a month LABEL, so it stays a name even in numeric mode */
     monYear: function (pack, m) {
       var mo = month(pack, 'full', m[1]);
@@ -362,7 +388,11 @@
    'Google,Google Ads,Google Analytics,Gmail,Stripe,PayPal,Quickbooks,QuickBooks,' +
    'Authorize.net,NMI,Mercado Pago,Zapier,Slack,Shopify,WordPress,Yext,Twilio,' +
    'Mailgun,LeadConnector,HighLevel,Gokollab,Gokollab Marketplace,Zoom,Calendly,' +
-   'OpenAI,Anthropic,Claude,SMS,MMS,UTM,CPC,CTR,SEO,HTML,CSS,API,URL,PDF,CSV'
+   'OpenAI,Anthropic,Claude,SMS,MMS,UTM,CPC,CTR,SEO,HTML,CSS,API,URL,PDF,CSV,' +
+   /* ISO currency codes — identifiers, identical in every language. Added
+      11 Sep when the test account switched to CZK and "CZK" / "USD" began
+      turning up in the harvest queue as gaps. */
+   'CZK,USD,EUR,GBP'
   ).split(',').forEach(function (n) { NEVER[n.toLowerCase()] = n; });
 
   /* Returns the string unchanged when it must never be translated, else null.

@@ -105,6 +105,19 @@
        Set to 'genitive' to get the v27 rendering back ("31. srpna 2026").   */
     dateStyle: 'numeric',
 
+    /* ---- numbers and money ------------------------------------------------
+       Czech: a NON-BREAKING space between thousands, a decimal comma, and the
+       currency symbol AFTER the amount, separated by a non-breaking space —
+       "4 526,87 Kč". Used by the money formatter for CZK amounts HighLevel
+       renders the American way ("Kč4,526.87"). Symbols map HighLevel's symbol
+       to the one Czech writes; Kč is already right. */
+    number: {
+      group:   ' ',
+      decimal: ',',
+      money:   '{n} {sym}',
+      symbols: { 'Kč': 'Kč' }
+    },
+
     /* ---- recurrence: a recurring invoice's schedule ("Every  month") -----
        An interval of ONE is an adverb — "Měsíčně", not "Každý 1 měsíc".
        Counted intervals inflect twice: the "each" word follows the plural
@@ -3383,6 +3396,15 @@
     "Last Synced At":                   "Naposledy synchronizováno",
     "Enter product name":               "Zadejte název produktu",
     "Select taxes":                     "Vyberte daně",
+    /* product editor, after the account switched to CZK, 11 Sep */
+    "Onetime":                          "Jednorázově",
+    "Create Collection":                "Vytvořit kolekci",
+    "Enter the SEO title":              "Zadejte titulek pro SEO",
+    "Enter the SEO Description":        "Zadejte popis pro SEO",
+    /* HighLevel's own aria-label on every radio button — a developer label a
+       screen reader reads aloud. Translated for the same reason as the leaked
+       titleX keys: it cannot make things worse, and it helps someone. */
+    "radio-input":                      "přepínač",
     "Successfully saved":               "Úspěšně uloženo",
     "Tax will be exclusive or inclusive based on the Global settings (Payments > Settings) i.e. every time Global settings change, the tax behavior for this product would change. To keep it unlinked to Global Settings, select 'Yes' or 'No' from below options.":
       "Daň bude zahrnuta v ceně nebo připočtena podle globálního nastavení (Platby > Nastavení), tj. při každé změně globálního nastavení se změní i daňové chování tohoto produktu. Chcete-li ho od globálního nastavení oddělit, vyberte níže „Ano“ nebo „Ne“.",
