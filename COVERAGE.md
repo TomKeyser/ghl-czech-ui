@@ -62,6 +62,21 @@ Leaving **16 genuine gaps** across twelve screens: `Win%`, `0s`, `$0/M`,
 
 **1,167 / (1,167 + 16) = 98.6%.**
 
+### Since that measurement — engine v63, 11 September
+
+The figure above is the v52 walk and is left as measured. What has changed:
+
+- `1 more` is **closed** (pattern `N_MORE` with a Czech one/few/other table).
+  Fixing it also caught `PLUS_MORE`, an older rule rendering a hardcoded
+  `dalších`, so `+1 more` had been reading `+1 dalších`.
+- The same twelve-route walk now leaves the collector holding **seven**
+  strings, and none of them is work: HighLevel's own leaked
+  `snapshots.…selectSnapshotTemplate`, `Win%`, `0s`, `$0/M`, `GMT -07:00`,
+  `ctrlK`, and the two smart-list view names below.
+
+Restating the percentage would need a full re-walk; the honest statement is
+that the gap list has shrunk by one and nothing new has appeared.
+
 ## What is excluded, and why that is the point
 
 **323 nodes off limits** — message bodies, contact and company names, pipeline
