@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v82';
+  var VERSION = 'v83';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -739,7 +739,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v57';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v58';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1155,7 +1155,9 @@
      portal address as a link, and a business's website or a booking link can
      turn up anywhere. Untranslatable, often the customer's own, and reported
      on every sweep. Whole-string only — "Visit https://…" is a sentence. */
-  var URL_SHAPE = /^(?:https?:\/\/|www\.)[^\s]+$/i;
+  /* also a bare path, "/product/" — the fixed prefix beside a product's URL
+     handle (v83). Slash-first, no spaces: no label is spelled like that. */
+  var URL_SHAPE = /^(?:(?:https?:\/\/|www\.)[^\s]+|\/[\w\-.\/]+)$/i;
 
   function looksLikeUrl(s) {
     return URL_SHAPE.test(String(s).trim());

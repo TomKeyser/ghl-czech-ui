@@ -407,6 +407,7 @@
       SHOWING_OF:     'Zobrazeno {1}–{2} z celkem {3}',
       N_HRS:          '{1} h',
       DUR_SECS:       '{1} s',
+      CSS_SIZE:       '{1}{2}',
       TOTAL_MEM:      'Celkem {1} {~members:1}',
       LAST_UPD:       'Naposledy aktualizováno: {*1}',
       BYTES_USED:     'Využito {1} {2}',

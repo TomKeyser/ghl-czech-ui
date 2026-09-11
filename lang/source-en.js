@@ -198,6 +198,10 @@
          Only the seconds form has been SEEN; longer lengths ("3d 4h"?) have
          not, so they are not guessed at here. Case-sensitive on purpose. */
       ['DUR_SECS',       /^(\d+)s$/],
+      /* "16px" — the rich-text editor's font-size box. A CSS size, the same in
+         every language; the rule exists so it stops reading as a gap. No "%":
+         Czech writes "50 %", so a percentage is not an identity. */
+      ['CSS_SIZE',       /^(\d+(?:\.\d+)?)(px|pt|em|rem)$/],
       ['TOTAL_MEM',      /^(\d+)\s+total members?$/i],
       ['REL_LONG',       /^(\d+)\s+(second|minute|hour|day|week|month)s?\s+ago$/i, '@relLong'],
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],

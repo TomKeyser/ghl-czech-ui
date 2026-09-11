@@ -112,6 +112,40 @@ Left deliberately. Severity is low: the name is the user's own, visible only to
 them, and exact-match translation cannot alter it unless it collides with a
 dictionary key. It is recorded here rather than quietly rounded off.
 
+## The sweep route list
+
+The collector sees only screens someone opens, so the post-deploy sweep is
+only as good as its list of routes. On 11 Sep the list in use had two stale
+payments paths (`payments/transactions` and `payments/subscriptions`, which
+are really under `payments/v2/`). It also had never included fifteen payments
+sub-pages. Both rendered nothing, the sweep reported "clean", and about 45
+gaps plus the whole app marketplace sat unseen. **Read routes off the menus
+(the side bar, and each module's top bar), not from memory.** The list as of
+v82, relative to `/v2/location/<id>/`:
+
+```
+launchpad  dashboard  conversations/conversations  calendars/view
+contacts/smart_list/All  opportunities/list
+payments/invoices  payments/recurring-templates  payments/invoice-templates
+payments/v2/estimates  payments/integrations/dashboard
+payments/proposals-estimates  payments/proposals-estimates/templates
+payments/v2/orders  payments/v2/abandoned-checkouts  payments/v2/subscriptions
+payments/v2/paymentlinks  payments/v2/transactions
+payments/products  payments/products/collections  payments/products/inventory
+payments/products/reviews  payments/coupons  payments/gift-cards
+payments/settings/receipts  payments/settings/taxes
+marketing/social-planner  automation/workflows  funnels-websites/funnels
+memberships/client-portal/client-portal-ai  media-storage
+reputation/overview  reporting/reports  integration  settings/company
+```
+
+Plus one saved record per editor (a product, a recurring invoice), and a
+*create* form wherever toggles hide sections (see the caveat below).
+
+**Parked, deliberately:** `ai-agents/getting-started` is HighLevel's own
+marketing landing page, about 100 strings of sales copy and demo chats.
+Translating it is a product decision, not a gap.
+
 ## Honest caveats
 
 - One sub-account, one dataset. A screen with no records shows fewer strings.

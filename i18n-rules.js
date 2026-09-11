@@ -406,7 +406,11 @@
    /* accounting providers on Payments > Accounting sync, and the captcha badge */
    'Xero,Wave,Intuit,reCAPTCHA,' +
    /* raw booleans HighLevel sometimes prints as an aria-label */
-   'true,false'
+   'true,false,' +
+   /* the rich-text editor's font name, the search box's shortcut hint, and a
+      currency symbol standing alone in a price field's prefix. Every sweep
+      reported all three. */
+   'Inter,ctrlK,Kč'
   ).split(',').forEach(function (n) { NEVER[n.toLowerCase()] = n; });
 
   /* Returns the string unchanged when it must never be translated, else null.
