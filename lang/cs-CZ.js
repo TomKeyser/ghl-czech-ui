@@ -72,6 +72,19 @@
       { selector: 'html body a#sb_launchpad span.nav-title::before', text: 'Rychlý start' }
     ],
 
+    /* ---- typography HighLevel's CSS gets wrong for Czech -----------------
+       Czech writes labels in SENTENCE CASE. English title-cases them, and
+       HighLevel does it in CSS rather than in the text, so our Czech inherits
+       it. The invoice status cell is text-transform: capitalize (measured
+       11 Sep), which would render "Částečně Uhrazeno" and "Splatnost Za 1 Den".
+       Injected only while translating, and removed with everything else when
+       the gate closes, so an English viewer keeps HighLevel's capitalisation.
+       Scoped to the status column of that one table component — widen only
+       with a measured case. */
+    css: [
+      'td.hr-data-table-td[data-col-key*="status" i], td.hr-data-table-td[data-col-key*="status" i] * { text-transform: none !important; }'
+    ],
+
     /* ---- date style ------------------------------------------------------
        'numeric' -> 31. 8. 2026.  Confirmed by a native speaker (2026-09-05):
        Czechs always write numeric days. Applies to DATE STAMPS ONLY. Month and
@@ -196,7 +209,15 @@
        prefix wins, so declaration order here does not matter. */
     byRoute: {
       '/payments': {
-        'Overdue': 'Po splatnosti'
+        'Overdue':        'Po splatnosti',
+        /* 'Paid' IS ANOTHER DOMAIN SPLIT, found 11 Sep on the first real
+           invoices. A paid INVOICE is uhrazena (settled); a paid COURSE or
+           PLAN is placeny. Globally 'Paid' would have to pick one and be wrong
+           for the other, so it lives only here. The uhraz- family also matches
+           'k uhrade' (to be paid) already on the summary tiles. NOT YET
+           NATIVE-CONFIRMED - both go with the invoice batch. */
+        'Paid':           'Uhrazeno',
+        'Partially Paid': 'Částečně uhrazeno'
       }
     },
 
@@ -207,7 +228,15 @@
          payments domain gets its own vocabulary. */
       invoiceState: {
         'in draft': 'v konceptu', 'in due': 'k úhradě',
-        'received': 'přijato', 'overdue': 'po splatnosti'
+        /* WAS 'přijato', wrong twice over. (1) It did not agree with the
+           count: '1 faktura přijato'. (2) The WORD was wrong: in Czech
+           accounting a 'přijatá faktura' is an INCOMING invoice, a bill from a
+           supplier. This tile counts invoices you ISSUED that have been PAID -
+           the paid amount sits beneath it. A business owner would read
+           'přijato' as supplier bills. 'Uhrazeno' is the settled-invoice term
+           and matches 'Paid' in the status column. MY CZECH - confirm. */
+        'received': { one: 'uhrazena', few: 'uhrazeny', other: 'uhrazeno' },
+        'overdue': 'po splatnosti'
       }
     },
 
@@ -256,6 +285,10 @@
       RANGE_OF:       '{1} – {2} z {3}',
       N_OPPS:         '{1} {~opportunities:1}',
       N_MORE:         '{1} {~more:1}',
+      /* 'Due in 1 day(s)' on a sent invoice. A NOUN, 'splatnost', rather than
+         an adjective, so nothing has to agree with the invoice's gender. 
+         'za' + accusative: za 1 den / za 3 dny / za 5 dní. MY CZECH. */
+      DUE_IN_DAYS:    'Splatnost za {1} {~periodDays:1}',
       /* "0 opportunities selected" — the plural agrees with the number, which is
          why this cannot be a dictionary entry: Czech needs one/few/other and
          English has two forms. */
@@ -3229,6 +3262,13 @@
     "totalLeads":                       "Celkem zájemců",
     "totalValues":                      "Celkové hodnoty",
     "winPercentage":                    "Úspěšnost v %",
+
+    /* Invoice list, 11 Sep — the first screen with real invoices on it. The
+       row menu's aria-label, and the two sections of the Filters popover,
+       which nobody had opened before. NOT YET NATIVE-CONFIRMED. */
+    "Menu options":                     "Možnosti nabídky",
+    "Invoice Status":                   "Stav faktury",
+    "Payment Mode":                     "Způsob platby",
 
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
        SPEAKER, 10 Sep 2026 — as were the weekday abbreviations and the

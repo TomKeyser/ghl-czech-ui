@@ -85,6 +85,13 @@ text node. The attribute drops into `CONTENT_ZONES` and costs nothing, because
 `#ka-gap-badge`, `#ka-gap-panel` — the gap picker. Both also carry
 `data-ka-ignore`; the ids are for the capture-phase click handler.
 
+`#ka-pack-css` — the engine's `<style>` element in `<head>`, holding the pack's
+CSS-drawn labels (`pack.pseudo`) and its typography fixes (`pack.css`). Removed
+when the gate closes, restored when it opens. **Renamed 11 Sep from
+`ghl-cs-pseudo`**, which escaped the v32 sweep — a name we create, in
+HighLevel's prefix, and not listed here. Found by accident while adding
+`pack.css`; worth a `grep -n "ghl" ghlczechui.js` for any other stragglers.
+
 ## localStorage
 
 | Key | Written by | Lifetime |

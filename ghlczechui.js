@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v66';
+  var VERSION = 'v67';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -247,19 +247,34 @@
      than dictionary. Empty until a pack supplies pack.pseudo. */
   var PSEUDO = [];
 
-  var PSEUDO_STYLE_ID = 'ghl-cs-pseudo';
+  /* PLAIN CSS RULES FROM THE PACK (pack.css), for typography a language needs
+     that HighLevel's styling fights. The case that forced it, 11 Sep: the
+     invoice status cell is text-transform: capitalize, which title-cases every
+     word. Right for English, wrong for Czech — "Částečně Uhrazeno", "Splatnost
+     Za 1 Den". Language-specific, so it comes from the pack, never the engine.
 
-  function injectPseudoCss() {
-    if (!PSEUDO.length) return;
-    if (document.getElementById(PSEUDO_STYLE_ID)) return;
+     SAME STYLE ELEMENT AS THE PSEUDO RULES, deliberately: revertAll() already
+     removes it when the gate closes and flush() puts it back, so an English
+     viewer gets HighLevel's own capitalisation back without any extra code. */
+  var PACK_CSS = [];
+
+  /* RENAMED 11 Sep from 'ghl-cs-pseudo', which escaped the v32 namespace sweep:
+     an element id Keytone creates, in HighLevel's prefix, and missing from
+     NAMESPACE.md. Internal — nothing outside this file reads it. */
+  var PACK_STYLE_ID = 'ka-pack-css';
+
+  function injectPackCss() {
+    if (!PSEUDO.length && !PACK_CSS.length) return;
+    if (document.getElementById(PACK_STYLE_ID)) return;
     if (!document.head) return;
     var css = '';
     for (var i = 0; i < PSEUDO.length; i++) {
       var esc = String(PSEUDO[i].text).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       css += PSEUDO[i].selector + '{content:"' + esc + '" !important;}\n';
     }
+    for (var j = 0; j < PACK_CSS.length; j++) css += String(PACK_CSS[j]) + '\n';
     var el = document.createElement('style');
-    el.id = PSEUDO_STYLE_ID;
+    el.id = PACK_STYLE_ID;
     el.textContent = css;
     document.head.appendChild(el);
   }
@@ -346,6 +361,26 @@
     '.tabulator-cell:not([tabulator-field*="date" i]):not([tabulator-field*="time" i]):not([tabulator-field*="activity" i]):not([tabulator-field*="created" i]):not([tabulator-field*="updated" i])',
     /* the dashboard widget tables, which use HighLevel's own component library */
     '.hr-data-table__body-cell',
+    /* THE INVOICE LIST — and any other table built on the same component. Found
+       11 Sep, the first day the account had real invoices: the customer's
+       INITIALS were protected (.hr-avatar__text) but their NAME reached the
+       engine, along with the invoice title, number and amount. The same
+       one-member-of-a-family mistake, again.
+
+       SAME POLICY AS THE CONTACTS TABLE ABOVE, AND FOR THE SAME REASON: block
+       every column EXCEPT the ones known to hold our text, instead of listing
+       the ones that hold theirs. Each cell names its column in data-col-key
+       (name, invoiceNumber, contactDetails.name, issueDate, amount, status,
+       actions) — semantic, from HighLevel's column config, not styling. A
+       column added later is protected by default.
+
+       LET THROUGH: dates (formatted by us), status (our vocabulary), and the
+       row menu (its "Menu options" aria-label is ours).
+
+       SCOPE, MEASURED: of 16 routes walked on 11 Sep, only /payments/invoices
+       rendered this component with rows. Several payments screens had no data,
+       so a future one may pick this rule up — which is the intended default. */
+    'td.hr-data-table-td[data-col-key]:not([data-col-key*="date" i]):not([data-col-key*="status" i]):not([data-col-key="actions"])',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -565,7 +600,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v44';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v45';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -806,6 +841,7 @@
 
     RULES = R; SOURCE = S; PACK = P;
     PSEUDO = Array.isArray(P.pseudo) ? P.pseudo : [];
+    PACK_CSS = Array.isArray(P.css) ? P.css : [];
 
     /* dictApi first, then dict, so HAND-CURATED WINS on conflict. */
     DICT = {};
@@ -1236,7 +1272,7 @@
     TOUCHED_ATTRS = [];
 
     /* the pseudo-element rules are ours too, and would keep applying */
-    var css = document.getElementById(PSEUDO_STYLE_ID);
+    var css = document.getElementById(PACK_STYLE_ID);
     if (css && css.parentNode) css.parentNode.removeChild(css);
 
     STATUS.reverted = restored;
@@ -1324,7 +1360,7 @@
     if (wasHere === true && STATUS.translatingHere === false) {
       try { revertAll(); } catch (e) { /* never break the app */ }
     }
-    if (STATUS.translatingHere) injectPseudoCss();   /* cheap; restores it if removed */
+    if (STATUS.translatingHere) injectPackCss();   /* cheap; restores it if removed */
     var batch = queue;
     queue = [];
     for (var i = 0; i < batch.length; i++) {
@@ -1354,7 +1390,7 @@
 
   function start() {
     refreshStatus();
-    if (shouldTranslate()) injectPseudoCss();
+    if (shouldTranslate()) injectPackCss();
     walk(document.body);
 
     new MutationObserver(function (muts) {

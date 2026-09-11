@@ -126,6 +126,14 @@
          The visible good that came of it: PLUS_MORE had a hardcoded "dalších"
          and read "+1 dalších". It now shares this rule's plural table. */
       ['N_MORE',         /^(\d+)\s+more$/i],
+      /* the status of a SENT invoice, counting down to its due date. Seen only
+         in the invoice list's status column, 11 Sep. The Czech is the invoice
+         word (splatnost), so if TASKS ever render this exact string they will
+         get an accounting word — patterns are not route-scoped the way
+         pack.byRoute is. Check that before widening this. The screen shows it
+         as "Due In 1 Day(S)", but only through CSS: the text itself is
+         "Due in 1 day(s)", which is what this matches. */
+      ['DUE_IN_DAYS',    /^Due in (\d+) day\(s\)$/i],
       /* trailing period OPTIONAL. This greeting is typed out a character at a
          time, and the frame before the last one is the whole sentence WITHOUT
          its full stop -- the collector recorded exactly that on 11 Sep while

@@ -271,9 +271,25 @@
     },
     /* "3 Invoice(s) in Draft" */
     invoices: function (pack, m) {
-      var noun = pluralForm(pack, 'invoices', parseInt(m[1], 10));
+      var n = parseInt(m[1], 10);
+      var noun = pluralForm(pack, 'invoices', n);
       var st = pack.maps && pack.maps.invoiceState && pack.maps.invoiceState[String(m[2]).toLowerCase()];
       if (noun === null || st === undefined) return null;
+      /* A STATE WORD MAY HAVE TO AGREE WITH THE COUNT, so a pack can give
+         either a plain string or a { one, few, other } set, the same shape as
+         pack.plurals. Czech needs it for a participle: "1 faktura uhrazena",
+         "3 faktury uhrazeny", "5 faktur uhrazeno". A prepositional state
+         ("v konceptu", "k úhradě") does not change, and stays a string.
+
+         Found on 11 Sep only because the account finally had exactly ONE paid
+         invoice. With none, the tile read "0 faktur přijato", which is
+         correct for zero — so the bug was invisible on every empty screen. */
+      if (st && typeof st === 'object') {
+        var agreed = st[category(pack.locale, n)];
+        if (agreed === undefined) agreed = st.other;
+        if (agreed === undefined) return null;
+        st = agreed;
+      }
       return m[1] + ' ' + noun + ' ' + st;
     }
   };

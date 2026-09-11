@@ -198,5 +198,12 @@ one was named, five ids in the tasks widget where only one was blocked. Every
 one was found by asking the **live DOM** what else shared the shape — not by
 reading the code.
 
+A fourth, the same afternoon: the **invoice list** protected the customer's
+initials (the avatar rule) and leaked their name, the invoice title, number and
+amount. It only appeared once the account had real invoices, which is the other
+half of the lesson — **an empty screen cannot leak, so it cannot tell you it is
+safe.** Fixed with a column rule on `data-col-key` that lets through dates,
+status and the row menu and blocks the rest by default.
+
 Run `__kaDebug.dead()` after any change here, and re-walk with the collector
 before claiming a fix worked.
