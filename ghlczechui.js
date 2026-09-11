@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v53';
+  var VERSION = 'v54';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -362,6 +362,19 @@
        the text wrapper rather than the switcher leaves the switcher's chrome
        translatable. Found by the harvest walk once the noise was cleared. */
     '.hl_location-text',
+    /* DASHBOARD WIDGETS. Task titles are whatever the user called the task
+       ("zz call the prospect"), and HighLevel gives each one the same id —
+       task-title-text — on every row, so an attribute selector catches them all.
+
+       The widget's pipeline filter sits in a dropdown whose id is the generic
+       "select-id". Checked before scoping to it: that id appears ONLY on the
+       dashboard, across opportunities, reporting, tasks, payments and social
+       planner — so blocking its selected label costs no enum value elsewhere.
+       If it ever turns up on another screen holding a status, this rule will
+       leave that status in English, and the zero-match audit will not notice:
+       it will still be matching something. */
+    '[id="task-title-text"]',
+    '[id="select-id"] .hr-base-selection-label',
     /* THE OPPORTUNITY CARDS THEMSELVES. Only visible once a pipeline has cards
        in it, which is why the board looked clean when the stage headings were
        fixed in v45 — an empty board has no records to leak.
