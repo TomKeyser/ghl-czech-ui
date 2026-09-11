@@ -482,6 +482,10 @@
       DUR_SECS:       '{1} s',
       CALL_TO:        'Volat: {1}',
       MONEY_KC_PAREN: '({*1})',
+      /* "0 Kč/měs." — the abbreviation, not "za měsíc": it sits under a
+         dashboard tile with no room, and the same "měs." already reads right
+         in the recurring-invoice schedule. MY CZECH. */
+      MONEY_KC_PER_M: '{*1}/měs.',
       /* percentages keep HighLevel's decimal dot, as the tax rates do — the
          question is with the reviewer (round 2, formats). */
       PROGRESS_PCT:   'Ukazatel průběhu {1} %',

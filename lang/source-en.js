@@ -159,6 +159,13 @@
       /* "(Kč0.00)" — the same amount in brackets, the forecast's at-risk rows.
          The inside goes back through the rules, so MONEY_KC formats it. */
       ['MONEY_KC_PAREN', /^\((-?Kč\s?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?)\)$/],
+      /* "Kč0/M" — the dashboard's per-month metric, the last open item on the
+         invoice-vocabulary pass. The amount goes back through the rules, so
+         MONEY_KC formats it and this rule only has to say what "/M" means.
+         Kč only, like MONEY_KC: the dollar shape has not been seen since the
+         account's currency changed, and a rule for an unobserved shape is how
+         the old firewall came to match nothing. */
+      ['MONEY_KC_PER_M', /^(-?Kč\s?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?)\/M$/],
       /* THE RECURRING-INVOICE EDITOR, 11 Sep */
       ['RECURRING_EVERY', /^Recurring\s+Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@recurringEvery'],
       /* the dates are HighLevel's own and go through the date rules via {*N} */
