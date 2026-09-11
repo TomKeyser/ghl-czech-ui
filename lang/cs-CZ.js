@@ -183,11 +183,12 @@
        task word on an invoice reads wrong to anyone who runs a business, which
        is precisely who this product is for.
 
-       NATIVE-CONFIRMED, one half of it: "Po termínu" for tasks came back ok on
-       11 Sep (review item r29, the dashboard tasks widget). "Po splatnosti"
-       did NOT -- no invoice string was in that batch. It is the standard term
-       and it already ships inside maps.invoiceState, but it is my Czech until
-       she sees it. SEND IT WITH THE INVOICE BATCH.
+       BOTH HALVES NATIVE-CONFIRMED, 11 Sep 2026. "Po termínu" for tasks came
+       back ok in the wording review (item r29, the dashboard tasks widget).
+       "Po splatnosti" for the invoice context was confirmed separately the
+       same day, after Tom raised the split -- it was NOT in the 44-item batch,
+       so it was asked directly rather than assumed. The same word already
+       ships inside maps.invoiceState, which is therefore confirmed too.
 
        ADDING TO THIS: only for a genuine domain split, where a field of work
        owns different vocabulary. Not for a word you dislike on one screen --
@@ -200,6 +201,10 @@
     },
 
     maps: {
+      /* NATIVE-CONFIRMED 11 Sep 2026 for 'overdue' -> 'po splatnosti', asked
+         directly rather than inferred. The other three states are still my
+         Czech and go with the invoice batch -- see byRoute above for why the
+         payments domain gets its own vocabulary. */
       invoiceState: {
         'in draft': 'v konceptu', 'in due': 'k úhradě',
         'received': 'přijato', 'overdue': 'po splatnosti'
