@@ -111,7 +111,13 @@
       /* must precede N_OPPS, which would otherwise never see the longer string */
       ['N_OPPS_SEL',     /^(\d+)\s+opportunit(?:y|ies)\s+selected$/i],
       ['N_OPPS',         /^(\d+)\s+opportunit(?:y|ies)$/i],
-      ['CAL_AI_HI',      /^Hi\s+(.+?)!\s*I'm Calendar AI\.\s*Tell me what you'd like help with, or choose an option below\.$/i],
+      /* trailing period OPTIONAL. This greeting is typed out a character at a
+         time, and the frame before the last one is the whole sentence WITHOUT
+         its full stop -- the collector recorded exactly that on 11 Sep while
+         the finished sentence was already correctly in Czech. Making the period
+         optional translates that frame too, so the typewriter lands in Czech
+         one frame earlier and the collector stops reporting a phantom gap. */
+      ['CAL_AI_HI',      /^Hi\s+(.+?)!\s*I'm Calendar AI\.\s*Tell me what you'd like help with, or choose an option below\.?$/i],
       ['N_PIPES',        /^(\d+)\s+pipelines?$/i],
       ['N_APPLIED',      /^(\d+)\s+applied$/i],
       ['OUT_OF',         /^(.+?)\s*\((\d+)\s+out of\s+(\d+)\)$/i],

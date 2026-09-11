@@ -3121,6 +3121,44 @@
   };
 
   pack.dict = {
+    /* HIGHLEVEL'S OWN LEAKED i18n KEYS, 11 Sep 2026.
+       The dashboard widgets carry aria-label="titleOpportunityStatus" and the
+       like -- raw translation keys that HighLevel never resolved. They are
+       INVISIBLE on screen and reach only screen readers, which read them out
+       as camelCase gibberish in every language, English included.
+
+       WE CAN FIX THAT, so we do. Exact-match on a key that could never be
+       legitimate interface text, which makes this as safe an entry as exists
+       in the pack: if HighLevel ever resolves these properly, our entries
+       simply stop matching and the resolved English hits the ordinary
+       dictionary instead. Nothing to unwind.
+
+       NOT NATIVE-CONFIRMED -- they arrived after the 11 Sep review closed, and
+       being invisible they are the lowest-value batch to send back. Flag them
+       with the next visible batch rather than on their own.
+
+       "zájemc-" not "lead-": the pack is currently inconsistent about this
+       ("Lead": "Zájemce" but "Leads": "Leady"), which is the very split the
+       reviewer raised. These new entries follow the native form; the existing
+       pair still needs deciding. */
+    "titleOpportunityStatus":           "Stav příležitostí",
+    "titleOpportunityValue":            "Hodnota příležitostí",
+    "titleOpportunityFunnel":           "Trychtýř příležitostí",
+    "titleOpportunityStageDistribution": "Rozdělení příležitostí podle fází",
+    "titleOpportunitySalesEfficiency":  "Efektivita prodeje",
+    "titleConversionRate":              "Míra konverze",
+    "titleTasks":                       "Úkoly",
+    "titleManualActions":               "Ruční akce",
+    "titleLeadSources":                 "Zdroje zájemců",
+    "titleGoogleAnalyticsCount":        "Google Analytics – počty",
+    "titleGoogleAnalyticsChart":        "Google Analytics – graf",
+    "titleGmbReports":                  "Přehledy Firemního profilu Google",
+    "titleFacebookAdsReport":           "Přehled reklam na Facebooku",
+    "titleGoogleAdsReport":             "Přehled reklam Google",
+    "totalLeads":                       "Zájemci celkem",
+    "totalValues":                      "Hodnota celkem",
+    "winPercentage":                    "Úspěšnost v %",
+
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
        SPEAKER, 10 Sep 2026 — as were the weekday abbreviations and the
        24-hour clock shipped alongside them. */

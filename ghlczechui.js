@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v57';
+  var VERSION = 'v58';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -431,6 +431,18 @@
        the list view in v55 -- the same one-of-two mistake as the pipeline
        dropdown, found in the same walk. */
     '.avatar_img', '.hr-avatar__text',
+    /* THE CALENDAR SIDEBAR'S FILTER LISTS. Under each heading -- Users,
+       Calendars, Groups -- sits a checkbox row per record, and the row's label
+       is the record's name ("Gym Classes/Sessions", a calendar group the
+       account owner named). The heading buttons carry .interactive-element too,
+       but their label span is .text-sm.font-medium, not .text-left, so the
+       headings keep translating and only the rows are protected.
+
+       ONE GROUP EXISTS IN THIS ACCOUNT, so the shape is confirmed against a
+       single record. It is a per-row structure, so N records give N matches of
+       the same shape -- but if this ever stops matching, that single sample is
+       where to look first. */
+    '.interactive-element button span.text-left',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -553,7 +565,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v37';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v38';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
