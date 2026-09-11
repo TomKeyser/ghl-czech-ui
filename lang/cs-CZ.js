@@ -3712,6 +3712,11 @@
     "Browse all marketplace templates": "Procházet všechny šablony z Marketplace",
 
     /* --- wordpress/dashboard: the hosting pitch -------------------------- */
+    /* the toolbar above the pitch, which only renders once the page has
+       finished loading — the first walk missed all three */
+    "All Sites":                        "Všechny weby",
+    "Create Site":                      "Vytvořit web",
+    "Search Site":                      "Hledat web",
     "Lightning Fast WordPress Hosting": "Bleskově rychlý WordPress hosting",
     "Unlimited Bandwidth":              "Neomezený přenos dat",
     "Instant 1-Click Migrations":       "Okamžité migrace na jedno kliknutí",
