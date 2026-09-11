@@ -211,6 +211,7 @@
       ['UNSAVED_N',      /^You have (\d+) unsaved change\(s\)$/i],
       ['PIPE_DASH',      /^Pipeline - (.+)$/],
       ['ORD_STAMP',      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(?:st|nd|rd|th),\s*(\d{1,2}):(\d{2})\s*(am|pm)$/i, '@ordStamp'],
+      ['DATE_DAY_FIRST', /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@dateDayFirst'],
       ['DATE_ABBR',      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateAbbr'],
       ['TIME_AMPM',      /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@timeAmPm'],
       ['N_NEW',          /^(\d+)\s+new$/i],

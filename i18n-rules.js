@@ -326,6 +326,11 @@
       var mo = month(pack, 'genitiveAbbr', m[1]);
       return mo === null ? null : m[2] + '. ' + mo + ' ' + m[3];
     },
+    /* "04 Sep 2026" — day first, no comma (the tags list, where the time is a
+       separate node). Same output as @dateAbbr. */
+    dateDayFirst: function (pack, m) {
+      return FORMATTERS.dateAbbr(pack, [m[0], m[2], String(+m[1]), m[3]]);
+    },
     /* "01:57 PM" */
     timeAmPm: function (pack, m) { return to24(m[1], m[3]) + ':' + m[2]; },
     /* "Jan 4, 2026 - Feb 8, 2026" */
