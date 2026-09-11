@@ -70,8 +70,32 @@ are customer data. Not translating them is the product working, not a shortfall,
 and the count is worth quoting alongside the coverage figure: it is the size of
 what we deliberately never touch.
 
-**56 more** reached the engine and look like customer data, mostly on the
-opportunities board. Those are firewall gaps, tracked separately.
+**56 more** reached the engine and looked like customer data, mostly on the
+opportunities board. **Closed in v55–v57** (11 September), and worth recording
+how, because three of the four fixes were the same mistake:
+
+| | |
+|---|---|
+| Pipeline name, text **and** `title` | There are **two** pipeline selects. v45 named only `#pipelineDropdDown-listview`, so the board's copy leaked for ten versions. Now an id prefix. |
+| Avatar initials | **Two** avatar components. `.avatar_img` is the old header one, `.hr-avatar__text` the design-system one used in lists. |
+| Dashboard task fields | **Five** ids in that widget. v45 named only `task-title-text`; the body and the contact name leaked. |
+| Card hover tooltip | No selector possible — identical to the action tooltips beside it. Closed by the **record backstop** instead (see NAMESPACE.md). |
+
+The lesson is worth more than the fixes: **when a selector names one member of a
+family, census the family.** Every instance above was found by asking the live
+DOM what else shared the shape, not by reading the code.
+
+### Known remaining leak, one of them
+
+Smart-list **view names** in `#views-bar .view-label` on the contacts screen
+("ZZ few", "ZZ many"). The same element class holds HighLevel's own labels
+("All", "Add Smart List") which we translate correctly, so a selector would
+break two working strings to protect two user-authored ones — and the backstop
+cannot help, because a smart list's name appears nowhere inside the firewall.
+
+Left deliberately. Severity is low: the name is the user's own, visible only to
+them, and exact-match translation cannot alter it unless it collides with a
+dictionary key. It is recorded here rather than quietly rounded off.
 
 ## Honest caveats
 

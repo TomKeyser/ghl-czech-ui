@@ -23,7 +23,7 @@ sat in *HighLevel's* namespace, reading as though they had set it.
 | `__kaActive` | engine | Guard against double-loading. |
 | `__kaVersion` | engine | Deployment check: `__kaVersion` in the console tells you whether the CDN has caught up. |
 | `__kaStatus` | engine | Diagnosis: state, locale, localeSource, platformLang, packSource, audience, userType, translatingHere, notTranslatingBecause, reverted, terms/curated/fromApi. |
-| `__kaDebug` | engine | Read-only. `why(node[,attr])`, `dead()`, `translate`, `zones`, `attrs`, `maxLen`. |
+| `__kaDebug` | engine | Read-only. `why(node[,attr])`, `dead()`, `records()`, `translate`, `zones`, `attrs`, `maxLen`. |
 | `__kaOnMiss` | **a collector registers it** | The engine calls it at its two miss sites if present. Absent by default. |
 | `__kaCollect` | collector.js | `stats() top() suspect() truncated() all() download() clear()` |
 | `__kaCollectActive` | collector.js | Double-load guard. |
@@ -40,6 +40,27 @@ Set on DOM nodes, not attributes: invisible in markup, never serialised into
 | `__kaSrc` | text nodes | The **English we replaced**, so the shell can be put back when the gate closes. |
 | `__kaAttr_<name>` | elements | The attribute value we wrote, e.g. `__kaAttr_title`. The counterpart of `__kaDone`; without it `doAttrs` re-read its own output every pass and reported it as a gap. |
 | `__kaVal` | inputs, textareas | The prefilled value we wrote. |
+
+## The record backstop (v55)
+
+Not a name, but it belongs beside the attribute contract because it is the other
+half of the firewall.
+
+`CONTENT_ZONES` is a map of **where** customer data lives, and a map can only
+name places that exist. HighLevel copies record names into places no selector
+can reach: the opportunity card's hover tooltip holding a contact's name is
+structurally identical to the five action tooltips beside it — same classes,
+same parent, same child span. Only the content differs.
+
+So the engine remembers every string the firewall **rejects**, and refuses to
+report that same string when it reappears somewhere the selectors do not cover.
+`why()` calls it `record-mirror`, distinct from `missing`.
+
+It suppresses **reporting, not translation**, deliberately: a record named
+"Call" would otherwise stop the Call button translating everywhere on the page.
+Bounded at 800 strings, per page load, never persisted. `__kaDebug.records()`
+returns the **count**, never the strings — the whole point is that customer data
+does not reach tooling, and a debug surface exists to be read by tooling.
 
 ## The attribute contract
 
