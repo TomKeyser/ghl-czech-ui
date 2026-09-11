@@ -3169,6 +3169,12 @@
        simply stop matching and the resolved English hits the ordinary
        dictionary instead. Nothing to unwind.
 
+       ALIGNED WITH THE VISIBLE TEXT, 11 Sep: these aria-labels sit on the SAME
+       elements as column headers we already translate, so they must read the
+       same words. totalLeads first read "Zájemci celkem" while the header above
+       it read "Celkem zájemců" -- one element saying the same thing two ways,
+       which is exactly what a screen-reader user cannot cross-check.
+
        NOT NATIVE-CONFIRMED -- they arrived after the 11 Sep review closed, and
        being invisible they are the lowest-value batch to send back. Flag them
        with the next visible batch rather than on their own.
@@ -3189,8 +3195,8 @@
     "titleGmbReports":                  "Přehledy Firemního profilu Google",
     "titleFacebookAdsReport":           "Přehled reklam na Facebooku",
     "titleGoogleAdsReport":             "Přehled reklam Google",
-    "totalLeads":                       "Zájemci celkem",
-    "totalValues":                      "Hodnota celkem",
+    "totalLeads":                       "Celkem zájemců",
+    "totalValues":                      "Celkové hodnoty",
     "winPercentage":                    "Úspěšnost v %",
 
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
