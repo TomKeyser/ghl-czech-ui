@@ -114,6 +114,16 @@
          rule rather than a widened STAMP, so the reviewed output of that one
          cannot move. */
       ['STAMP_FULL',     /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(\d{4}),?\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
+      /* THE TAX LINE ON AN INVOICE, 11 Sep — the business's tax NAME wrapped in
+         HighLevel's wording. Two shapes, one per pricing mode:
+           "ZZ DPH 21 % (21% - included in prices)"   tax inside the price
+           "ZZ DPH 12 % (12% on $100.00)"             tax added on top
+         {1} is the business's own tax name and passes through RAW — never {*1},
+         which would run the dictionary over it and rewrite a tax someone
+         called "Standard". Specific enough to be safe: "included in prices"
+         and "% on" do not turn up by accident. */
+      ['TAX_INCLUDED',   /^(.+)\s\((\d+(?:\.\d+)?)%\s-\sincluded in prices\)$/i],
+      ['TAX_ON',         /^(.+)\s\((\d+(?:\.\d+)?)%\son\s(.+)\)$/i],
       /* "Every  month", "Every 3 weeks" — recurring invoice schedule, 11 Sep */
       ['EVERY_N',        /^Every\s+(\d*)\s*(day|week|month|year)s?$/i, '@everyInterval'],
       /* "Sep 10 at 09:20 PM" — payments lists, 11 Sep */

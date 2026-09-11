@@ -254,7 +254,15 @@
         /* a product's TYPE. Masculine, agreeing with produkt. Scoped here
            rather than global: "Physical" alone could label an address or a
            location elsewhere, with a different gender. MY CZECH. */
-        'Physical':       'Fyzický'
+        'Physical':       'Fyzický',
+        /* "Due Date" was rendering "Termín" — the TASK word — as the label of an
+           invoice's due date. The overdue split again: an invoice falls due,
+           it is splatná, and the date is its datum splatnosti. The global
+           dictionary keeps "Termín" for tasks. MY CZECH. */
+        'Due Date':       'Datum splatnosti',
+        /* a tax table's column. Scoped here because "Rate" alone elsewhere is
+           as likely to be a verb — rate a review — as a percentage. */
+        'Rate':           'Sazba'
       }
     },
 
@@ -326,6 +334,10 @@
          an adjective, so nothing has to agree with the invoice's gender. 
          'za' + accusative: za 1 den / za 3 dny / za 5 dní. MY CZECH. */
       DUE_IN_DAYS:    'Splatnost za {1} {~periodDays:1}',
+      /* the tax line on an invoice. {1} is the business's tax name, raw. Czech
+         puts a space before % when the number stands alone ("21 %"). MY CZECH. */
+      TAX_INCLUDED:   '{1} ({2} % – zahrnuto v ceně)',
+      TAX_ON:         '{1} ({2} % z {3})',
       /* "0 opportunities selected" — the plural agrees with the number, which is
          why this cannot be a dictionary entry: Czech needs one/few/other and
          English has two forms. */
@@ -3370,6 +3382,69 @@
     "Product Id":                       "ID produktu",
     "Last Synced At":                   "Naposledy synchronizováno",
     "Enter product name":               "Zadejte název produktu",
+    "Select taxes":                     "Vyberte daně",
+    "Successfully saved":               "Úspěšně uloženo",
+    "Tax will be exclusive or inclusive based on the Global settings (Payments > Settings) i.e. every time Global settings change, the tax behavior for this product would change. To keep it unlinked to Global Settings, select 'Yes' or 'No' from below options.":
+      "Daň bude zahrnuta v ceně nebo připočtena podle globálního nastavení (Platby > Nastavení), tj. při každé změně globálního nastavení se změní i daňové chování tohoto produktu. Chcete-li ho od globálního nastavení oddělit, vyberte níže „Ano“ nebo „Ne“.",
+
+    /* TAX SETTINGS, 11 Sep — walked with two real Czech VAT rates in place.
+       GLOSSARY: a "Tax ID" is the DIČ (daňové identifikační číslo) — never
+       the IČO, which is the company registration number. "Tax agency" is
+       "správce daně", the legal term for the tax administrator. Both legal
+       terms: CONFIRM WITH THE NATIVE REVIEWER. */
+    "Tax Rates":                        "Daňové sazby",
+    "Manage tax rates for your business": "Spravujte daňové sazby své firmy",
+    "Add Tax":                          "Přidat daň",
+    "Create Tax":                       "Vytvořit daň",
+    "No taxes to show yet":             "Zatím žádné daně k zobrazení",
+    "Tax Id Number":                    "DIČ",
+    "Tax Agency":                       "Správce daně",
+    "Name of the tax":                  "Název daně",
+    "Please enter the description":     "Zadejte popis",
+    "Please enter the tax id number":   "Zadejte DIČ",
+    "Please enter the tax agency name": "Zadejte správce daně",
+    "Automatic Taxes":                  "Automatické daně",
+    "Automatically calculates tax based on customer's address and/or business's address as applicable.":
+      "Daň se automaticky vypočítá podle adresy zákazníka nebo firmy, podle toho, co se uplatní.",
+    "Enable automatic tax":             "Zapnout automatický výpočet daně",
+    "Shipping":                         "Doprava",
+    "Pickup in store":                  "Osobní odběr",
+
+    /* THE INVOICE EDITOR, 11 Sep. The preview beside it is deliberately NOT
+       translated — see '#invoice-editor-container .preview-section' in the
+       engine. "Poplatek z prodlení" is the Czech legal term for a late-payment
+       charge: CONFIRM. Accounts receivable throughout — see the glossary rule. */
+    "New Invoice":                      "Nová faktura",
+    "New Recurring Invoice":            "Nová opakovaná faktura",
+    "Import Invoices using CSV":        "Importovat faktury ze souboru CSV",
+    "Business & Customer Information":  "Údaje o firmě a zákazníkovi",
+    "Add your business and the customer information to this template":
+      "Přidejte do této šablony údaje o své firmě a zákazníkovi",
+    "Business Information":             "Údaje o firmě",
+    "Customer Information":             "Údaje o zákazníkovi",
+    "Edit business details":            "Upravit údaje o firmě",
+    "Contact menu":                     "Nabídka kontaktu",
+    "Select Customer":                  "Vyberte zákazníka",
+    "Link Opportunity":                 "Propojit příležitost",
+    "Add invoice number and dates":     "Přidejte číslo faktury a data",
+    "e.g. INV":                         "např. INV",
+    "Add Products":                     "Přidat produkty",
+    "Choose products from your catalogue or add new products to this invoice":
+      "Vyberte produkty z katalogu nebo do faktury přidejte nové",
+    "Enable Tax Automatically":         "Automatický výpočet daně",
+    "Item":                             "Položka",
+    "Quantity":                         "Množství",
+    "Select Product":                   "Vyberte produkt",
+    "Add Product":                      "Přidat produkt",
+    "Add Discount":                     "Přidat slevu",
+    "Edit Tax":                         "Upravit daň",
+    "Add Payment Schedule":             "Přidat splátkový kalendář",
+    "Amount Due":                       "Částka k úhradě",
+    "Add terms and notes to your invoice": "Přidejte do faktury podmínky a poznámky",
+    "Terms and Conditions":             "Obchodní podmínky",
+    "Charge Late Fees":                 "Účtovat poplatek z prodlení",
+    "Charge Processing Fees":           "Účtovat poplatky za zpracování",
+    "Include Tipping":                  "Povolit spropitné",
 
     /* Calendars screen, flagged with the gap picker and CONFIRMED BY A NATIVE
        SPEAKER, 10 Sep 2026 — as were the weekday abbreviations and the

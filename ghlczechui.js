@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v71';
+  var VERSION = 'v72';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -455,6 +455,20 @@
        editor's new and edit modes; check the recurring and template editors
        use it before assuming they are covered. */
     '#invoice-editor-container .preview-section',
+    /* THE INVOICE EDITOR'S BUSINESS AND CUSTOMER BLOCKS. The customer block
+       sent the customer's EMAIL AND PHONE to the engine (found 11 Sep, the
+       first invoice with a real customer on it). Censused: each
+       .business-details-preview holds only record data — the business name in
+       one, the customer's name, email and phone in the other — and no label
+       or attribute of ours. The "Edit business details" and "Contact menu"
+       buttons sit outside it and still translate. */
+    '#invoice-editor-container .business-details-preview',
+    /* THE TAXES ATTACHED TO A PRODUCT. Each selected tax shows as a tag reading
+       "{tax name} ({rate}%)" — the business's own tax name. Blocked by the id
+       of the select that holds it, not by a pattern: a rule matching any
+       "X (N%)" string would also swallow unrelated screens and hide real gaps
+       from the collector. #taxSelect names what it holds. */
+    '#taxSelect .n-tag',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -674,7 +688,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v48';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v49';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
