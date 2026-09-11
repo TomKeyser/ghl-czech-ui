@@ -82,7 +82,7 @@
        Scoped to the status column of that one table component — widen only
        with a measured case. */
     css: [
-      'td.hr-data-table-td[data-col-key*="status" i], td.hr-data-table-td[data-col-key*="status" i] * { text-transform: none !important; }'
+      ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i], :is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i] * { text-transform: none !important; }'
     ],
 
     /* ---- date style ------------------------------------------------------
@@ -100,6 +100,10 @@
       lastPeriod: '(Posledních {n} {unit})',
       numericDate: '{d}. {m}. {y}',
       createdOn: 'Vytvořeno: {stamp}',
+      /* date + time with NO connective: the preposition would be v or ve
+         depending on how the hour is pronounced (ve dvě, v jednu), which a
+         digit cannot tell us. "10. 9. 21:20" is the ordinary Czech form. */
+      dateTime: '{date} {time}',
       overdue: 'Po termínu – {date}'
     },
 
@@ -217,7 +221,14 @@
            'k uhrade' (to be paid) already on the summary tiles. NOT YET
            NATIVE-CONFIRMED - both go with the invoice batch. */
         'Paid':           'Uhrazeno',
-        'Partially Paid': 'Částečně uhrazeno'
+        'Partially Paid': 'Částečně uhrazeno',
+        /* a transaction's status. Feminine, agreeing with the row it sits on
+           (platba / transakce are both feminine). MY CZECH. */
+        'Succeeded':      'Úspěšná',
+        /* a product's TYPE. Masculine, agreeing with produkt. Scoped here
+           rather than global: "Physical" alone could label an address or a
+           location elsewhere, with a different gender. MY CZECH. */
+        'Physical':       'Fyzický'
       }
     },
 

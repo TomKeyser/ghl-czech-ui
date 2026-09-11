@@ -225,6 +225,28 @@
       var mo = month(pack, 'abbr', m[1]);
       return mo === null ? null : m[2] + '. ' + mo + ' ' + m[3] + ' ' + time;
     },
+    /* "Sep 10 at 09:20 PM" — the timestamp in every payments list (products,
+       transactions, orders...). No year, and an English "at". The SHAPE comes
+       from pack.frames.dateTime, because the connective is language: Czech
+       drops it ("10. 9. 21:20") — the preposition would be v/ve depending on
+       how the hour is PRONOUNCED, which digits cannot tell you — while another
+       language may want one. Same 24-hour clock as @stamp, which a native
+       speaker has already confirmed. */
+    monDayTime: function (pack, m) {
+      var date;
+      if (isNumeric(pack)) {
+        var i = monthIndex(m[1]);
+        if (i === null) return null;
+        date = parseInt(m[2], 10) + '. ' + i + '.';
+      } else {
+        var mo = month(pack, 'genitive', m[1]);
+        if (mo === null) return null;
+        date = parseInt(m[2], 10) + '. ' + mo;
+      }
+      var time = to24(m[3], m[5]) + ':' + m[4];
+      return ((pack.frames && pack.frames.dateTime) || '{date} {time}')
+        .replace('{date}', date).replace('{time}', time);
+    },
     /* "Sep 2026" — a month LABEL, so it stays a name even in numeric mode */
     monYear: function (pack, m) {
       var mo = month(pack, 'full', m[1]);

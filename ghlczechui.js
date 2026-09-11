@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v67';
+  var VERSION = 'v68';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -374,13 +374,34 @@
        actions) — semantic, from HighLevel's column config, not styling. A
        column added later is protected by default.
 
-       LET THROUGH: dates (formatted by us), status (our vocabulary), and the
-       row menu (its "Menu options" aria-label is ours).
+       LET THROUGH, and nothing else:
+         *date* / *At     dates and timestamps (issueDate, startDate,
+                          updatedAt, createdAt, fulfilledAt) — formatted by us.
+                          $="At" is CASE-SENSITIVE on purpose: it matches the
+                          camelCase timestamp suffix and not a word like "format".
+         *status*         our vocabulary ("Status" too, hence the i flag)
+         action*          the row menu — "action" on some screens, "actions"
+         productType, paymentProviderType
+                          NAMED EXPLICITLY, not *type*: the transactions table
+                          has an entitySourceType column that holds the SOURCE
+                          INVOICE'S NAME ("New Invoice") — record data wearing
+                          a type-shaped key. A blanket *type* would leak it.
 
-       SCOPE, MEASURED: of 16 routes walked on 11 Sep, only /payments/invoices
-       rendered this component with rows. Several payments screens had no data,
-       so a future one may pick this rule up — which is the intended default. */
-    'td.hr-data-table-td[data-col-key]:not([data-col-key*="date" i]):not([data-col-key*="status" i]):not([data-col-key="actions"])',
+       TWO CLASS PREFIXES, ONE COMPONENT. hr-data-table-td is HighLevel's copy
+       of Naive UI's n-data-table-td, and both carry data-col-key. v67 named only
+       hr-, which covers the invoice list; the SAME DAY the products list leaked
+       product names through n-. Measured on 11 Sep, n- sits under every
+       payments list: products, transactions, orders, subscriptions, payment
+       links, coupons, proposals. The fifth instance of naming one member of a
+       family — see FIREWALL.md.
+
+       ⚠ THE COST, STATED PLAINLY: a column holding OUR text under a key not
+       listed above stays English, AND NOTHING REPORTS IT — blocked text never
+       reaches the collector. The only signal is a person seeing English in a
+       table. The gap picker then says "content-zone" with this selector, and
+       the fix is one more :not() here. That trade is deliberate: an unlisted
+       column is more likely to hold a customer's words than ours. */
+    ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key]:not([data-col-key*="date" i]):not([data-col-key$="At"]):not([data-col-key*="status" i]):not([data-col-key^="action" i]):not([data-col-key="productType"]):not([data-col-key="paymentProviderType"])',
     /* THE OPPORTUNITIES BOARD. Stage names are user-authored ("ZZ New Lead"),
        and HighLevel gives each one an id of its own: data-stage-name-<uuid>.
        An id prefix is a better anchor than any class here -- it names what the
@@ -600,7 +621,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v45';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v46';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
