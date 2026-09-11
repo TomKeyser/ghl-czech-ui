@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v96';
+  var VERSION = 'v97';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -923,6 +923,24 @@
   var ROUTE_PATH = null;
   var ROUTE_MAP = null;
 
+  /* A PACK ENTRY is a plain string, or — v97 — a VOLATILE entry:
+       { t: "Czech", seen: "2026-09-11", ttl: 30 }
+     for content that churns (Settings > Labs: HighLevel's beta cards change
+     about daily). It expires `ttl` days after it was last SEEN; `seen` is
+     refreshed whenever the string is met again, so a card that stays up keeps
+     its translation and a withdrawn one drops out by itself. An expired entry
+     is treated as absent at load; check-pack.js lists expired entries for
+     removal. Returns the text, or null for "absent". */
+  function entryText(v) {
+    if (typeof v === 'string') return v;
+    if (!v || typeof v.t !== 'string') return null;
+    if (v.seen && v.ttl) {
+      var seen = Date.parse(v.seen);
+      if (!isNaN(seen) && Date.now() > seen + v.ttl * 86400000) return null;
+    }
+    return v.t;
+  }
+
   function routeOverrides() {
     var path = window.location.pathname;
     if (ROUTE_PATH === path) return ROUTE_MAP;
@@ -945,7 +963,11 @@
     ROUTE_MAP = {};
     for (var i = 0; i < keys.length; i++) {
       var m = by[keys[i]];
-      for (var w in m) if (own(m, w)) ROUTE_MAP[w] = m[w];
+      for (var w in m) {
+        if (!own(m, w)) continue;
+        var rv = entryText(m[w]);               /* expired volatile entry: skip */
+        if (rv !== null) ROUTE_MAP[w] = rv;
+      }
     }
     return ROUTE_MAP;
   }
@@ -1054,11 +1076,13 @@
     PSEUDO = Array.isArray(P.pseudo) ? P.pseudo : [];
     PACK_CSS = Array.isArray(P.css) ? P.css : [];
 
-    /* dictApi first, then dict, so HAND-CURATED WINS on conflict. */
+    /* dictApi first, then dict, so HAND-CURATED WINS on conflict. Values go
+       through entryText(): an entry may be a plain string or a VOLATILE entry
+       that expires, and an expired one is dropped here as if absent. */
     DICT = {};
-    var api = P.dictApi || {}, k;
-    for (k in api) if (own(api, k)) DICT[k] = api[k];
-    for (k in P.dict) if (own(P.dict, k)) DICT[k] = P.dict[k];
+    var api = P.dictApi || {}, k, tv;
+    for (k in api) if (own(api, k) && (tv = entryText(api[k])) !== null) DICT[k] = tv;
+    for (k in P.dict) if (own(P.dict, k) && (tv = entryText(P.dict[k])) !== null) DICT[k] = tv;
 
     /* LOOKUP is the case-insensitive fallback and it is FIRST-WINS, so the
        insertion order below is DATA, not tidiness. Several English strings
@@ -1072,7 +1096,9 @@
       for (kk in halves[h]) {
         if (!own(halves[h], kk)) continue;
         lower = kk.toLowerCase();
-        if (!own(LOOKUP, lower)) LOOKUP[lower] = halves[h][kk];
+        if (own(LOOKUP, lower)) continue;
+        tv = entryText(halves[h][kk]);
+        if (tv !== null) LOOKUP[lower] = tv;
       }
     }
 

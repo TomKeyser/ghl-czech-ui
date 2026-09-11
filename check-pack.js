@@ -32,9 +32,34 @@ const dups = [...seen].filter(([, v]) => v.length > 1);
 console.log('keys: ' + seen.size + '   duplicated: ' + dups.length);
 dups.forEach(([k, v]) => { problems++; console.log('  DUP ' + k + '  lines ' + v.join(', ')); });
 
+// 1b. volatile entries (engine v97): { t, seen, ttl }. A malformed one is an
+//     ERROR (the engine would drop it silently); an expired one is listed for
+//     removal as a warning — the engine already ignores it at load.
+const text = v => (typeof v === 'string' ? v : (v && typeof v.t === 'string' ? v.t : null));
+const DAY = 86400000;
+let volatile = 0;
+const expired = [];
+const checkEntries = (where, map) => {
+  for (const [k, v] of Object.entries(map || {})) {
+    if (typeof v === 'string') continue;
+    volatile++;
+    const ok = v && typeof v.t === 'string' && v.t &&
+      typeof v.seen === 'string' && !isNaN(Date.parse(v.seen)) &&
+      typeof v.ttl === 'number' && v.ttl > 0;
+    if (!ok) { problems++; console.log('  BAD VOLATILE ' + where + ' ' + JSON.stringify(k) + ' ' + JSON.stringify(v)); continue; }
+    if (Date.now() > Date.parse(v.seen) + v.ttl * DAY) expired.push(where + ' ' + JSON.stringify(k) + ' (seen ' + v.seen + ', ttl ' + v.ttl + ')');
+  }
+};
+checkEntries('dict', P.dict);
+checkEntries('dictApi', P.dictApi);
+for (const [route, map] of Object.entries(P.byRoute || {})) checkEntries('byRoute ' + route, map);
+console.log('volatile entries: ' + volatile + '   expired: ' + expired.length);
+expired.forEach(e => console.log('  warn: expired, remove ' + e));
+
 // 2. dictionary entries the NEVER list would shadow. A pure case correction
 //    ("Wordpress" -> "WordPress") is fine: NEVER deliberately leaves spelling alone.
-const all = Object.assign({}, P.dictApi || {}, P.dict || {});
+const all = {};
+for (const d of [P.dictApi || {}, P.dict || {}]) for (const [k, v] of Object.entries(d)) { const t = text(v); if (t !== null) all[k] = t; }
 const shadow = Object.keys(all).filter(k =>
   R.neverTranslate(k) !== null && all[k] !== k && all[k].toLowerCase() !== k.toLowerCase());
 console.log('shadowed by NEVER: ' + shadow.length);

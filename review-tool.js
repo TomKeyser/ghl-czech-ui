@@ -130,7 +130,10 @@
         [p.dictApi, p.dict].forEach(function (d) {
           if (!d) return;
           for (var en in d) {
-            var out = String(d[en]).trim();
+            /* an entry may be a volatile { t, seen, ttl } object (engine v97) */
+            var v = d[en];
+            var out = String(typeof v === 'string' ? v : (v && v.t) || '').trim();
+            if (!out) continue;
             if (!REVERSE[out]) REVERSE[out] = [];
             if (REVERSE[out].indexOf(en) === -1) REVERSE[out].push(en);
           }
