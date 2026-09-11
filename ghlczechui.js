@@ -1,4 +1,4 @@
-﻿/* =============================================================================
+/* =============================================================================
    HighLevel UI -> Czech (cs-CZ) translation layer
    Built for: Keytone Services (app.keytoneservices.com)
 
