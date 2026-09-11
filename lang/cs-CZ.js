@@ -52,6 +52,17 @@
    PRODUCT NAMES (HighLevel's and Meta's) and stay in English — LeadConnector
    is in the brand set in i18n-rules.js. "leads to"/"leading to" in English
    source strings is the VERB and translates as "vede na"/"vedoucí k".
+
+   ── GLOSSARY RULE: THE PAYMENTS MODULE IS ACCOUNTS RECEIVABLE ────────────
+   Tom, 11 Sep 2026: "this whole module is accounts receivable, not payable."
+   Every invoice in it is one the BUSINESS ISSUED to its customer. So payments
+   vocabulary is always from the seller's side:
+     USE    vydaná faktura (issued), k úhradě, uhrazeno, po splatnosti,
+            platba přijata (a PAYMENT received is fine — it is the money in)
+     NEVER  přijatá faktura, závazek, dodavatel — those are the payable side,
+            a bill FROM a supplier, and a business owner reads them that way.
+   The first real invoice caught exactly this: the tile said "faktur přijato"
+   for invoices the business had issued and been paid for. See maps.invoiceState.
 ============================================================================= */
 
 (function (root) {
