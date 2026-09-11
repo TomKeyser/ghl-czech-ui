@@ -249,6 +249,20 @@ churns about daily, and its cards arrive cut off with "…". Also left alone: th
 galleries, whose names and truncated tags ("Digital Mark...") are HighLevel's
 sample content.
 
+### The three invoice editors — checked, 11 September
+
+The template editor is `#invoice-template-editor-container`, **not** the
+`#invoice-editor-container` an earlier note assumed. It does not matter: the
+preview rule had already been widened in v74 to
+`[id*="invoice"][id$="editor-container"] .preview-section`, which matches all
+three. Verified on the live page — every node in the template preview reports
+`content-zone` naming that rule, so a user building a Czech invoice template
+sees exactly what their customer will get.
+
+The rest of the template editor walks clean: 34 strings translated, one miss,
+and that is a `12 / 40` character counter. The recurring-invoice list is clean
+as well.
+
 ## Honest caveats
 
 - One sub-account, one dataset. A screen with no records shows fewer strings.
