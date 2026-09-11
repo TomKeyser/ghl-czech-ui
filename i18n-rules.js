@@ -147,17 +147,6 @@
     return t[k] !== undefined ? t[k] : null;
   }
 
-  /* A bare hour label with no minutes, as a calendar gutter draws it.
-     THIS IS NOT A TRANSLATION, IT IS A CLOCK CHANGE: Czech uses 24-hour time,
-     so "1 PM" is 13:00 and "12 AM" is 0:00. No dictionary could ever produce
-     that, which is why the whole calendar column came back as a gap. Written
-     unpadded because that is how Czech calendars label the hour. */
-  function hour24(h, ampm) {
-    var n = parseInt(h, 10) % 12;
-    if (/pm/i.test(ampm)) n += 12;
-    return String(n);
-  }
-
   var FORMATTERS = {
     /* "Created on: Sep 4 2026, 7:13 PM (PDT)" — a label, a stamp and a zone.
        THE ZONE IS PASSED THROUGH UNCHANGED: it is the account's real setting,
@@ -200,8 +189,20 @@
       var w = weekday(pack, 'abbr', m[2]);
       return w === null ? null : m[1] + ' ' + w;
     },
-    /* "12 AM", "1 PM" — a calendar gutter hour */
-    hourLabel: function (pack, m) { return hour24(m[1], m[2]) + ':00'; },
+    /* "12 AM", "1 PM" — a calendar gutter hour.
+       THIS IS NOT A TRANSLATION, IT IS A CLOCK CHANGE: Czech uses 24-hour
+       time, so "1 PM" is 13:00 and "12 AM" is 00:00. No dictionary could
+       produce that, which is why the whole calendar column came back as a gap.
+
+       PADDED, CORRECTED 11 Sep. This used its own unpadded helper ("9:00",
+       "0:00") on the strength of my claim that Czech calendars label hours
+       that way. A native speaker says Czech times are ALWAYS two-digit —
+       "00:00", "09:00" — and that she missed it when she approved the
+       calendar, because the review looked at the day names and the 24-hour
+       switch, not the zero. Every other time in this file already padded
+       through to24; the helper that did not is gone, so there is one clock
+       and nothing to choose wrongly between. */
+    hourLabel: function (pack, m) { return to24(m[1], m[2]) + ':00'; },
     /* "Sep 6 – 12, 2026" — one month, a span of days, shared year */
     dayRangeInMonth: function (pack, m) {
       var d1 = parseInt(m[2], 10), d2 = parseInt(m[3], 10), y = m[4];
