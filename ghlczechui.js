@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v65';
+  var VERSION = 'v66';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -565,7 +565,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v43';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v44';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -691,6 +691,29 @@
     return own(LOOKUP, l) ? LOOKUP[l] : null;
   }
 
+  /* Resolve pack.byRoute for the CURRENT path. Cached on the pathname, because
+     translate() is called thousands of times per pass and the path changes only
+     on navigation. Re-resolved when it does, so an in-app route change takes
+     effect on the pass that notices the re-render it caused. */
+  var ROUTE_PATH = null;
+  var ROUTE_MAP = null;
+
+  function routeOverrides() {
+    var path = window.location.pathname;
+    if (ROUTE_PATH === path) return ROUTE_MAP;
+    ROUTE_PATH = path;
+    ROUTE_MAP = null;
+    var by = PACK && PACK.byRoute;
+    if (!by) return null;
+    var bestKey = '';
+    for (var k in by) {
+      if (!own(by, k)) continue;
+      if (path.indexOf(k) === -1) continue;
+      if (k.length > bestKey.length) { bestKey = k; ROUTE_MAP = by[k]; }
+    }
+    return ROUTE_MAP;
+  }
+
   function translate(raw) {
     if (!DICT) return null;                      /* not ready: touch nothing */
     var key = String(raw).trim();
@@ -704,6 +727,33 @@
       var keep = RULES.neverTranslate(key);
       if (keep !== null) return keep;
     }
+
+    /* ROUTE-SCOPED OVERRIDES, checked before the global dictionary.
+
+       SOME ENGLISH WORDS ARE ONE WORD IN ENGLISH AND TWO IN CZECH, and which
+       one is right depends on the DOMAIN, not the sentence. "Overdue" is the
+       case that forced this: a task is "po termínu" (past its deadline) and an
+       invoice is "po splatnosti" (past its maturity) -- the accounting term.
+       There is no word that covers both, and using the task word on an invoice
+       reads wrong to anyone who runs a business, which is exactly our user.
+
+       ⚠ THIS FAILURE CLASS IS INVISIBLE TO EVERY TOOL WE HAVE, and that is why
+       the machinery exists before the bug does. The collector only sees MISSES.
+       "Overdue" -> "Po termínu" on an invoice screen is a confident HIT: the
+       gap picker paints it green, the coverage figure counts it as translated,
+       and it ships at 98.6% while being wrong. Nothing reports it but a person
+       who reads Czech and knows accounting.
+
+       LONGEST MATCHING PREFIX WINS, deliberately -- not first-declared. Object
+       key order would otherwise be a hidden dependency, and the day someone
+       reorders the pack for tidiness the translations change.
+
+       KEEP THIS SMALL. It is for genuine domain splits, not a place to fix a
+       word you dislike on one screen. If a string needs different Czech in two
+       places for any reason OTHER than the domain owning different vocabulary,
+       the answer is a pattern rule or a better single word. */
+    var byRoute = routeOverrides();
+    if (byRoute && own(byRoute, key)) return byRoute[key];
 
     if (own(DICT, key)) return DICT[key];
 
@@ -1032,7 +1082,14 @@
        records means the selectors have stopped matching. The strings themselves
        are customer data and are deliberately not exposed, least of all through
        a surface whose whole purpose is to be read by tooling. */
-    records: function () { return RECORDS_N; }
+    records: function () { return RECORDS_N; },
+    /* WHICH domain overrides are active on this screen, and what they change.
+       Without this, "why is it 'Po splatnosti' here and 'Po termínu' on tasks?"
+       has no answer short of reading the pack. */
+    routeOverrides: function () {
+      var m = routeOverrides();
+      return m ? { scope: ROUTE_PATH, overrides: m } : null;
+    }
   };
 
   /* ---------- the miss hook ----------------------------------------------

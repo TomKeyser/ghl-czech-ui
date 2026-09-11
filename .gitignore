@@ -32,3 +32,7 @@ seed-contacts*
 *.log
 .DS_Store
 Thumbs.db
+
+# review exports pulled back from the artifact db — Tom's + mine, no customer
+# data, but they belong with the rest of the harvest rather than in the repo
+harvest/review-*/

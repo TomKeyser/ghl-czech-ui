@@ -173,6 +173,32 @@
       }
     },
 
+    /* ---- ROUTE-SCOPED OVERRIDES ------------------------------------------
+       Checked BEFORE the dictionary, for the handful of English words that are
+       one word in English and two in Czech depending on the DOMAIN.
+
+       "Overdue" is the case that forced the mechanism. A TASK is po termínu --
+       past its deadline. An INVOICE is po splatnosti -- past its maturity, the
+       standard accounting term. There is no Czech word covering both, and the
+       task word on an invoice reads wrong to anyone who runs a business, which
+       is precisely who this product is for.
+
+       NATIVE-CONFIRMED, one half of it: "Po termínu" for tasks came back ok on
+       11 Sep (review item r29, the dashboard tasks widget). "Po splatnosti"
+       did NOT -- no invoice string was in that batch. It is the standard term
+       and it already ships inside maps.invoiceState, but it is my Czech until
+       she sees it. SEND IT WITH THE INVOICE BATCH.
+
+       ADDING TO THIS: only for a genuine domain split, where a field of work
+       owns different vocabulary. Not for a word you dislike on one screen --
+       that is a pattern rule or a better single word. Longest matching path
+       prefix wins, so declaration order here does not matter. */
+    byRoute: {
+      '/payments': {
+        'Overdue': 'Po splatnosti'
+      }
+    },
+
     maps: {
       invoiceState: {
         'in draft': 'v konceptu', 'in due': 'k úhradě',
