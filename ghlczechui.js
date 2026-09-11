@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v52';
+  var VERSION = 'v53';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -362,6 +362,18 @@
        the text wrapper rather than the switcher leaves the switcher's chrome
        translatable. Found by the harvest walk once the noise was cleared. */
     '.hl_location-text',
+    /* THE OPPORTUNITY CARDS THEMSELVES. Only visible once a pipeline has cards
+       in it, which is why the board looked clean when the stage headings were
+       fixed in v45 — an empty board has no records to leak.
+
+       Each card carries a two-cell table per field: the LABEL in the first cell
+       ("Název firmy:", ours, translated) and the VALUE in the second (the
+       customer's). `td + td` takes every value cell and no label — measured on
+       the live board: 15 values matched, 0 labels.
+
+       The title is the only link inside a card's content. */
+    '.opportunitiesCard tr[id] td + td',
+    '.opportunitiesCard .ui-card-content a',
     /* the selected pipeline, also user-named. Scoped to that one dropdown on
        purpose: .hr-base-selection-label is HighLevel's design system and is
        used by every select in the product, including status pickers whose
