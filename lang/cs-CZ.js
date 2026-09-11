@@ -169,6 +169,7 @@
       apps:           { one: 'aplikace',  few: 'aplikace',  other: 'aplikací' },
       reviews:        { one: 'recenze',   few: 'recenze',   other: 'recenzí' },
       steps:          { one: 'krok',      few: 'kroky',     other: 'kroků' },
+      pages:          { one: 'stránka',   few: 'stránky',   other: 'stránek' },
       periodMonths:   { one: 'měsíc',     few: 'měsíce',    other: 'měsíců' },
       periodDays:     { one: 'den',       few: 'dny',       other: 'dní' },
       periodWeeks:    { one: 'týden',     few: 'týdny',     other: 'týdnů' },
@@ -432,6 +433,9 @@
       /* "znaků" is the genitive after the maximum, right for any count */
       CHAR_COUNT:     '{1} / {2} znaků',
       N_STEPS:        '{1} {~steps:1}',
+      N_PAGES:        '{1} {~pages:1}',
+      FC_TIP_EXPECTED: 'Očekávané tržby: {*1}\nMaximální možné tržby: {*2}\nMíra očekávaných tržeb: {3} %',
+      FC_TIP_TOTAL:   'Celkový potenciál: {*1}\nRozpis: {*2} (očekávané tržby) + {*3} (vyhrané tržby)',
       N_MONTHS:       '{1} {~periodMonths:1}',
       N_DAYS:         '{1} {~periodDays:1}',
       CSS_SIZE:       '{1}{2}',

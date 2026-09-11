@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v90';
+  var VERSION = 'v91';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -790,7 +790,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v65';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v66';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1682,8 +1682,15 @@
     var n;
     while ((n = w.nextNode())) doTextNode(n);
 
-    /* attributes on the root and everything under it (form controls included) */
-    doAttrs(root);
+    /* attributes on the root and everything under it (form controls included).
+       The ROOT goes through blockedAttr() like every other element (v91). It
+       used to be translated unconditionally, which was safe only while every
+       zone was a closest() zone and the bail above had already caught it. The
+       v82 attribute-only zones and the v90 widget-table columns are not caught
+       by that bail. The v90 sweep found a snippet's text and a product's name
+       reported from exactly this line, when the changed element was the
+       cell's own child. */
+    if (!blockedAttr(root)) doAttrs(root);
     var withAttrs = root.querySelectorAll('[placeholder],[title],[aria-label]');
     for (var i = 0; i < withAttrs.length; i++) {
       if (!blockedAttr(withAttrs[i])) doAttrs(withAttrs[i]);
