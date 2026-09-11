@@ -254,8 +254,10 @@
 
        ADDING TO THIS: only for a genuine domain split, where a field of work
        owns different vocabulary. Not for a word you dislike on one screen --
-       that is a pattern rule or a better single word. Longest matching path
-       prefix wins, so declaration order here does not matter. */
+       that is a pattern rule or a better single word. Every matching path
+       applies, merged shortest first, so a longer path overrides word by word
+       and inherits the rest (engine v93; before that only the longest match
+       applied). Declaration order here does not matter. */
     byRoute: {
       '/payments': {
         'Overdue':        'Po splatnosti',
@@ -282,11 +284,6 @@
         /* a tax table's column. Scoped here because "Rate" alone elsewhere is
            as likely to be a verb — rate a review — as a percentage. */
         'Rate':           'Sazba',
-        /* date labels on the product label's visibility window. Globally both
-           are verbs (End = "Ukončit", a call or a session), which read wrong
-           above a date picker. MY CZECH. */
-        'Start':          'Začátek',
-        'End':            'Konec',
         /* THE RECURRING SCHEDULE, walked in every mode 11 Sep. HighLevel builds
            it from separate nodes around dropdowns and an input:
              [Monthly] on [First] [Monday] of Every [1] month
@@ -304,6 +301,18 @@
         'By':             'K datu',
         /* the late-fee frequency LABEL: "Every * [1] [Month ▾]" */
         'Every':          'Interval'
+      },
+      /* Start/End as DATE LABELS: the product label's visibility window, and
+         the recurring schedule's End. Globally both are verbs, and the
+         recurring LIST's row menu needs the verb ("End" the series = Ukončit),
+         so they are scoped to these two screens. Needs the v93 engine, where
+         routes inherit from shorter prefixes. MY CZECH. */
+      '/payments/products': {
+        'Start':          'Začátek',
+        'End':            'Konec'
+      },
+      '/payments/recurring-templates/v2': {
+        'End':            'Konec'
       },
       /* the app marketplace's price tag, beside "Zdarma": a PAID app, never a
          settled invoice. Feminine, agreeing with aplikace. MY CZECH. */
@@ -437,6 +446,7 @@
       CREATED_ON_TZ:  'Vytvořeno: {*1} ({2})',
       TIME_RANGE:     '{*1}–{*2}',
       EDIT_QUOTED:    'Upravit „{1}“',
+      DELETE_TAX:     'Smazat daň – {1}',
       N_PAGES:        '{1} {~pages:1}',
       FC_TIP_EXPECTED: 'Očekávané tržby: {*1}\nMaximální možné tržby: {*2}\nMíra očekávaných tržeb: {3} %',
       FC_TIP_TOTAL:   'Celkový potenciál: {*1}\nRozpis: {*2} (očekávané tržby) + {*3} (vyhrané tržby)',
@@ -4043,6 +4053,27 @@
     "Book or update appointment":       "Rezervovat nebo změnit schůzku",
     "Audit log:":                       "Protokol auditu:",
     "Audit Logs:":                      "Protokoly auditu:",
+    /* row menus and the dialogs behind them */
+    "Convert to Template":              "Převést na šablonu",
+    "Edit in a new tab":                "Upravit na nové kartě",
+    "View History":                     "Zobrazit historii",
+    "View in a new tab":                "Zobrazit na nové kartě",
+    "Are you sure you want to delete this tax?": "Opravdu chcete tuto daň smazat?",
+    "Deleting tax will not affect the invoices and products where it is included already.":
+      "Smazání daně neovlivní faktury a produkty, ve kterých už je použita.",
+    "If this tax is already used in an invoice, it should continue to be processed.":
+      "Pokud už je daň na některé faktuře, bude se dál zpracovávat.",
+    "Renaming a tag will:":             "Přejmenování štítku:",
+    "- Update workflow triggers and actions with the new name": "- aktualizuje spouštěče a akce workflow na nový název",
+    "- Not update its name in filters or smart lists": "- neaktualizuje jeho název ve filtrech ani chytrých seznamech",
+    "- Not trigger workflows at the time of renaming": "- při přejmenování nespustí žádné workflow",
+    "Please input a tag name":          "Zadejte název štítku",
+    "Update tag":                       "Upravit štítek",
+    "Edit Snippet":                     "Upravit úryvek",
+    "Duplicate Snippet":                "Duplikovat úryvek",
+    "Delete Snippet":                   "Smazat úryvek",
+    /* sites analytics: "Page views by [dropdown]" */
+    "Page views by":                    "Zobrazení stránek podle",
     /* the new-appointment dialog's two tabs */
     "Status :":                         "Stav:",
     "Going on vacation? Taking some time off? Block off time on your calendar to prevent clients from booking appointments. Existing appointments will still remain on your calendar.":

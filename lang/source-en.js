@@ -131,6 +131,9 @@
       ['TIME_RANGE',     /^(\d{1,2}:\d{2}\s*[AP]M)\s*[–-]\s*(\d{1,2}:\d{2}\s*[AP]M)$/i],
       /* "Created On: Sep 4, 2026 9:34 PM (PDT)" — the task drawer's footer */
       ['CREATED_ON_TZ',  /^Created On:\s*(.+?)\s+\(([A-Z]{2,5})\)$/],
+      /* "Delete Tax - ZZ DPH 12 %" — the confirm dialog; the tax name is the
+         business's own and passes through raw */
+      ['DELETE_TAX',     /^Delete Tax - (.+)$/],
       /* 'Edit "Zz Test Quebec"' — the opportunity modal's title. The quoted part
          is the record's name and passes through raw. */
       ['EDIT_QUOTED',    /^Edit\s+"(.+)"$/],

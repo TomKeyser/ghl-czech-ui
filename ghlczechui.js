@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v92';
+  var VERSION = 'v93';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -790,7 +790,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v67';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v68';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -930,11 +930,22 @@
     ROUTE_MAP = null;
     var by = PACK && PACK.byRoute;
     if (!by) return null;
-    var bestKey = '';
+    /* EVERY matching prefix, merged shortest first, so a longer one overrides
+       key by key and inherits the rest (v93). Until v93 only the single longest
+       match applied, so a narrow route could not correct one word without
+       re-listing its parent's whole vocabulary. The recurring list's row menu
+       needed "End" as a verb (Ukončit) while its editor needs the noun (Konec),
+       both under /payments. */
+    var keys = [];
     for (var k in by) {
-      if (!own(by, k)) continue;
-      if (path.indexOf(k) === -1) continue;
-      if (k.length > bestKey.length) { bestKey = k; ROUTE_MAP = by[k]; }
+      if (own(by, k) && path.indexOf(k) !== -1) keys.push(k);
+    }
+    if (!keys.length) return null;
+    keys.sort(function (a, b) { return a.length - b.length; });
+    ROUTE_MAP = {};
+    for (var i = 0; i < keys.length; i++) {
+      var m = by[keys[i]];
+      for (var w in m) if (own(m, w)) ROUTE_MAP[w] = m[w];
     }
     return ROUTE_MAP;
   }
@@ -1150,11 +1161,34 @@
            th.getAttribute('aria-label') || null;
   }
 
+  /* FALLBACK, v93: some of these tables carry no key at all (the tags list).
+     Their header's own TITLE is HighLevel's column name. It's read in the
+     ORIGINAL English (the text node's __kaSrc, since we translate headers)
+     and let through only on an exact date-or-status title. Anchored at both
+     ends, so "Last Name" or "Created By" can never open a column. */
+  var HR_TITLE_LET = /^(?:(?:date\s+)?(?:created|updated|modified|added)(?:\s+(?:on|at|date))?|date|due date|last (?:updated|modified)|status)$/i;
+
+  function hrHeaderTitle(td) {
+    var table = td.closest('table');
+    var head = table && table.tHead;
+    if (!head || !head.rows.length) return null;
+    var th = head.rows[head.rows.length - 1].cells[td.cellIndex];
+    if (!th) return null;
+    var w = document.createTreeWalker(th, NodeFilter.SHOW_TEXT), n;
+    while ((n = w.nextNode())) {
+      var t = (n.__kaSrc || n.textContent || '').trim();
+      if (t) return t;
+    }
+    return null;
+  }
+
   function hrCellBlocked(el) {
     var td = el.closest('td.hr-data-table__body-cell');
     if (!td) return false;
     var key = hrColumnKey(td);
-    return !(key && hrColumnLetThrough(key));
+    if (key) return !hrColumnLetThrough(key);
+    var title = hrHeaderTitle(td);
+    return !(title && HR_TITLE_LET.test(title));
   }
 
   function blockedText(el) {
