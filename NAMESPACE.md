@@ -44,7 +44,9 @@ Set on DOM nodes, not attributes: invisible in markup, never serialised into
 ## The record backstop (v55)
 
 Not a name, but it belongs beside the attribute contract because it is the other
-half of the firewall.
+half of the firewall. **FIREWALL.md** is the full account — both mechanisms,
+what each cannot reach, the known gaps, and the `:has()` approach that was
+measured and parked.
 
 `CONTENT_ZONES` is a map of **where** customer data lives, and a map can only
 name places that exist. HighLevel copies record names into places no selector
