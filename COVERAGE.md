@@ -173,6 +173,23 @@ settings/lc-integrations  settings/private-integrations  settings/tags
 settings/labs  settings/audit/logs
 ```
 
+**Dialogs** (added v89). The route list cannot reach what sits behind a
+button, so these are opened and closed **unsaved** (Escape, then Zrušit).
+Afterwards, check the lists: the v89 walk left nothing behind.
+
+```
+contacts/smart_list/All  → Přidat kontakt        opportunities/list → Přidat příležitost
+tasks                    → Přidat úkol           businesses/list    → Přidat společnost
+payments/coupons         → Vytvořit kupón        payments/v2/paymentlinks → Vytvořit odkaz
+payments/gift-cards      → Vytvořit dárkový poukaz   payments/v2/subscriptions → Přidat předplatné
+settings/custom_values   → Přidat vlastní hodnotu    settings/tags → Vytvořit štítek
+settings/fields          → Vytvořit pole         settings/objects   → Přidat vlastní objekt
+marketing/trigger-links  → Přidat odkaz          marketing/templates → Nový úryvek
+blogs → Nový blog   qr-codes → Vytvořit QR kód   reputation/requests → Odeslat žádost o recenzi
+funnels-websites/funnels → Nový trychtýř         memberships/courses/products-v2 → Vytvořit nový kurz
+settings/scoring → Přidat nové pravidlo
+```
+
 Plus one saved record per editor (a product, a recurring invoice), and a
 *create* form wherever toggles hide sections (see the caveat below).
 
