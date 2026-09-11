@@ -113,6 +113,7 @@
          letters, so "September" and "Sep" land on the same month. A separate
          rule rather than a widened STAMP, so the reviewed output of that one
          cannot move. */
+      ['STAMP_DAY_FIRST', /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\s*\/\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stampDayFirst'],
       ['STAMP_FULL',     /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(\d{4}),?\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@stamp'],
       /* THE TAX LINE ON AN INVOICE, 11 Sep — the business's tax NAME wrapped in
          HighLevel's wording. Two shapes, one per pricing mode:
@@ -222,6 +223,8 @@
       ['LABS_LIVE_IN',   /^Activate now - Live in (\d+) days?$/],
       /* a text box's counter, "0 / 2000 characters" (the new-task dialog) */
       ['CHAR_COUNT',     /^(\d+)\s*\/\s*(\d+)\s+characters$/],
+      /* "3 Steps" — a funnel's step count, in the funnels list */
+      ['N_STEPS',        /^(\d+)\s+Steps?$/],
       ['N_MONTHS',       /^(\d+)\s+months?$/i],
       ['N_DAYS',         /^(\d+)\s+days?$/i],
       /* "16px" — the rich-text editor's font-size box. A CSS size, the same in

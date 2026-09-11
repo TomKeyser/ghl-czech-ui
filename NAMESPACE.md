@@ -53,6 +53,7 @@ Set on DOM nodes, not attributes: invisible in markup, never serialised into
 | `__kaSrc` | text nodes | The **English we replaced**, so the shell can be put back when the gate closes. |
 | `__kaAttr_<name>` | elements | The attribute value we wrote, e.g. `__kaAttr_title`. The counterpart of `__kaDone`; without it `doAttrs` re-read its own output every pass and reported it as a gap. |
 | `__kaVal` | inputs, textareas | The prefilled value we wrote. |
+| `__kaAttrSrc_<name>` | elements | The attribute's **original** value, before we translated it (v90). A widget table's column key lives in its header cell's `aria-label` ("dateUpdated"). Translating that label would otherwise destroy the key that `hrCellBlocked()` reads to decide whether a column is ours. |
 
 ## The record backstop (v55)
 

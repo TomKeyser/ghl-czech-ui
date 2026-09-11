@@ -96,6 +96,18 @@ campaign table (`.table-hl tbody`) and a contact's attribution source
 (`#attribution-value`) are blocked for the usual reason: they're the
 account's own data.
 
+**Widget tables read their column from the header** (v90, `hrCellBlocked()`).
+HighLevel's own table component (`td.hr-data-table__body-cell`) carries no
+column key on its cells, so until v90 the only possible rule was to block
+every cell. That left dates and counts in English on the funnels list, the
+dashboard widgets, and anywhere else the component is used. The key is on the
+header cell instead, as its `aria-label` ("dateUpdated", "steps"). The cell's
+`cellIndex` finds that header cell in O(1). The let-through is the same as for
+the `data-col-key` tables, plus "steps". An unknown header, a missing header
+or an empty key means blocked, as before. One subtlety: the engine translates
+those aria-labels itself, so it now keeps each rewritten attribute's original
+in `__kaAttrSrc_<name>` (NAMESPACE.md).
+
 **Attribute-only zones** (v81, `SELF_ATTR_ZONES`). A zone works through
 `closest()`, so it silences everything inside it. That cannot express "this
 element's own attributes are a record, its children are ours". The product

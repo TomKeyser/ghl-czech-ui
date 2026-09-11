@@ -168,6 +168,7 @@
       accounts:       { one: 'účet',      few: 'účty',      other: 'účtů' },
       apps:           { one: 'aplikace',  few: 'aplikace',  other: 'aplikací' },
       reviews:        { one: 'recenze',   few: 'recenze',   other: 'recenzí' },
+      steps:          { one: 'krok',      few: 'kroky',     other: 'kroků' },
       periodMonths:   { one: 'měsíc',     few: 'měsíce',    other: 'měsíců' },
       periodDays:     { one: 'den',       few: 'dny',       other: 'dní' },
       periodWeeks:    { one: 'týden',     few: 'týdny',     other: 'týdnů' },
@@ -430,6 +431,7 @@
       LABS_LIVE_IN:   'Aktivujte hned – pro všechny za {1} {~periodDays:1}',
       /* "znaků" is the genitive after the maximum, right for any count */
       CHAR_COUNT:     '{1} / {2} znaků',
+      N_STEPS:        '{1} {~steps:1}',
       N_MONTHS:       '{1} {~periodMonths:1}',
       N_DAYS:         '{1} {~periodDays:1}',
       CSS_SIZE:       '{1}{2}',

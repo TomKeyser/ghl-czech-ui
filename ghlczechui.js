@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v89';
+  var VERSION = 'v90';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -367,8 +367,11 @@
        lists what to protect would silently miss every column added later.
        Header cells are untouched, so column titles still translate. */
     '.tabulator-cell:not([tabulator-field*="date" i]):not([tabulator-field*="time" i]):not([tabulator-field*="activity" i]):not([tabulator-field*="created" i]):not([tabulator-field*="updated" i])',
-    /* the dashboard widget tables, which use HighLevel's own component library */
-    '.hr-data-table__body-cell',
+    /* the dashboard widget tables (.hr-data-table__body-cell) are NOT listed
+       here any more — see hrCellBlocked(), v90. Their cells carry no column key,
+       so a selector could only block every cell, dates included ("Mar 18, 2025
+       11:05 PM" on the funnels list stayed English). The column is now read
+       from the header cell, with the same let-through as the tables below. */
     /* THE INVOICE LIST — and any other table built on the same component. Found
        11 Sep, the first day the account had real invoices: the customer's
        INITIALS were protected (.hr-avatar__text) but their NAME reached the
@@ -787,7 +790,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v64';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v65';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1121,9 +1124,43 @@
     loadScript(BASE + 'lang/' + locale + '.js' + pin, done);
   }
 
+  /* HIGHLEVEL'S WIDGET TABLES, v90. Their body cells (td.hr-data-table__body-cell)
+     carry no data-col-key, unlike the invoice-list tables. The column's key
+     lives on the HEADER cell, as its aria-label ("dateUpdated", "steps") — which
+     this engine itself translates, so the original is read from the property
+     doAttrs leaves behind (__kaAttrSrc_aria-label).
+
+     Same default as every other table: a cell is BLOCKED unless its column is
+     known to hold our text. Unknown header, no header, no key: blocked. The
+     let-through is the data-col-key list in CONTENT_ZONES plus "steps" (a count,
+     "3 Steps"). cellIndex and tHead are O(1), so this costs nothing per node. */
+  function hrColumnLetThrough(k) {
+    return /date/i.test(k) || /At$/.test(k) || /status/i.test(k) || /^action/i.test(k) ||
+           k === 'productType' || k === 'paymentProviderType' || /edOn$/.test(k) ||
+           /^schedule/.test(k) || k === 'steps';
+  }
+
+  function hrColumnKey(td) {
+    var table = td.closest('table');
+    var head = table && table.tHead;
+    if (!head || !head.rows.length) return null;
+    var th = head.rows[head.rows.length - 1].cells[td.cellIndex];
+    if (!th) return null;
+    return th['__kaAttrSrc_aria-label'] || th.getAttribute('data-col-key') ||
+           th.getAttribute('aria-label') || null;
+  }
+
+  function hrCellBlocked(el) {
+    var td = el.closest('td.hr-data-table__body-cell');
+    if (!td) return false;
+    var key = hrColumnKey(td);
+    return !(key && hrColumnLetThrough(key));
+  }
+
   function blockedText(el) {
     if (!el || !el.closest) return true;
     if (el.closest(BLOCKED_TEXT)) return true;
+    if (hrCellBlocked(el)) return true;
     /* an <option> is allowed unless it belongs to a record picker */
     if (el.tagName === 'OPTION' || el.closest('option')) return inDataPicker(el);
     return false;
@@ -1132,7 +1169,8 @@
   function blockedAttr(el) {
     if (!el) return true;
     if (el.matches && el.matches(SELF_ATTR)) return true;
-    return el.closest && el.closest(BLOCKED_ATTR);
+    if (!el.closest) return true;
+    return !!el.closest(BLOCKED_ATTR) || hrCellBlocked(el);
   }
 
   /* ---------- MIRRORED RECORDS: the backstop behind the selectors ---------
@@ -1335,13 +1373,18 @@
        not match the code it describes is worse than none. */
     if (attr) {
       if (blockedAttr(el)) {
-        return { reason: 'content-zone', zone: zoneOf(el, true),
+        return { reason: 'content-zone', zone: zoneOf(el, true) || 'hr-data-table column',
                  on: describe(el.closest(BLOCKED_ATTR) || el), text: key };
       }
     } else {
       if (el.closest(BLOCKED_TEXT)) {
         return { reason: 'content-zone', zone: zoneOf(el, false),
                  on: describe(el.closest(BLOCKED_TEXT) || el), text: key };
+      }
+      if (hrCellBlocked(el)) {
+        var hrTd = el.closest('td.hr-data-table__body-cell');
+        return { reason: 'content-zone', zone: 'hr-data-table column: ' + (hrColumnKey(hrTd) || '(no key)'),
+                 on: describe(hrTd), text: key };
       }
       if ((el.tagName === 'OPTION' || el.closest('option')) && inDataPicker(el)) {
         return { reason: 'data-picker', on: describe(el.closest('select') || el), text: key };
@@ -1485,6 +1528,10 @@
       if (out === v) continue;
       el.setAttribute(a, out);
       el[mark] = out;
+      /* the ORIGINAL, v90: a widget table's column key is its header cell's
+         aria-label, and translating it would otherwise destroy the key that
+         hrCellBlocked() reads. Same lifetime as the marker above. */
+      el['__kaAttrSrc_' + a] = v;
       if (TOUCHED_ATTRS.length < MAX_TOUCHED) TOUCHED_ATTRS.push([el, a, v, out]);
     }
   }

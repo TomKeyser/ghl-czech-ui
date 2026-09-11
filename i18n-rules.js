@@ -226,6 +226,11 @@
       var mo = month(pack, 'abbr', m[1]);
       return mo === null ? null : m[2] + '. ' + mo + ' ' + m[3] + ' ' + time;
     },
+    /* "04 Sep 2026 / 07:13 PM" — the tags list, day first. Same output as
+       @stamp; only the capture order differs. */
+    stampDayFirst: function (pack, m) {
+      return FORMATTERS.stamp(pack, [m[0], m[2], String(+m[1]), m[3], m[4], m[5], m[6]]);
+    },
     /* "Sep 10 at 09:20 PM" — the timestamp in every payments list (products,
        transactions, orders...). No year, and an English "at". The SHAPE comes
        from pack.frames.dateTime, because the connective is language: Czech
