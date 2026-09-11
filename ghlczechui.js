@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v54';
+  var VERSION = 'v55';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -387,11 +387,26 @@
        The title is the only link inside a card's content. */
     '.opportunitiesCard tr[id] td + td',
     '.opportunitiesCard .ui-card-content a',
-    /* the selected pipeline, also user-named. Scoped to that one dropdown on
+    /* the selected pipeline, also user-named. Scoped to that dropdown on
        purpose: .hr-base-selection-label is HighLevel's design system and is
        used by every select in the product, including status pickers whose
-       values we DO translate. (Their id really is spelled DropdDown.) */
-    '#pipelineDropdDown-listview .hr-base-selection-label',
+       values we DO translate. (Their id really is spelled DropdDown.)
+
+       AN ID PREFIX, NOT THE EXACT ID. There are TWO of these selects and they
+       are different elements: #pipelineDropdDown on the board and
+       #pipelineDropdDown-listview in the list-view toolbar. v45 named only the
+       listview one, so the board's pipeline name leaked in BOTH its text and
+       its title attribute for ten versions -- found on /opportunities, 11 Sep.
+       The prefix covers whatever the next view calls its copy. */
+    '[id^="pipelineDropdDown"] .hr-base-selection-label',
+    /* AVATAR INITIALS. Always derived from a person's name, so they are as much
+       customer data as the name is -- "ZZ" here is the sub-account owner. Two
+       characters never carry interface meaning, so there is nothing to lose by
+       blocking the class wholesale.
+
+       .avatar_img, NOT .hl_header--avatar: the anchor around it carries the
+       aria-label "Open profile menu", which IS ours to translate. */
+    '.avatar_img',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -799,6 +814,49 @@
     return !el || (el.closest && el.closest(BLOCKED_ATTR));
   }
 
+  /* ---------- MIRRORED RECORDS: the backstop behind the selectors ---------
+     CONTENT_ZONES is a map of WHERE customer data lives, and a map can only
+     name places that exist. HighLevel copies a record's name into places the
+     map cannot reach: hover tooltips portalled to <body>, aria-labels and
+     title attributes on wrapper elements. Measured on /opportunities, 11 Sep:
+     the card-hover tooltip holding a contact's name is structurally IDENTICAL
+     to the five action tooltips beside it -- same classes, same parent, same
+     child span -- so no selector can separate "zz tom zz keyser" from
+     "Add note". Only the content differs.
+
+     So use the content. Every string the firewall REJECTS is customer data by
+     definition; remember those, and refuse to report the same string when it
+     turns up somewhere the selectors do not cover. The set maintains itself
+     from the firewall we already have, and needs no new selector per mirror.
+
+     IT SUPPRESSES REPORTING, NOT TRANSLATION, and that limit is deliberate.
+     A record named "Call" would otherwise stop the Call BUTTON translating
+     everywhere on the page -- a customer's data silently breaking the product
+     for them, which is worse than the leak it would close. The suppression
+     therefore sits on the miss path only, where translate() has already
+     returned null: nothing that was going to be translated is affected, and
+     the names stop flowing to the collector, the picker and the error channel.
+
+     Bounded and per-page-load. Nothing is persisted. */
+  var RECORDS = Object.create(null);
+  var RECORDS_N = 0;
+  var MAX_RECORDS = 800;
+
+  function noteRecord(s) {
+    if (!s) return;
+    s = String(s).trim();
+    /* 3 chars minimum: shorter strings are initials and symbols, which collide
+       with interface text far more often than they identify anyone. */
+    if (s.length < 3 || s.length > 80) return;
+    if (RECORDS[s] || RECORDS_N >= MAX_RECORDS) return;
+    RECORDS[s] = 1;
+    RECORDS_N++;
+  }
+
+  function isRecordMirror(s) {
+    return !!RECORDS[String(s).trim()];
+  }
+
   /* ---------- __kaDebug: read-only diagnosis surface ----------------------
      The gap picker and the errors channel both need to answer ONE question
      about a string on screen: why is this not in Czech? Everything needed to
@@ -848,7 +906,7 @@
 
   /* why(node[, attr]) -> { reason, ... }
      reasons: not-ready | empty | too-long | iframe | content-zone |
-              data-picker | missing | translated                        */
+              data-picker | record-mirror | missing | translated        */
   function why(node, attr) {
     if (!node) return { reason: 'no-node' };
     if (!DICT) return { reason: 'not-ready' };
@@ -902,9 +960,15 @@
     }
 
     var out = translate(key);
-    return out === null
-      ? { reason: 'missing', text: key, attr: attr || null }
-      : { reason: 'translated', text: key, to: out, attr: attr || null };
+    if (out !== null) return { reason: 'translated', text: key, to: out, attr: attr || null };
+    /* seen inside the firewall elsewhere on this page: a mirror of a record,
+       not a gap. Reported separately so the picker can show it as protected
+       rather than as work outstanding. */
+    if (isRecordMirror(key)) {
+      return { reason: 'record-mirror', text: key, attr: attr || null,
+               note: 'same string was blocked by a content zone elsewhere on this page' };
+    }
+    return { reason: 'missing', text: key, attr: attr || null };
   }
 
   /* Zero-match audit. A do-not-touch selector that matches nothing on any
@@ -926,7 +990,13 @@
     dead: dead,
     zones: CONTENT_ZONES,
     attrs: ATTRS,
-    maxLen: MAX_LEN
+    maxLen: MAX_LEN,
+    /* HOW MANY record strings the firewall has caught on this page, not WHICH.
+       The count is the useful diagnostic -- a zero here on a screen full of
+       records means the selectors have stopped matching. The strings themselves
+       are customer data and are deliberately not exposed, least of all through
+       a surface whose whole purpose is to be read by tooling. */
+    records: function () { return RECORDS_N; }
   };
 
   /* ---------- the miss hook ----------------------------------------------
@@ -963,7 +1033,10 @@
        -> 400 (long warnings and tooltips). Applies to the English source. */
     if (!raw || raw.length > MAX_LEN) return;
     var out = translate(raw);
-    if (out === null) { missed(raw, node, null); return; }
+    if (out === null) {
+      if (!isRecordMirror(raw)) missed(raw, node, null);
+      return;
+    }
     /* preserve surrounding whitespace so layout/spacing is unchanged */
     var lead = raw.match(/^\s*/)[0];
     var tail = raw.match(/\s*$/)[0];
@@ -993,7 +1066,10 @@
       var mark = '__kaAttr_' + a;
       if (el[mark] === v) continue;              /* ours, and untouched since */
       var out = translate(v);
-      if (out === null) { missed(v, el, a); continue; }
+      if (out === null) {
+        if (!isRecordMirror(v)) missed(v, el, a);
+        continue;
+      }
       if (out === v) continue;
       el.setAttribute(a, out);
       el[mark] = out;
@@ -1080,7 +1156,8 @@
     if (!shouldTranslate()) return;
 
     if (root.nodeType === 3) {
-      if (!blockedText(root.parentElement)) doTextNode(root);
+      if (blockedText(root.parentElement)) noteRecord(root.textContent);
+      else doTextNode(root);
       return;
     }
     if (root.nodeType !== 1) return;
@@ -1109,7 +1186,10 @@
     /* text nodes (form controls excluded -- their text is customer data) */
     var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
-        return blockedText(n.parentElement) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+        if (!blockedText(n.parentElement)) return NodeFilter.FILTER_ACCEPT;
+        /* the firewall rejected it, so it is customer data -- remember it */
+        noteRecord(n.textContent);
+        return NodeFilter.FILTER_REJECT;
       }
     });
     var n;
