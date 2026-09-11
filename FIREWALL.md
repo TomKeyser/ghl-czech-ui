@@ -108,6 +108,18 @@ or an empty key means blocked, as before. One subtlety: the engine translates
 those aria-labels itself, so it now keeps each rewritten attribute's original
 in `__kaAttrSrc_<name>` (NAMESPACE.md).
 
+**Cost, measured 11 Sep:** the extra `closest('td.hr-data-table__body-cell')`
+per text node adds **0.3–1.0 ms** to a full pass over every text node on
+screen (funnels 115 nodes, dashboard 139, contacts list 302). The existing
+zone check costs 1.5–2.5 ms on the same pass. Real passes walk only what
+changed. Unlike the parked `:has()` approach, it doesn't grow with the
+selector list.
+
+When a table has no key at all (the tags list, v93), the header's original
+English title is the fallback. It opens the column only on an exact date or
+status title ("Created On", "Status"), anchored so that "Last Name" or
+"Created By" never matches.
+
 **Attribute-only zones** (v81, `SELF_ATTR_ZONES`). A zone works through
 `closest()`, so it silences everything inside it. That cannot express "this
 element's own attributes are a record, its children are ours". The product
