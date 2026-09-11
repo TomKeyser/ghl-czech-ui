@@ -277,7 +277,12 @@
         'Due Date':       'Datum splatnosti',
         /* a tax table's column. Scoped here because "Rate" alone elsewhere is
            as likely to be a verb — rate a review — as a percentage. */
-        'Rate':           'Sazba'
+        'Rate':           'Sazba',
+        /* date labels on the product label's visibility window. Globally both
+           are verbs (End = "Ukončit", a call or a session), which read wrong
+           above a date picker. MY CZECH. */
+        'Start':          'Začátek',
+        'End':            'Konec'
       }
     },
 
@@ -3345,6 +3350,7 @@
       "Automaticky odesílat faktury zákazníkům v nastaveném intervalu",
     "Recurring Invoice Name":           "Název opakované faktury",
     "Last Issued On":                   "Naposledy vystaveno",
+    "No recurring invoices to show yet": "Zatím žádné opakované faktury k zobrazení",
 
     /* THE PRODUCT EDITOR, 11 Sep — the largest untranslated screen found so
        far (53 gaps against 38 translated on first open). A newer surface:
@@ -3408,10 +3414,34 @@
     "Create Collection":                "Vytvořit kolekci",
     "Enter the SEO title":              "Zadejte titulek pro SEO",
     "Enter the SEO Description":        "Zadejte popis pro SEO",
+    /* the online-store half of the product editor, 11 Sep. Shown only while
+       "Zahrnout do e-shopu" is on, which is the default on a NEW product —
+       the saved test products had it off, so the collector caught these only
+       as a flash during load. Walked on the create form. MY CZECH. */
+    "Search Engine Listing":            "Zobrazení ve vyhledávačích",
+    "SEO Title":                        "Titulek pro SEO",
+    "SEO Description":                  "Popis pro SEO",
+    /* the product's URL slug. The fixed "/product/" path prints beside it and
+       is a URL, so it stays as it is. */
+    "Handle":                           "Část adresy URL",
+    "Product Collection":               "Kolekce produktů",
+    "Select (or) Search for a Collection": "Vyberte nebo vyhledejte kolekci",
+    "Track Inventory":                  "Sledovat skladové zásoby",
+    "Continue selling when out of stock": "Prodávat i po vyprodání zásob",
+    "Add Margin":                       "Přidat marži",
+    /* the product label ("Sale", "Featured") and the window it shows for.
+       Start/End are scoped to /payments in byRoute: globally both are verbs. */
+    "Eg: Sale, Featured etc":           "Např. Výprodej, Doporučujeme",
+    "Visibility Duration":              "Doba zobrazení",
     /* HighLevel's own aria-label on every radio button — a developer label a
        screen reader reads aloud. Translated for the same reason as the leaked
        titleX keys: it cannot make things worse, and it helps someone. */
     "radio-input":                      "přepínač",
+    /* two more of HighLevel's untranslated message KEYS, printed raw: the
+       rich-text editor's screen-reader label, and the title of the "load a
+       snapshot" dialog that sits hidden in every page. */
+    "editor.richTextEditor.uploadImageLabel": "Nahrát obrázek",
+    "snapshots.loadSnapshotsTemplate.selectSnapshotTemplate": "Vyberte šablonu snapshotu",
     "Successfully saved":               "Úspěšně uloženo",
     "Tax will be exclusive or inclusive based on the Global settings (Payments > Settings) i.e. every time Global settings change, the tax behavior for this product would change. To keep it unlinked to Global Settings, select 'Yes' or 'No' from below options.":
       "Daň bude zahrnuta v ceně nebo připočtena podle globálního nastavení (Platby > Nastavení), tj. při každé změně globálního nastavení se změní i daňové chování tohoto produktu. Chcete-li ho od globálního nastavení oddělit, vyberte níže „Ano“ nebo „Ne“.",
