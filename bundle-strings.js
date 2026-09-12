@@ -105,7 +105,7 @@ function literals(src) {
 /* ---------- what we already have ---------------------------------------- */
 
 function known() {
-  const pack = require('./lang/cs-CZ.js');
+  const pack = require('./src/lang/cs-CZ.js');
   const set = new Set();
   for (const part of ['dict', 'dictApi']) {
     for (const k of Object.keys(pack[part] || {})) set.add(k);

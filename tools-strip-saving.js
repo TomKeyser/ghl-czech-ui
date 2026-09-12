@@ -4,7 +4,7 @@
 const fs = require('fs');
 const zlib = require('zlib');
 
-const FILES = ['ghlczechui.js','i18n-rules.js','lang/cs-CZ.js','lang/source-en.js','collector.js'];
+const FILES = ['src/ghlczechui.js','src/i18n-rules.js','src/lang/cs-CZ.js','src/lang/source-en.js','src/collector.js'];
 
 function stripComments(s) {
   let out = '', i = 0, inStr = null, inBlock = false, inLine = false;

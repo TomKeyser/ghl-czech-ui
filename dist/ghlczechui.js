@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v127';
+  var VERSION = 'v128';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -275,7 +275,7 @@
       var s = document.currentScript && document.currentScript.src;
       if (s) return s.replace(/[^/]*(?:\?.*)?$/, '');
     } catch (e) {}
-    return 'https://tomkeyser.github.io/ghl-czech-ui/';
+    return 'https://tomkeyser.github.io/ghl-czech-ui/dist/';
   })();
   var STATUS = window.__kaStatus = {
     version: VERSION, dataVersion: DATA_VERSION, base: BASE,

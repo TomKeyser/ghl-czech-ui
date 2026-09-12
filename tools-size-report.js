@@ -3,12 +3,12 @@ const fs = require('fs');
 const zlib = require('zlib');
 
 const FILES = [
-  ['ghlczechui.js',    'engine'],
-  ['i18n-rules.js',    'rules engine'],
-  ['lang/cs-CZ.js',    'target pack (cs-CZ)'],
-  ['lang/source-en.js','source rules (en)'],
-  ['gap-picker.js',    'dev tool, opt-in'],
-  ['review-tool.js',   'dev tool, opt-in']
+  ['src/ghlczechui.js',    'engine'],
+  ['src/i18n-rules.js',    'rules engine'],
+  ['src/lang/cs-CZ.js',    'target pack (cs-CZ)'],
+  ['src/lang/source-en.js','source rules (en)'],
+  ['src/gap-picker.js',    'dev tool, opt-in'],
+  ['src/review-tool.js',   'dev tool, opt-in']
 ];
 
 /* Strip comments while respecting strings and template literals.

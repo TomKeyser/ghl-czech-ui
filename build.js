@@ -30,7 +30,7 @@
    measured saving is almost entirely the comments; mangling would add real
    risk for a few more kilobytes, and this code reaches a live business.
 
-   Usage:  node build.js          build + verify into dist/
+   Usage:  node build.js          build + verify src/ into dist/
            node build.js --check  verify only, write nothing
 ============================================================================= */
 
@@ -40,7 +40,10 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
+const SRC = 'src';
 const OUT = 'dist';
+/* Paths below are relative to both: src/lang/cs-CZ.js builds to dist/lang/cs-CZ.js,
+   so the served layout is unchanged and the engine's BASE + 'lang/' still resolves. */
 const MODULES = [
   { file: 'ghlczechui.js', requireable: false },
   { file: 'i18n-rules.js', requireable: true },
@@ -265,7 +268,7 @@ const results = [];
 let failed = false;
 
 for (const mod of MODULES) {
-  const srcPath = mod.file;
+  const srcPath = path.join(SRC, mod.file);
   if (!fs.existsSync(srcPath)) { console.log('SKIP (missing) ' + srcPath); continue; }
   const src = fs.readFileSync(srcPath, 'utf8');
 
@@ -317,7 +320,7 @@ for (const mod of MODULES) {
 
   const gzA = zlib.gzipSync(src, { level: 6 }).length;
   const gzB = zlib.gzipSync(built, { level: 6 }).length;
-  results.push({ file: srcPath, checks, allOk,
+  results.push({ file: srcPath, rel: mod.file, checks, allOk,
     rawBefore: Buffer.byteLength(src), rawAfter: Buffer.byteLength(built),
     gzBefore: gzA, gzAfter: gzB, built });
 }
@@ -357,7 +360,7 @@ if (checkOnly) { console.log('\n--check: verified, nothing written.'); process.e
 fs.mkdirSync(path.join(OUT, 'lang'), { recursive: true });
 let writeFailed = false;
 for (const r of results) {
-  const dest = path.join(OUT, r.file);
+  const dest = path.join(OUT, r.rel);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, r.built, 'utf8');
 

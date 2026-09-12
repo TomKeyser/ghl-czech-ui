@@ -1,5 +1,5 @@
 // Pre-deploy checks for a language pack. Run before every commit that touches
-// lang/ or i18n-rules.js:   node check-pack.js [locale]     (default cs-CZ)
+// src/lang/ or src/i18n-rules.js:   node check-pack.js [locale]     (default cs-CZ)
 //
 // Each check exists because its failure shipped once, silently:
 //   1. duplicate keys  — in an object literal a repeated key replaces the
@@ -14,9 +14,9 @@ const fs = require('fs');
 const path = require('path');
 
 const locale = process.argv[2] || 'cs-CZ';
-const packPath = path.join(__dirname, 'lang', locale + '.js');
-const R = require('./i18n-rules.js');
-const S = require('./lang/source-en.js');
+const packPath = path.join(__dirname, 'src', 'lang', locale + '.js');
+const R = require('./src/i18n-rules.js');
+const S = require('./src/lang/source-en.js');
 const P = require(packPath);
 let problems = 0;
 

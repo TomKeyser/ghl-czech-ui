@@ -33,7 +33,7 @@
    because you walked past.
 
    INSTALL — one line, under the engine's loader in the Whitelabel Custom JS box:
-     <script src="https://tomkeyser.github.io/ghl-czech-ui/gap-picker.js"></script>
+     <script src="https://tomkeyser.github.io/ghl-czech-ui/dist/gap-picker.js"></script>
 
    It inherits the engine's own sub-account gate, so it appears exactly where
    the engine is running and nowhere else.

@@ -21,7 +21,10 @@
    untenable. So APPEND this one line below the existing loader in
    Agency > Settings > Company > Whitelabel > Custom JS (append, never replace):
 
-     <script src="https://tomkeyser.github.io/ghl-czech-ui/review-tool.js"></script>
+     <script src="https://tomkeyser.github.io/ghl-czech-ui/src/review-tool.js"></script>
+
+   (Not built into dist/, so it is served from src/ — and only while the repo
+   is public. Not loaded by the Custom JS as of 12 Sep.)
 
    That is safe to leave in the shared field because THIS TOOL GATES ITSELF ON
    EXACTLY THE SAME SUB-ACCOUNTS THE ENGINE TRANSLATES — see the gate below, which

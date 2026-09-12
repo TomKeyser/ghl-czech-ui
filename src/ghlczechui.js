@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v127';
+  var VERSION = 'v128';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1178,7 +1178,7 @@
       var s = document.currentScript && document.currentScript.src;
       if (s) return s.replace(/[^/]*(?:\?.*)?$/, '');
     } catch (e) {}
-    return 'https://tomkeyser.github.io/ghl-czech-ui/';
+    return 'https://tomkeyser.github.io/ghl-czech-ui/dist/';
   })();
 
   var STATUS = window.__kaStatus = {

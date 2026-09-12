@@ -35,7 +35,7 @@
    with __kaCollect.download(). No endpoint, no beacon, no network at all.
 
    INSTALL — after the engine, in the Whitelabel Custom JS box:
-     <script src="https://tomkeyser.github.io/ghl-czech-ui/collector.js"></script>
+     <script src="https://tomkeyser.github.io/ghl-czech-ui/dist/collector.js"></script>
 
    CONSOLE
      __kaCollect.stats()      what has been seen, by route

@@ -13,7 +13,7 @@ new Function('module','exports','require',src+'\nmodule.exports={scan,tokensEqua
 const {scan,tokensEqual,nonAsciiProfile,profilesEqual}=mod.exports;
 
 const good=fs.readFileSync(path.join('dist','lang','cs-CZ.js'),'utf8');
-const orig=fs.readFileSync(path.join('lang','cs-CZ.js'),'utf8');
+const orig=fs.readFileSync(path.join('src','lang','cs-CZ.js'),'utf8');
 const origTokens=scan(orig,'orig').tokens;
 
 function verdict(label, mutated){
