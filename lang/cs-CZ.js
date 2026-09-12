@@ -691,7 +691,7 @@
     "Summary": "Souhrn",
     "The predictable monthly subscription revenue from active customers": "Předvídatelné měsíční tržby z předplatného od aktivních zákazníků",
     "The Stripe account connected to this agency is unverified and cannot collect payments. Please complete verification by logging in to your": "Účet Stripe propojený s touto agenturou není ověřen a nemůže přijímat platby. Dokončete prosím ověření přihlášením do svého",
-    "These metrics now reflect subscriptions that currently exist in HighLevel and do not include data pulled directly from payment processors. Learn more about how MRR is calculated": "Tyto metriky nyní odrážejí předplatná, která aktuálně existují v HighLevelu, a nezahrnují data načtená přímo od platebních zpracovatelů. Zjistěte více o tom, jak se MRR počítá",
+    "These metrics now reflect subscriptions that currently exist in HighLevel and do not include data pulled directly from payment processors. Learn more about how MRR is calculated": "Tyto metriky nyní odrážejí předplatná, která aktuálně existují v systému, a nezahrnují data načtená přímo od platebních zpracovatelů. Zjistěte více o tom, jak se MRR počítá",
     "Top products by revenue": "Nejlepší produkty podle tržeb",
     "Total Cost": "Celkové náklady",
     "Total Customers": "Celkem zákazníků",
@@ -916,7 +916,14 @@
     "Facebook message": "Zpráva na Facebooku",
     "Fetching typography styles..": "Načítám styly písma…",
     "Fetching your latest alerts, hang tight!": "Načítáme vaše nejnovější upozornění, vydržte!",
-    "Find anything in HighLevel...": "Najít cokoli v HighLevelu...",
+    /* WHITE LABEL, Tom's rule 12 Sep: our output never names the platform.
+       The English source does ("Find anything in HighLevel..."), so this is
+       one of the few places the translation can be BETTER than the original
+       rather than merely faithful. Safe on both kinds of account: on a
+       white-labelled one HighLevel already strips its own name (verified on a
+       real agency domain — the string never rendered), and on an unbranded one
+       the neutral Czech is still correct. */
+    "Find anything in HighLevel...": "Najít cokoli…",
     "Find opportunities...": "Najít příležitosti...",
     "following": "následující",
     "Form": "Formulář",

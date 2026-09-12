@@ -86,6 +86,28 @@ does not reach tooling, and a debug surface exists to be read by tooling.
 
 Decided with Tom on 11 Sep 2026 (design, v97).
 
+**WHITE LABEL (Tom, 12 Sep 2026): nothing we author ever names the platform.**
+Applies to every string we put on screen — the planned user message area first
+(`DESIGN.md` §1), but also the dictionary, because a translation is text we
+author even when the English was not.
+
+Two entries were neutralised the day the rule was set:
+
+| English source | was | now |
+|---|---|---|
+| `Find anything in HighLevel...` | „…v HighLevelu…" | **„Najít cokoli…"** |
+| the MRR footnote | „…existují v HighLevelu…" | **„…existují v systému…"** |
+
+These are the rare cases where the translation is **better than the original
+rather than merely faithful**, and they are safe on either kind of account: a
+white-labelled instance never renders the vendor's name anyway (verified on a
+real agency domain — "HighLevel" appears nowhere on screen), and on an
+unbranded one the neutral Czech is still correct.
+
+The rule extends to our own brand. If this layer is sold to other agencies,
+"Keytone" on their screen is exactly as wrong as "HighLevel" on Tom's.
+Attribution, if ever wanted, is a pack option — never a literal in the engine.
+
 - **Text on screen, `placeholder`, `title` and `aria-label`, and nothing else.**
   Never `id`, `class`, `data-*`, `name`, `href` or `value`, **with one named
   exception**: `TRANSLATE_PREFILLS` (on) lets the engine rewrite an input's

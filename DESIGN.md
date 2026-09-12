@@ -108,17 +108,49 @@ week, and then it is noise on every screen it ever appears on.
 - **Never a marketing surface.** No upsell, no product news, nothing Keytone
   wants to say. Only the state of the layer on this screen.
 
+### WHITE LABEL — a hard rule, not a preference
+
+**Tom, 12 September: system messages never mention HighLevel.**
+
+The platform is resold under the agency's own domain and brand. To the person
+reading a notice, HighLevel does not exist — and on a real white-labelled
+account it genuinely does not appear anywhere on screen (verified: the string
+"HighLevel" renders nowhere, and HighLevel strips its own name from its own
+search placeholder). A notice that names the vendor would leak in a way the
+platform itself does not, on a screen we injected. That is the worst possible
+place for the leak to come from.
+
+The rule goes further than the vendor's name, and the reason is worth stating,
+because this layer is meant to be sold to other agencies:
+
+- **No vendor name.** Not HighLevel, not LeadConnector, not the frame hosts.
+- **No Keytone either.** If another agency ships this, our name is as wrong on
+  their screen as HighLevel's is on Tom's. Notice text is brand-free; if an
+  agency ever wants attribution, that is a pack or config option, never a
+  literal in the engine.
+- **No technical vocabulary that implies a vendor** — "cross-origin",
+  "iframe", a `*.leadconnectorhq.com` hostname. These are true and they are
+  also a trail straight back to the platform.
+
+So the notice may say only what it can say without naming anyone:
+
+> *Tuto část se zatím nedaří přeložit — načítá se z jiného systému.*
+> ("This section cannot be translated yet — it loads from another system.")
+
+"Jiný systém" is honest, brand-free, and means nothing to someone who should
+not be thinking about it. **To be reviewed by the native reviewer before it
+ships.**
+
+⚠ **The developer line for agency users breaks this rule by design** — it
+carries the host name and the internal reason. It is therefore gated on
+`STATUS.audience === 'agency'` and must never render for anyone else. That
+gate is the whole safety of it, so it needs a test, not a comment.
+
 ### Honesty limits on the wording
 
 The notice may say **only what we know**. "This area cannot be translated"
-is true. "HighLevel does not support Czech" is a different and much larger
+is true. "The platform does not support Czech" is a different and much larger
 claim, and not ours to make on someone's screen.
-
-Draft, to be reviewed by the native reviewer before it ships:
-
-> *Tuto část se nedaří přeložit — HighLevel ji načítá z vlastního serveru.*
-> ("This section cannot be translated — HighLevel loads it from its own
-> server.")
 
 ### Agency users see more
 
