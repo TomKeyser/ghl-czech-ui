@@ -188,7 +188,83 @@ is left alone", if that ever proves worth saying.
 
 ---
 
-## 2. Per-message content translation — designed 12 Sep, parked
+## 2. A browser extension — the one route past the six walls
+
+**Raised 12 Sep 2026, from a Facebook comment Tom passed on. Not built, not
+decided. It reframes something this project has been calling impossible.**
+
+COVERAGE.md says six areas "can never be reached". That is true of **page
+JavaScript injected through Custom JS**, which is bound by the same-origin
+policy — measured: `contentDocument` is `null` and `contentWindow.location`
+throws on every one of them.
+
+**A browser extension is not bound the same way.** A content script declared
+with host permissions and `all_frames: true` is injected into *every* frame,
+cross-origin ones included, each in an isolated world with full read and write
+access to that frame's DOM. On that route, Automation, the page builder,
+Settings and Marketing → Emails stop being walls.
+
+The wording in COVERAGE.md was imprecise and has been left as it is with this
+note pointing at it: the ceiling is the delivery mechanism's, not the idea's.
+
+**What it would cost, honestly:**
+
+- **Every user installs something.** For the operator building workflows that
+  is a small ask. For an agency's clients, who do not know the platform exists,
+  it is an awkward one — and it sits badly beside the white-label rule.
+- **Two delivery mechanisms to maintain**, with the same pack and engine but
+  different injection, permissions and update paths.
+- **A gatekeeper.** Chrome Web Store review, and a rejection is not appealable
+  on a schedule anyone can plan around.
+- **It does not weaken the founders argument — it sharpens it.** "We had to
+  ship a browser extension because you walled your own product off from the
+  customisation feature you sell agencies" is a harder sentence to answer than
+  a request for Czech.
+
+**The cheap experiment, before any of that:** a throwaway unpacked extension
+with one content script that does nothing but report `location.href` and
+`document.body.children.length` from inside
+`client-app-automation-workflows.leadconnectorhq.com`. If that comes back, the
+route is real and worth costing properly. If it does not, this section is
+closed for good. An afternoon, and no product decision rides on it until the
+answer is known.
+
+## 3. Splitting the repository — source private, distribution public
+
+**Tom, 12 Sep. Tooling built (`deploy-dist.js`), nothing created.**
+
+Git visibility is per-repository; there is no way to make a folder private
+inside a public repo, and history keeps whatever was ever committed. As of
+12 Sep the repo is public with **0 forks, 0 stars, 0 watchers**, so exposure so
+far is almost certainly nil.
+
+Options, in the order they were discussed:
+
+1. **Private repo + GitHub Pages** — needs a paid plan. One toggle, no new
+   machinery.
+2. **Two repositories** — private source, public distribution. Free.
+   `deploy-dist.js` implements it.
+3. **Move hosting off GitHub** (Cloudflare Pages) — also brings **brotli**,
+   measured at **161 KB → 130 KB** on top of the comment stripping.
+
+**Sequencing is not optional.** A live business runs on this. Flipping the
+current repo private on a free plan stops Pages and takes the layer off the
+air. So: create the public repo → push → verify it serves → Tom repoints
+Custom JS → confirm working → *then* make the source private.
+
+**Do these at the same time, because the URL changes anyway:**
+
+- **A CNAME to a Keytone subdomain.** `tomkeyser.github.io` currently appears
+  in the Custom JS field and every user's network tab — Tom's personal GitHub
+  username, on a product meant to be resold. Free on Pages for a public repo.
+  This is the white-label rule applied to the script URL, which the rule's
+  original wording did not cover but plainly should.
+- **Hash the sub-account ids.** Private source hides none of this; it is
+  compiled in. `deploy-dist.js` prints it on every run:
+  `'SbA5m1DElMNEKBVnixsX' ×3`, `'zWR1h9iaCeH2Ki6kGZLD' ×3`,
+  `'qO4OrGisQvYo5ozx4j5U' ×1`. A hash compares identically and reveals nothing.
+
+## 4. Per-message content translation — designed 12 Sep, parked
 
 A small icon on each message; click to translate incoming to Czech and the
 reply out to English. Three routing modes; mode 3 (the customer's own endpoint,
@@ -197,7 +273,7 @@ the only one a regulated buyer could use. BYO key is table stakes — Customizer
 already does it on a flat rate. Full design in the session record and the
 project memory.
 
-## 3. Our own booking widget — designed 12 Sep, parked
+## 5. Our own booking widget — designed 12 Sep, parked
 
 Feasible and thinner than it looks: `GET /calendars/:calendarId/free-slots`
 returns HighLevel's *computed* slots with a timezone parameter, so we render
