@@ -83,11 +83,15 @@ does not reach tooling, and a debug surface exists to be read by tooling.
 Decided with Tom on 11 Sep 2026 (design, v97).
 
 - **Text on screen, `placeholder`, `title` and `aria-label`, and nothing else.**
-  Never `id`, `class`, `data-*`, `name`, `href` or `value`. (Prefilled values
-  are a separate switch, `TRANSLATE_PREFILLS`. **It is ON** — this line said
-  "off" until 11 Sep and was simply wrong. What that means, and the 25-in-59
-  collision measurement against snapshot vocabulary, is written beside the
-  switch in the engine. The decision about it is task t63.)
+  Never `id`, `class`, `data-*`, `name`, `href` or `value`, **with one named
+  exception**: `TRANSLATE_PREFILLS` (on) lets the engine rewrite an input's
+  value when that value is one of **HighLevel's own defaults** — the list is
+  `PREFILL_DEFAULTS` in i18n-rules.js, three entries, exact and
+  case-sensitive. Nothing else in a text field is touched, because `doValues`
+  dispatches `input`/`change`, so whatever it writes is what gets saved.
+  Decided 12 Sep after measuring the risk: 25 of 59 record names typical of an
+  English snapshot collide with the dictionary. (This line said prefills were
+  *off* until 11 Sep, which was simply wrong.)
 - **Everything the viewer can perceive is translated, and screen readers
   count.** So `aria-label` is translated too, **including HighLevel's raw keys**
   printed there (`dateUpdated`, `common.resize`). A blind Czech user should hear
