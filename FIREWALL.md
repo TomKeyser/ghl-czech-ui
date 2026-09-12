@@ -372,6 +372,32 @@ a sweep's `why()` walk shows such a node as `content-zone` rather than
 
 ## Known gaps
 
+### Closed on the first real account — 12 September, v113–v116
+
+All four needed real data. A test account has no custom fields, no media
+folders, no inbox and no notifications, so none of them could appear.
+
+| Gap | What reached the engine | Closed by |
+|---|---|---|
+| Contact field labels | HighLevel's own six labels were **blocked** by a rule that was simply wrong (see above) | slug-scoped `FIELD_LABEL_ZONE` |
+| Message threads | thread status lines carrying no chat bubble | `.message-item` |
+| Media folder / file names | seven folder names, safe only by dictionary luck | `.folder-card-wrapper .truncate`, `.media-file-name` |
+| **Notifications drawer** | a customer's name, phone, email and a reply body — `suspect: phone`, `suspect: email` | `#notification-list` |
+
+The drawer is the one to remember. **Nothing was mistranslated in any of the
+four** — they were misses. A miss enters the harvest queue, and the hive
+reports what installs see, so the failure mode was not a wrong word on screen
+but someone's customer list reaching a shared store.
+
+Two smaller ones the same night, neither a leak: HighLevel's **marketing
+figures and demo names** on the AI Agents page (`.hero-stats-value`,
+`.trust-value`, `.agent-conversation-panel__user-row`), and the rotating
+**what's-new feed** (`.feature-discovery-main-container`) — zoned because the
+content churns weekly, not because it is unimportant. Plus `CODE_SHAPE`, after
+the contacts smart list rendered a **Vue render function into a text node**.
+
+### Still open
+
 ~~**Smart-list view names**~~ — **closed in v98** by the phrase allowlist
 above. The tabs are zoned and *All* comes back through a phrase, so the user's
 list names are protected and HighLevel's two labels still translate.
