@@ -370,6 +370,50 @@ zones never report. `__kaDebug.phrases` lists what each zone lets through, and
 a sweep's `why()` walk shows such a node as `content-zone` rather than
 `missing`. That is the trade for protecting the record names beside it.
 
+## Declared walls — English on purpose, and able to say so (v127)
+
+Tom, 12 Sep: *"create a wall on the invoice preview area so you don't end up
+with false reports later."*
+
+There are now **three** reasons a string is not translated, and until v127 the
+engine could only express two:
+
+| | meaning | example |
+|---|---|---|
+| content zone | we **must not** — it is somebody's data | a customer's message |
+| iframe | we **cannot** — another origin | the workflow builder |
+| **declared wall** | we **could, and doing so would be wrong** | the invoice preview |
+
+The invoice preview is reachable, in our own DOM, and stays English because
+**the document the customer receives is English**. A Czech preview over an
+English document is the one mistake a person running a business must never be
+shown.
+
+**Why the third category earns its keep.** Before v127, `why()` answered
+`content-zone` on a preview node. That reads as *"this is customer data"* —
+which is not the reason — and it is the exact shape of a false report: a future
+session sees English, sees a verdict that does not explain it, and "fixes"
+something already correct. The node now answers:
+
+```
+reason: 'declared-wall'   wall: 'invoice-preview'   note: <the whole reason>
+```
+
+**The blocking has not moved.** `CONTENT_ZONES` still performs it; a declared
+wall only *explains* it, so behaviour is byte-for-byte what it was. That split
+is deliberate — an explanation layer cannot introduce a leak.
+
+**It checks itself.** A wall that explains a block which is no longer happening
+is worse than the generic answer it replaced, so `WALL_DRIFT` proves at boot
+that every wall selector is still in `CONTENT_ZONES`, and
+`__kaDebug.walls()` reports a **live match count** — a wall HighLevel has
+renamed shows `live: 0` instead of staying silent. Verified on the real
+account: `live: 1`, `blocking: true`, `drift: []`.
+
+**Not walled, on purpose:** estimates and proposals. Neither has ever been seen
+with data on it, and a selector written for an unobserved shape is how the old
+firewall came to match nothing. Walk them when the account has one.
+
 ## Known gaps
 
 ### Closed on the first real account — 12 September, v113–v116
