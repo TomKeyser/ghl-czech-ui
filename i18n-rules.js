@@ -249,9 +249,24 @@
         if (mo === null) return null;
         date = parseInt(m[2], 10) + '. ' + mo;
       }
-      var time = to24(m[3], m[5]) + ':' + m[4];
-      return ((pack.frames && pack.frames.dateTime) || '{date} {time}')
-        .replace('{date}', date).replace('{time}', time);
+      var h = to24(m[3], m[5]);
+      var time = h + ':' + m[4];
+      var frame = (pack.frames && pack.frames.dateTime) || '{date} {time}';
+      /* {at} — A PREPOSITION THE HOUR DECIDES, v98. Czech says "ve 21:20" but
+         "v 10:20", and which one depends on how the hour is SPOKEN: ve dvě, ve
+         dvanáct, ve dvacet — v pět, v deset, v patnáct. The pack supplies the
+         hours that take the long form, because that is a fact about Czech and
+         not about this engine; a pack without `timePrep` simply leaves {at}
+         empty and nothing changes for it. */
+      var at = '';
+      if (frame.indexOf('{at}') !== -1 && pack.timePrep) {
+        var hn = parseInt(h, 10);
+        var longHours = pack.timePrep.long || [];
+        var isLong = false;
+        for (var i2 = 0; i2 < longHours.length; i2++) if (longHours[i2] === hn) isLong = true;
+        at = isLong ? (pack.timePrep.longWord || '') : (pack.timePrep.word || '');
+      }
+      return frame.replace('{date}', date).replace('{at}', at).replace('{time}', time);
     },
     /* "Every  month" / "Every 3 weeks" — a recurring invoice's schedule. The
        double space is HighLevel's: an interval of 1 renders as nothing.

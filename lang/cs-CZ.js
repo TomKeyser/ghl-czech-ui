@@ -139,11 +139,29 @@
       lastPeriod: '(Posledních {n} {unit})',
       numericDate: '{d}. {m}. {y}',
       createdOn: 'Vytvořeno: {stamp}',
-      /* date + time with NO connective: the preposition would be v or ve
-         depending on how the hour is pronounced (ve dvě, v jednu), which a
-         digit cannot tell us. "10. 9. 21:20" is the ordinary Czech form. */
-      dateTime: '{date} {time}',
+      /* date + time, with the preposition the hour decides.
+         ⚠ CORRECTED 12 Sep BY THE REVIEWER (round 2, r2-018). This used to
+         render "10. 9. 21:20" with no connective, and the comment here claimed
+         a digit could not tell us whether Czech wants "v" or "ve". That was
+         wrong: the preposition follows how the HOUR IS SPOKEN, and the hour is
+         exactly what we have. She returned "ve 21:20". The hours that take
+         "ve" are listed in timePrep below. */
+      dateTime: '{date} {at} {time}',
       overdue: 'Po termínu – {date}'
+    },
+
+    /* WHICH HOURS TAKE "ve" — the spoken form decides, not the digit:
+         ve dvě · ve tři · ve čtyři · ve dvanáct · ve třináct · ve čtrnáct ·
+         ve dvacet (and 21–23, which all begin "dvacet")
+         v jednu · v pět · v šest … v jedenáct · v patnáct … v devatenáct
+       MY DERIVATION from her correction, which gave only the 21:20 case.
+       ⚠ IN THE PASS-3 BATCH AS ITS OWN QUESTION: she should see the whole
+       table rather than one example, because getting it wrong is the kind of
+       mistake a native notices instantly and we never would. */
+    timePrep: {
+      word: 'v',
+      longWord: 've',
+      long: [2, 3, 4, 12, 13, 14, 20, 21, 22, 23]
     },
 
     /* ---- plural forms ---------------------------------------------------- */
@@ -4641,7 +4659,9 @@
     "Business Information":             "Údaje o firmě",
     "Customer Information":             "Údaje o zákazníkovi",
     "Edit business details":            "Upravit údaje o firmě",
-    "Contact menu":                     "Nabídka kontaktu",
+    /* REVIEWER, round 2 r2-115: "Nabídka kontaktu" was wrong — plain "Kontakty"
+       is what the button opens in the invoice editor. */
+    "Contact menu":                     "Kontakty",
     "Select Customer":                  "Vyberte zákazníka",
     "Link Opportunity":                 "Propojit příležitost",
     "Add invoice number and dates":     "Přidejte číslo faktury a data",
