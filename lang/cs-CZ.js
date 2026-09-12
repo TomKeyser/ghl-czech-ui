@@ -458,6 +458,8 @@
          reasoning as CAL_PERSONAL. */
       LP_GREETING: 'Dobrý den, {1}. Tady je váš osobní seznam kroků – vše, čím je dobré začít.',
       LP_PROGRESS_ARIA: 'Průběh dokončení: {?1}',
+      /* same reasoning as LP_GREETING: the name is not declined */
+      GREET_HI: 'Dobrý den, {1}',
       CONV_UNREAD: 'Nepřečtené, {1} {~conversations:1}',
       /* {1} passes the capture through untouched: the status word is ours, the
          record name belongs to whoever created it. */
@@ -4794,6 +4796,46 @@
     "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
     "Change message channel, current: Live Chat": "Změnit kanál zprávy, aktuálně: Živý chat",
     "Close drawer": "Zavřít panel",
+
+    /* THE NEW CLIENT PORTAL promo, 12 Sep — 23 strings behind Membership >
+       Client Portal, all HighLevel's own. Several use CURLY apostrophes
+       ("you’re", "I’ve", "I’m"); matching is exact, so the keys carry them. */
+    "Introducing the redesigned client portal": "Představujeme nový klientský portál",
+    "The client portal loads faster with a clearer layout so members find what they need. Preview it in your account first, then roll it out when you’re ready.":
+      "Klientský portál se načítá rychleji a má přehlednější rozvržení, takže členové snáze najdou, co potřebují. Nejdřív si jej prohlédněte ve svém účtu a nasaďte ho, až budete připraveni.",
+    "Try the new client portal": "Vyzkoušejte nový klientský portál",
+    "Preview and enable the new client portal": "Prohlédnout a zapnout nový klientský portál",
+    "Preview the new portal": "Prohlédnout nový portál",
+    "New look": "Nový vzhled",
+    "Just for you": "Jen pro vás",
+    "All members": "Všichni členové",
+    "Open preview": "Otevřít náhled",
+    "Open your portal with the new look": "Otevřete si portál v novém vzhledu",
+    "Opens in a new tab with a private preview token. Members still see the current version.":
+      "Otevře se na nové kartě se soukromým náhledovým tokenem. Členové stále vidí současnou verzi.",
+    "Roll out the new portal to all members": "Nasadit nový portál všem členům",
+    "Everyone signs in with the new look immediately. You can switch back to the classic portal anytime.":
+      "Všichni se od té chvíle přihlásí do nového vzhledu. Kdykoli se můžete vrátit ke klasickému portálu.",
+    "I’ve previewed the new portal and I’m ready to enable it for everyone.":
+      "Nový portál jsem si prohlédl(a) a jsem připraven(a) jej zapnout pro všechny.",
+    "Enable for everyone": "Zapnout pro všechny",
+    "Note: The updated UI can take up to 5 minutes to appear for everyone after you enable it.":
+      "Poznámka: Po zapnutí může trvat až 5 minut, než se nové rozhraní zobrazí všem.",
+    "You can switch back anytime": "Kdykoli se můžete vrátit zpět",
+    "Maybe later": "Možná později",
+    /* HighLevel splits one sentence across three nodes: a <p>, a <strong> and
+       a trailing <p>. Each reaches the engine separately, so each is its own
+       entry and the Czech has to read correctly when they are rejoined:
+       "Používáte vlastní CSS nebo JS? Nejdřív si prohlédněte nový design, pak
+        aktualizujte svůj vlastní kód, než jej zapnete pro všechny." */
+    "Using custom CSS or custom JS? Preview the new design first, then":
+      "Používáte vlastní CSS nebo JS? Nejdřív si prohlédněte nový design, pak",
+    "update your custom code": "aktualizujte svůj vlastní kód",
+    "before enabling it for everyone.": "než jej zapnete pro všechny.",
+    "then": "pak",
+
+    /* the Reports upsell strip */
+    "Get listed across 37+ Digital services Global": "Zápis ve více než 37 digitálních službách po celém světě",
 
     /* THE LAUNCHPAD — the first screen a sub-account opens. Every string below
        is HighLevel's own onboarding copy, harvested from the origin user's

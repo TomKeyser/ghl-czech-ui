@@ -147,6 +147,11 @@
          signed-in user's own first name and passes through RAW. Never {*1}:
          a person called "Marketing" is not a section heading. */
       ['LP_GREETING',    /^Hey (.+), here's your personalized setup list with everything you need to get started\.$/],
+      /* "Hi Thomas" — the reputation dashboard's greeting. Deliberately NOT
+         /^Hi (.+)$/: that would match the opening line of any message a
+         customer ever wrote. One capitalised word, no spaces, so it can only
+         be a name. */
+      ['GREET_HI',       /^Hi ([A-Za-zÀ-ÖØ-öø-ž][A-Za-zÀ-ÖØ-öø-ž'’.\-]{1,30})$/],
       /* "Import and engage with all your contacts instantly completion progress"
          — the aria-label on each task's progress bar, built by HighLevel as
          "<task title> completion progress". {?1} looks the title up in the
