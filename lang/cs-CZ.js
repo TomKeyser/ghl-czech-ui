@@ -3754,6 +3754,19 @@
     "Invoice Status":                   "Stav faktury",
     "Payment Mode":                     "Způsob platby",
 
+    /* THE "NEW" MENU on the invoice list, 12 Sep. Three descriptions behind a
+       button, which is why no route walk had ever seen them — found only
+       because the menu was open for another reason. Infinitives, matching
+       "Automaticky odesílat faktury..." below rather than starting a new
+       style for the same kind of line. NOT NATIVE-CONFIRMED.
+       ("softwares" is HighLevel's own; the Czech just says "programů".) */
+    "Send a one-time invoice to the customer right away.":
+      "Odeslat zákazníkovi jednorázovou fakturu ihned.",
+    "Send a recurring invoice to the customer at scheduled intervals.":
+      "Odesílat zákazníkovi opakovanou fakturu v nastavených intervalech.",
+    "Import existing invoices from other softwares":
+      "Importovat stávající faktury z jiných programů",
+
     /* Recurring invoices, 11 Sep. "Vystaveno" is the seller's word for issuing
        an invoice — accounts receivable, see the glossary rule. */
     "Automatically send invoices to customers at scheduled frequency":
