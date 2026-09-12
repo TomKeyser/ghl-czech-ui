@@ -207,19 +207,54 @@ Settings and Marketing → Emails stop being walls.
 The wording in COVERAGE.md was imprecise and has been left as it is with this
 note pointing at it: the ceiling is the delivery mechanism's, not the idea's.
 
-**What it would cost, honestly:**
+### Tom's framing, and it is the one to build on
 
-- **Every user installs something.** For the operator building workflows that
-  is a small ask. For an agency's clients, who do not know the platform exists,
-  it is an awkward one — and it sits badly beside the white-label rule.
-- **Two delivery mechanisms to maintain**, with the same pack and engine but
-  different injection, permissions and update paths.
+The first version of this note treated the install as a problem to apologise
+for: *everyone would have to install something, which is awkward beside the
+white-label rule*. Tom, same day:
+
+> *"we might be able to build an extension for the end user that we ask them
+> to install if they want a more complete translation"*
+
+That removes the objection rather than answering it. **The Custom JS layer
+stays the product, installed by nobody.** The extension is an **opt-in
+upgrade** for a user who wants the rest. Decline it and nothing degrades —
+you get exactly today's coverage. The six walled areas stop being a limitation
+to explain away and become the reason to install.
+
+Two things make it cheaper than it first looks:
+
+- **It is the same product underneath.** Same pack, same engine, same
+  firewall — only the injection differs. Not a second product; a second
+  delivery mechanism for the one that exists.
+- **It is aimed at one person per account.** The business owner answering
+  enquiries never needs it. The operator building workflows does, and for them
+  an install is a small ask.
+
+### The boundary that decides what can be promised
+
+**An extension fixes OPERATOR screens. It can never fix CUSTOMER-FACING
+documents.**
+
+| | reachable by an extension? | why |
+|---|---|---|
+| Automation, page builder, Settings, Emails | **yes** | the operator installs it |
+| the invoice / estimate / receipt | **no** | the *customer* would have to install it |
+| the booking widget | **no** | same — it runs on the visitor's browser |
+
+So this does not weaken the founders argument, it splits it cleanly: an agency
+can fix its own staff's experience itself, and **the half that reaches its
+customers stays HighLevel's alone to fix**. That is a harder sentence to
+answer than a request for Czech.
+
+**The remaining costs, honestly:**
+
+- **Two delivery mechanisms to maintain**, with different injection,
+  permissions and update paths.
 - **A gatekeeper.** Chrome Web Store review, and a rejection is not appealable
   on a schedule anyone can plan around.
-- **It does not weaken the founders argument — it sharpens it.** "We had to
-  ship a browser extension because you walled your own product off from the
-  customisation feature you sell agencies" is a harder sentence to answer than
-  a request for Czech.
+- **The white-label rule still applies to it** — the listing, the name and the
+  icon are all end-user visible. See [[white-label-no-vendor-name]].
 
 **The cheap experiment, before any of that:** a throwaway unpacked extension
 with one content script that does nothing but report `location.href` and
