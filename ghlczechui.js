@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v126';
+  var VERSION = 'v127';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -360,6 +360,60 @@
     try { document.querySelector(scoped); return scoped; }
     catch (e) { return all; }
   })();
+
+  /* ---------- declared walls ------------------------------------------------
+     Tom's idea, 12 Sep: "create a wall on the invoice preview area so you
+     don't end up with false reports later."
+
+     A region we CAN reach and deliberately do not translate. That is a THIRD
+     thing, and the engine could not previously say so:
+
+       content zone   we must not translate it — it is somebody's data
+       iframe         we cannot translate it — another origin
+       DECLARED WALL  we could translate it, and translating it would be WRONG
+
+     The invoice preview is the case. It is in our DOM and perfectly
+     reachable. It stays English because the document the customer actually
+     receives is English, and a Czech preview over an English document is the
+     one mistake a person running a business must never be shown.
+
+     Before this, why() answered 'content-zone' for a preview node. That reads
+     as "customer data", which is not the reason, and it is the exact shape of
+     a false report: a future session sees English, sees a firewall verdict
+     that does not explain it, and "fixes" it. Now the node answers
+     'declared-wall' and carries its own reason.
+
+     These selectors MUST also appear in CONTENT_ZONES — that is what does the
+     blocking; this list only explains it. checkWalls() below proves it at boot
+     rather than trusting the two lists to stay in step. */
+  var DECLARED_WALLS = [
+    {
+      id: 'invoice-preview',
+      zone: '[id*="invoice"][id$="editor-container"] .preview-section',
+      note: 'The live preview of the document the CUSTOMER receives. Left in ' +
+            'English on purpose: this layer never runs on the page where that ' +
+            'document is rendered, so a translated preview would promise a ' +
+            'Czech invoice and send an English one. Left alone it is truthful. ' +
+            'A business wanting Czech invoices writes Czech into its own ' +
+            'template, and this rule then shows that text exactly as the ' +
+            'customer will see it. Covers all three editors (one-off, ' +
+            'recurring, template). NOT yet covering estimates or proposals — ' +
+            'those have never been seen with data on them, and a selector ' +
+            'written for an unobserved shape is how the old firewall came to ' +
+            'match nothing.'
+    }
+  ];
+  var WALL_ZONES = DECLARED_WALLS.map(function (w) { return w.zone; }).join(',');
+
+  /* which wall an element sits in, or null */
+  function declaredWall(el) {
+    if (!el || !el.closest || !WALL_ZONES) return null;
+    try { if (!el.closest(WALL_ZONES)) return null; } catch (e) { return null; }
+    for (var i = 0; i < DECLARED_WALLS.length; i++) {
+      try { if (el.closest(DECLARED_WALLS[i].zone)) return DECLARED_WALLS[i]; } catch (e) {}
+    }
+    return null;
+  }
 
   var CONTENT_ZONES = [
     /* OUR OWN INJECTED UI MARKS ITSELF. Tom's idea, 10 Sep. Anything Keytone
@@ -875,6 +929,16 @@
 
   /* attributes: everything above, but form controls are allowed */
   var BLOCKED_ATTR = CONTENT_ZONES.join(',');
+
+  /* A declared wall EXPLAINS a block; CONTENT_ZONES performs it. If the two
+     ever drift apart the wall becomes a lie — why() would answer
+     'declared-wall' for a region that is actually being translated, which is
+     worse than the generic answer it replaced. So prove the relationship at
+     boot and record the failure where it can be seen, rather than trusting a
+     comment to keep two lists in step. */
+  var WALL_DRIFT = DECLARED_WALLS.filter(function (w) {
+    return CONTENT_ZONES.indexOf(w.zone) === -1;
+  }).map(function (w) { return w.id; });
 
   /* ATTRIBUTE-ONLY ZONES, v81: an element whose OWN attributes hold a record
      while its children are ours. CONTENT_ZONES cannot express that — they
@@ -1720,9 +1784,9 @@
   }
 
   /* why(node[, attr]) -> { reason, ... }
-     reasons: not-ready | empty | too-long | iframe | content-zone |
-              data-picker | record-mirror | file-name | missing |
-              translated                                                */
+     reasons: not-ready | empty | too-long | iframe | declared-wall |
+              content-zone | data-picker | record-mirror | file-name |
+              missing | translated                                      */
   function why(node, attr) {
     if (!node) return { reason: 'no-node' };
     if (!DICT) return { reason: 'not-ready' };
@@ -1753,6 +1817,17 @@
     }
     if (key.length > MAX_LEN) {
       return { reason: 'too-long', length: key.length, max: MAX_LEN, text: key.slice(0, 60) };
+    }
+
+    /* A DECLARED WALL ANSWERS BEFORE THE FIREWALL DOES. Both block, so the
+       behaviour is identical either way; what differs is the explanation, and
+       the explanation is the entire point. 'content-zone' on a preview node
+       reads as "this is customer data", which is not why it is English, and
+       sends the next reader off to fix something that is already correct. */
+    var wall = declaredWall(el);
+    if (wall) {
+      return { reason: 'declared-wall', wall: wall.id, zone: wall.zone,
+               note: wall.note, text: key, attr: attr || null };
     }
 
     /* MIRROR blockedText EXACTLY. An earlier version ran inDataPicker on every
@@ -1888,6 +1963,20 @@
     frames: frames,
     watchFrames: watchFrames,
     frameLog: function () { return frameLog ? frameLog.slice() : null; },
+    /* walls() answers "is this English on purpose?" without anyone having to
+       find the right node first — the question a false report starts from.
+       `live` is how many elements the wall covers on THIS screen, so a wall
+       that has stopped matching (HighLevel renamed the container) shows as 0
+       and stops being silent. */
+    walls: function () {
+      return DECLARED_WALLS.map(function (w) {
+        var n = 0;
+        try { n = document.querySelectorAll(w.zone).length; } catch (e) { n = -1; }
+        return { id: w.id, zone: w.zone, live: n, blocking: CONTENT_ZONES.indexOf(w.zone) !== -1,
+                 note: w.note };
+      });
+    },
+    wallDrift: WALL_DRIFT,
     zones: CONTENT_ZONES,
     /* the phrases each zone lets through, v98: [{ zone, phrases }] */
     phrases: ZONE_PHRASES.map(function (z) { return { zone: z.zone, phrases: z.phrases.slice() }; }),
