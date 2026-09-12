@@ -241,6 +241,69 @@ As of 11 September that rate is **zero**: twelve routes, no suspects.
 If it does change, the measurement above says write `:has(.some-class)`, never
 `:has([attr])` and never a prefix match.
 
+### It was taken after all, in the opposite direction — v114, 12 September
+
+The decision above still stands for what it actually decided. v114 uses
+`:not(:has(...))` anyway, and the difference is worth being precise about,
+because "we parked `:has()`" would otherwise read as a contradiction.
+
+**The parked proposal used `:has()` to CREATE a block.** "Block this wrapper's
+attributes if it *contains* a record." Its fatal flaw was the direction of
+failure: before the children render, the `:has()` finds nothing, the block does
+not apply, and the attribute leaks. It **fails open**, non-deterministically.
+
+**v114 uses `:not(:has(...))` to NARROW a block that already exists.** The zone
+blocks every contact-field label; the `:not(:has(standard slug))` carves out
+HighLevel's own fields. Before the children render, the `:has()` finds nothing,
+`:not()` is therefore true, and the label **stays blocked**. It **fails
+closed** — toward the firewall, never through it. The worst outcome of a late
+render is an English label for one paint, which is the same outcome as not
+having written the rule.
+
+That inversion is the whole argument. Objection 1 — the one that decided the
+parking — does not apply to a subtractive rule, and cannot.
+
+**Objection 3 still applied and was paid for.** `closest()` throws on an
+invalid selector and the zone list is one joined string, so a malformed `:has()`
+does not degrade the firewall, it kills it, and a dead firewall translates
+customer data. `FIELD_LABEL_ZONE` therefore proves the selector parses —
+`document.querySelector(scoped)` inside a `try` — before it is allowed into the
+list, and falls back to the blanket zone if it throws. An English label is a
+blemish; a firewall that throws is a data leak.
+
+**The cost was re-measured, and the old rule of thumb needs refining.** On the
+real contact detail page — 1,428 nodes, 91 attribute targets:
+
+| Selector list | ms per attribute pass |
+|---|---|
+| blanket zone (no `:has()`) | **0.36** |
+| with `:not(:has(19 × [id="…"]))` | **0.60** |
+
+1.7×, not the 11× the dashboard measured — and this is an `[attr]` match with
+nineteen of them, exactly the shape the earlier note said never to write. Both
+measurements are correct; the rule of thumb was the wrong summary of them.
+
+What actually drives the cost is **how the thing inside `:has()` is resolved**,
+not whether it is an attribute:
+
+- `[id="contact.first_name"]` is an **exact id** — the browser answers it from
+  the id bucket, as cheaply as a class. Nineteen of them are nineteen bucket
+  lookups.
+- `[id^="data-stage-name-"]` is a **prefix** — no bucket exists, so it scans
+  every descendant of every ancestor, per element, per pass. That is where the
+  71.6 ms came from.
+
+And **the outer scope decides how many elements reach the `:has()` at all**. The
+v114 rule is gated behind `#field-container [id$="-form-item"]`, which exists on
+one route and matches about fifteen elements there; on every other route
+`closest()` fails at the gate and the `:has()` is never evaluated.
+
+So the refined rule, replacing the one above: **inside `:has()`, use anything
+the browser can resolve from a bucket — a class or an exact id — and never a
+prefix or substring match. Gate it behind a selector that is cheap and rare, so
+the `:has()` is reached by few elements on one route rather than by many on
+all of them.**
+
 ---
 
 ## HighLevel's own phrases inside a zone — built, v98/v99
@@ -377,3 +440,56 @@ status and the row menu and blocks the rest by default.
 
 Run `__kaDebug.dead()` after any change here, and re-walk with the collector
 before claiming a fix worked.
+
+### The stronger form of that lesson — 12 September, first real account
+
+"An empty screen cannot leak" understates it. **A test account does not merely
+hide leaks; it invents structure that does not exist in production, and a rule
+written against that structure is wrong in a way no amount of re-testing on the
+test account can reveal.**
+
+v113 shipped a custom-field firewall keyed on the form-item's id:
+
+```
+#field-container [id$="-form-item"]:not([id^="contact."]) .hr-form-item-label__text
+```
+
+The `:not([id^="contact."])` was there to let HighLevel's own labels through,
+on the belief that HighLevel's fields were wrapped in `contact.first_name-form-item`
+while the business's carried a record id. On the test account that looked true,
+because the test account **has no custom fields** — there was nothing to
+contrast against, and a single observation was read as a rule.
+
+On the first account with real fields in it, every form-item carries a record
+id — HighLevel's own six and the business's eight alike. The escape hatch
+therefore never fired, and the firewall swallowed *both*: the business's field
+names, correctly, and "First name", "Last name", "Email", "Phone", "Contact
+source", "Contact type", which are HighLevel's chrome and should have been
+Czech. The layer's very first screen on a real business showed English labels.
+
+The real discriminator was one level down, and only visible with both kinds of
+field on screen at once:
+
+| label | slug on the inner div |
+|---|---|
+| First name | `contact.first_name` |
+| Contact source | `contact.source` |
+| Ostraha Service Request | `contact.ostraha_service_request` |
+| ÚKLID EN Service Request | `contact.klid_en_service_request` |
+
+HighLevel's standard fields use a **closed vocabulary** of slugs. A custom
+field's slug is a slugified version of whatever the business typed — which is
+why `ÚKLID` becomes `klid`, the diacritics dropped. So `STD_CONTACT_FIELDS` is
+an explicit list and everything absent from it is somebody's own words.
+
+**Match the slug, never the English label.** The obvious cheaper fix was a
+phrase allowlist — let "First name", "Email" and the rest through by text. It
+would have worked on this account and quietly mistranslated the first business
+that names a custom field "Email" or "Message". Tom's account already has a
+custom field called **"Message"** and another called **"Work requested"** —
+English words, his authorship, and correctly left in English by the shipped
+rule. A text allowlist would have rewritten them.
+
+The generalisation: **a rule that separates the vendor's strings from the
+customer's must key on something the vendor controls and the customer cannot
+type.** An id slug from a closed set qualifies. An English word never does.
