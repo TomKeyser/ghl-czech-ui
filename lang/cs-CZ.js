@@ -319,6 +319,25 @@
       '/integration': {
         'Paid':           'Placená'
       },
+      /* THE LEAD-SCORING RULE BUILDER, 12 Sep. The dialog composes one
+         sentence out of our words and three controls:
+             If a [event ▾] [Add|Subtract] [ N ] Points
+         "If a" is the opener and nothing else on the screen; scoped here
+         because two words that vague would be a menace in the global
+         dictionary. "Pokud" carries the same job in Czech and needs no
+         agreement with whatever the dropdown says.
+
+         ⚠ FOR THE REVIEWER, and deliberately NOT guessed at: "Points" still
+         reads "Body" (nominative plural), so the line renders "10 Body" where
+         Czech wants "10 bodů" — genitive plural after five and above, "body"
+         after two to four, "bod" after one. The number is TYPED INTO AN INPUT,
+         so no rule can see it and no single form is right for every value.
+         The same problem was solved in the recurring schedule with an
+         abbreviation ("jednou za [N] měs."). Ask her which she wants here
+         rather than picking one that is wrong four times in ten. */
+      '/settings/scoring': {
+        'If a': 'Pokud'
+      },
       /* the same price tag on an agent template: masculine, agreeing with agent */
       '/ai-agents': {
         'Paid':           'Placený',
