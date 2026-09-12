@@ -171,6 +171,22 @@ reporting/{google-ads,facebook-ads,attribution,call,appointment,local-marketing-
 ai-agents/{agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,content-ai,agent-logs}
 ```
 
+**Running the sweep through the browser MCP — three things learned on the v128 sweep (12 Sep):**
+
+- **The page-script call times out at 45 s**, so a batch cannot be awaited. Start the
+  walker without awaiting it, have it write progress to `window`, and poll with short calls.
+- **A background tab throttles timers.** `settle()` is meant to cap at 14 s; screens took
+  about 60 s, and the whole walk took roughly 45 minutes instead of 3. Keep the sweep tab in the foreground.
+- **`reporting/local-marketing-audit` froze the renderer for about 2.5 minutes.** Nothing failed;
+  every script call just timed out until it recovered. Walk it last, or skip it and open it by hand.
+- **The browser MCP is signed in as the agency owner**, and the engine stands aside for agency
+  users. Open the first route with `?csagency=1`. The audience is resolved once at boot,
+  so in-app navigation keeps the override.
+- `sweep-routes.js` has drifted from this list: it lacks about 50 of these routes and has
+  `tasks`, `businesses/list`, `ai-agents/getting-started`, `ai-agents/voice-ai` and
+  `wordpress/dashboard` as core routes. This file is the canonical list; the v128 sweep walked the
+  union. Bring the script back in step.
+
 **Settings** (added v86 — DOM pages only; see the iframe caveat):
 
 ```
