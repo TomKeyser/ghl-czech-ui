@@ -82,6 +82,7 @@
       ['DATE_DAY_FIRST', /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@dateDayFirst'],
       ['DATE_ABBR',      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateAbbr'],
       ['TIME_AMPM',      /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@timeAmPm'],
+      ['TODAY_AT',       /^Today at (\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@todayAt'],
       ['N_NEW',          /^(\d+)\s+new$/i],
       ['AGO',            /^(\d+)\s*([smhdw])\s+ago$/i, '@ago'],
       ['NAME_AGO',       /^(.+?)\s*·\s*(\d+)\s*([smhdw])\s+ago$/i, '@nameAgo'],

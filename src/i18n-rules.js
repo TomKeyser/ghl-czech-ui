@@ -98,6 +98,19 @@
     return pad2(n);
   }
 
+  /* {at} — A PREPOSITION THE HOUR DECIDES, v98. Czech says "ve 21:20" but
+     "v 10:20", and which one depends on how the hour is SPOKEN: ve dvě, ve
+     dvanáct, ve dvacet — v pět, v deset, v patnáct. The pack supplies the
+     hours that take the long form, because that is a fact about Czech and not
+     about this engine; a pack without `timePrep` gets '' and nothing changes. */
+  function hourPrep(pack, h) {
+    var P = pack.timePrep;
+    if (!P) return '';
+    var hn = parseInt(h, 10), longHours = P.long || [];
+    for (var i = 0; i < longHours.length; i++) if (longHours[i] === hn) return P.longWord || '';
+    return P.word || '';
+  }
+
   function relative(pack, n, unitKey, unitMap) {
     var form = unitMap[String(unitKey).toLowerCase()] || unitMap._default;
     var word = pluralForm(pack, form, n);
@@ -275,21 +288,20 @@
       var h = to24(m[3], m[5]);
       var time = h + ':' + m[4];
       var frame = (pack.frames && pack.frames.dateTime) || '{date} {time}';
-      /* {at} — A PREPOSITION THE HOUR DECIDES, v98. Czech says "ve 21:20" but
-         "v 10:20", and which one depends on how the hour is SPOKEN: ve dvě, ve
-         dvanáct, ve dvacet — v pět, v deset, v patnáct. The pack supplies the
-         hours that take the long form, because that is a fact about Czech and
-         not about this engine; a pack without `timePrep` simply leaves {at}
-         empty and nothing changes for it. */
-      var at = '';
-      if (frame.indexOf('{at}') !== -1 && pack.timePrep) {
-        var hn = parseInt(h, 10);
-        var longHours = pack.timePrep.long || [];
-        var isLong = false;
-        for (var i2 = 0; i2 < longHours.length; i2++) if (longHours[i2] === hn) isLong = true;
-        at = isLong ? (pack.timePrep.longWord || '') : (pack.timePrep.word || '');
-      }
+      /* {at}: the hour decides the preposition, see hourPrep */
+      var at =frame.indexOf('{at}') !== -1 ? hourPrep(pack, h) : '';
       return frame.replace('{date}', date).replace('{at}', at).replace('{time}', time);
+    },
+    /* "Today at 1:36 PM" — the Google Ads report's last-sync line, found by the
+       v128 sweep. A frame, not a template: the connective is the same
+       hour-decided preposition as @monDayTime ("Dnes ve 13:36", "Dnes v 9:05"),
+       which a template cannot choose. A pack without frames.todayAt returns
+       null, so the string is left alone rather than half-translated. */
+    todayAt: function (pack, m) {
+      var frame = pack.frames && pack.frames.todayAt;
+      if (!frame) return null;
+      var h = to24(m[1], m[3]);
+      return frame.replace('{at}', hourPrep(pack, h)).replace('{time}', h + ':' + m[2]);
     },
     /* "Every  month" / "Every 3 weeks" — a recurring invoice's schedule. The
        double space is HighLevel's: an interval of 1 renders as nothing.

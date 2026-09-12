@@ -44,6 +44,13 @@
     if (/pm/i.test(ampm)) n += 12;
     return pad2(n);
   }
+  function hourPrep(pack, h) {
+    var P = pack.timePrep;
+    if (!P) return '';
+    var hn = parseInt(h, 10), longHours = P.long || [];
+    for (var i = 0; i < longHours.length; i++) if (longHours[i] === hn) return P.longWord || '';
+    return P.word || '';
+  }
   function relative(pack, n, unitKey, unitMap) {
     var form = unitMap[String(unitKey).toLowerCase()] || unitMap._default;
     var word = pluralForm(pack, form, n);
@@ -162,15 +169,14 @@
       var h = to24(m[3], m[5]);
       var time = h + ':' + m[4];
       var frame = (pack.frames && pack.frames.dateTime) || '{date} {time}';
-      var at = '';
-      if (frame.indexOf('{at}') !== -1 && pack.timePrep) {
-        var hn = parseInt(h, 10);
-        var longHours = pack.timePrep.long || [];
-        var isLong = false;
-        for (var i2 = 0; i2 < longHours.length; i2++) if (longHours[i2] === hn) isLong = true;
-        at = isLong ? (pack.timePrep.longWord || '') : (pack.timePrep.word || '');
-      }
+      var at =frame.indexOf('{at}') !== -1 ? hourPrep(pack, h) : '';
       return frame.replace('{date}', date).replace('{at}', at).replace('{time}', time);
+    },
+    todayAt: function (pack, m) {
+      var frame = pack.frames && pack.frames.todayAt;
+      if (!frame) return null;
+      var h = to24(m[1], m[3]);
+      return frame.replace('{at}', hourPrep(pack, h)).replace('{time}', h + ':' + m[2]);
     },
     everyInterval: function (pack, m) {
       var R = pack.recurrence;

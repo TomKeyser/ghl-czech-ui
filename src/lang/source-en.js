@@ -255,6 +255,10 @@
       ['DATE_DAY_FIRST', /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/, '@dateDayFirst'],
       ['DATE_ABBR',      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateAbbr'],
       ['TIME_AMPM',      /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@timeAmPm'],
+      /* "Today at 1:36 PM" — reporting/google-ads, v128 sweep. Only "Today" is
+         matched: no "Yesterday at" has been seen, and a rule for an unseen
+         shape is a guess. */
+      ['TODAY_AT',       /^Today at (\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@todayAt'],
       ['N_NEW',          /^(\d+)\s+new$/i],
       ['AGO',            /^(\d+)\s*([smhdw])\s+ago$/i, '@ago'],
       ['NAME_AGO',       /^(.+?)\s*·\s*(\d+)\s*([smhdw])\s+ago$/i, '@nameAgo'],

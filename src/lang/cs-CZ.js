@@ -147,6 +147,8 @@
          exactly what we have. She returned "ve 21:20". The hours that take
          "ve" are listed in timePrep below. */
       dateTime: '{date} {at} {time}',
+      /* "Today at 1:36 PM" → "Dnes ve 13:36". Same hour table as dateTime. */
+      todayAt: 'Dnes {at} {time}',
       overdue: 'Po termínu – {date}'
     },
 

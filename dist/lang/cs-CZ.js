@@ -28,6 +28,7 @@
       numericDate: '{d}. {m}. {y}',
       createdOn: 'Vytvořeno: {stamp}',
       dateTime: '{date} {at} {time}',
+      todayAt: 'Dnes {at} {time}',
       overdue: 'Po termínu – {date}'
     },
     timePrep: {
