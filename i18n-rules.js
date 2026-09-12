@@ -196,6 +196,17 @@
       var mo = month(pack, 'genitive', m[1]);
       return mo === null ? null : parseInt(m[2], 10) + '. ' + mo;
     },
+    /* "Sep 09 2026" — month, zero-padded day, year, no commas anywhere. The
+       attribution report's axis. STAMP and its relatives all require a comma
+       or a time, so none of them could see this one. parseInt drops the
+       leading zero, which Czech does not write. */
+    monDayYear: function (pack, m) {
+      var i = monthIndex(m[1]);
+      if (i === null) return null;
+      if (isNumeric(pack)) return numericDate(pack, m[2], i, m[3]);
+      var mo = month(pack, 'genitive', m[1]);
+      return mo === null ? null : parseInt(m[2], 10) + '. ' + mo + ' ' + m[3];
+    },
     /* "06 Sun" — the day-number and weekday a calendar draws above a column */
     dayWeekday: function (pack, m) {
       var w = weekday(pack, 'abbr', m[2]);

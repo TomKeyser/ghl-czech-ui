@@ -85,6 +85,10 @@
          as English on the first real screen it was ever shown. */
       ['CREATED_ON_TZ_DMY', /^Created on:\s*(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{4}),\s*(\d{1,2}):(\d{2})\s*(AM|PM)(?:\s*\(([A-Za-z]{2,5})\))?$/i, '@createdOnStampDmy'],
       ['OVERDUE_SLASH',  /^Overdue\s*-\s*(\d{1,2})\/(\d{1,2})\/(\d{4})$/i, '@overdueSlash'],
+      /* "Sep 09 2026" — the attribution report's axis. Must precede MON_DAY,
+         which would otherwise never match it but would match nothing useful
+         first; kept adjacent so the pair is read together. */
+      ['MON_DAY_YEAR',   /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})$/i, '@monDayYear'],
       ['MON_DAY',        /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})$/i, '@monDay'],
       /* ACTIVITY FEED on contact detail. Inspected before writing these: the
          line arrives as THREE separate text nodes, not one string --
