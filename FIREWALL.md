@@ -500,13 +500,18 @@ field on screen at once:
 |---|---|
 | First name | `contact.first_name` |
 | Contact source | `contact.source` |
-| Ostraha Service Request | `contact.ostraha_service_request` |
-| ÚKLID EN Service Request | `contact.klid_en_service_request` |
+| Servis Request | `contact.servis_request` |
+| ÚKLID EN Request | `contact.klid_en_request` |
+
+*(The two custom rows are illustrative. The account they were observed on is a
+real business and this repository is public — see `.gitignore`. The shape is
+exactly as observed; only the words are changed.)*
 
 HighLevel's standard fields use a **closed vocabulary** of slugs. A custom
 field's slug is a slugified version of whatever the business typed — which is
-why `ÚKLID` becomes `klid`, the diacritics dropped. So `STD_CONTACT_FIELDS` is
-an explicit list and everything absent from it is somebody's own words.
+why `ÚKLID` becomes `klid`, **the diacritics silently dropped**. So
+`STD_CONTACT_FIELDS` is an explicit list and everything absent from it is
+somebody's own words.
 
 **Match the slug, never the English label.** The obvious cheaper fix was a
 phrase allowlist — let "First name", "Email" and the rest through by text. It

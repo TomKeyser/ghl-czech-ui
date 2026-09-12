@@ -328,6 +328,45 @@ letting an account supply its own strings — which is the ask in the founders b
 invoice document does. Untested — the language was already back to English when the widget was
 checked. It changes nothing about reachability.
 
+### Two money formats in one viewport — the sharpest evidence yet, 12 Sep
+
+Opening the invoice editor on the **real business account** (nothing saved;
+a draft is not created until Save is pressed — Tom, 12 Sep) puts HighLevel's
+defect and our fix side by side on the same screen, for the same number:
+
+| Half of the screen | Renders zero as | Whose code |
+|---|---|---|
+| the editor's own UI, left | **`0,00 Kč`** | ours — correct Czech |
+| the document preview, right | **`Kč0.00`** | HighLevel's |
+
+Verified in the DOM, not by eye: every node matching a zero amount, bucketed by
+whether it sits inside `.preview-section`. Two on each side, and they disagree.
+
+**This is worth more than any argument about Czech.** It is not a subtle
+internationalisation complaint that a product manager can file behind twelve
+shipped languages. It is a single screenshot in which HighLevel contradicts
+itself — same product, same viewport, same value, one of them wrong — and the
+wrong one is the half the *customer* receives. Use it in the ticket and in the
+founders brief.
+
+Evidence image: `harvest/evidence-two-money-formats.jpeg` — **local only.**
+`harvest/` is gitignored because this repository is public, and that image
+carries the business's real address and phone number. It is not in the repo and
+must not be put there. Redact before any external use, and ask Tom first: it is
+his brother-in-law's company, not a prop.
+
+### Why the preview stays English, restated because the instinct is to fix it
+
+The preview is **in our DOM and reachable** — it is left alone on purpose, by
+the zone `[id*="invoice"][id$="editor-container"] .preview-section`. The
+customer's actual document is rendered by HighLevel on a path the engine never
+runs on. Translating the preview would show the operator a Czech invoice while
+an English one goes to the customer: **the one mistake a person running a
+business must never be shown.** Left alone, the preview is truthful.
+
+A future session will notice the preview is reachable and want to translate it.
+Do not.
+
 ### The notifications drawer — a deliberate trade, 12 September
 
 `#notification-list` is blocked whole, so **notification titles stay English**
