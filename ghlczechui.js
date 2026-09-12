@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v111';
+  var VERSION = 'v112';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -86,7 +86,20 @@
      To roll it out agency-wide later, set this to an empty array: []          */
   var ONLY_LOCATIONS = [
     'SbA5m1DElMNEKBVnixsX',   /* dummy / clean test sub-account */
-    'zWR1h9iaCeH2Ki6kGZLD'    /* second test sub-account (the harvester's) */
+    'zWR1h9iaCeH2Ki6kGZLD',   /* second test sub-account (the harvester's) */
+    /* THE FIRST REAL BUSINESS, 12 Sep 2026. The origin user's moving and
+       cleaning company in Prague — the man who would not use the CRM because
+       his English is poor, which is why this layer exists at all.
+
+       THIS ACCOUNT HOLDS REAL CUSTOMER DATA, so it is the first true test of
+       the firewall rather than of the dictionary. Two things make that less
+       frightening than it sounds: his records are written in CZECH and every
+       key in the pack is ENGLISH, so a collision is unlikely by construction;
+       and prefill translation is now restricted to HighLevel's own defaults.
+       The collector runs silently here and learns from real use, which is the
+       harvest that matters most — but the gap picker must NOT be loaded on
+       this account: a badge on his screen changes what is being measured. */
+    'qO4OrGisQvYo5ozx4j5U'
   ];
 
   function allowedHere() {
