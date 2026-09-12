@@ -4797,6 +4797,29 @@
     "Change message channel, current: Live Chat": "Změnit kanál zprávy, aktuálně: Živý chat",
     "Close drawer": "Zavřít panel",
 
+    /* INVOICE & ESTIMATE SETTINGS, 12 Sep — Payments > Nastavení. The panel
+       that decides what the business's own invoices look like, so it matters
+       more here than its size suggests: this account issues VAT documents. */
+    "Change your document settings": "Změňte nastavení svých dokumentů",
+    "Communications": "Komunikace",
+    "Title, Terms and Layout": "Název, podmínky a rozvržení",
+    "Payment Settings": "Nastavení plateb",
+    "Product Settings": "Nastavení produktů",
+    "Reminder Settings": "Nastavení připomínek",
+    "Billing Custom Fields": "Vlastní fakturační pole",
+    "Business Logo": "Logo firmy",
+    "Recommended size: 350 x 180 pixels": "Doporučená velikost: 350 × 180 pixelů",
+    "Phone No": "Telefon",
+    "Zip Code": "PSČ",
+    /* The country SELECT's current value. Only this one country is added, and
+       that is a deliberate, uncomfortable choice: translating the whole list
+       is out of scope, and a half-translated dropdown reads worse than an
+       English one. What the user sees at rest is their OWN country, and for
+       this pack that is always this string. If the open dropdown's mix of
+       "Česká republika" among English names proves jarring, the answer is the
+       full ISO list in the pack, not two or three more entries. */
+    "Czech Republic": "Česká republika",
+
     /* THE NEW CLIENT PORTAL promo, 12 Sep — 23 strings behind Membership >
        Client Portal, all HighLevel's own. Several use CURLY apostrophes
        ("you’re", "I’ve", "I’m"); matching is exact, so the keys carry them. */
