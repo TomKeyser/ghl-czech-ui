@@ -4793,6 +4793,7 @@
     "Delete contact": "Smazat kontakt",
     "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
     "Change message channel, current: Live Chat": "Změnit kanál zprávy, aktuálně: Živý chat",
+    "Close drawer": "Zavřít panel",
 
     /* THE LAUNCHPAD — the first screen a sub-account opens. Every string below
        is HighLevel's own onboarding copy, harvested from the origin user's
