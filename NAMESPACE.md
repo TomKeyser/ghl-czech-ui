@@ -34,13 +34,17 @@ sat in *HighLevel's* namespace, reading as though they had set it.
 
 **Renamed v76, 11 Sep 2026, from `I18nRules`, `GhlSourceRules` and
 `GhlLangPacks`.** They escaped the v32 sweep because the DATA files set them, and
-that sweep only grepped the engine. For one release the data files set **both**
-names and the engine reads the new name with the old as fallback: the engine
-file can sit in a browser's cache for about ten minutes after a deploy while the
-data files load fresh, and a mismatch would switch the layer off. **Remove the
-old names in a later release** — the aliases in i18n-rules.js, source-en.js,
-cs-CZ.js and es.js, and the fallback in `activate()` — once no cached engine
-older than v76 can remain.
+that sweep only grepped the engine. For one release both names were published —
+an engine can sit in a browser's cache for about ten minutes after a deploy while
+the data files load fresh, and an engine meeting only names it does not know
+switches the layer off.
+
+**The aliases were removed on 12 Sep 2026** (v111), thirty releases later, from
+i18n-rules.js, source-en.js, cs-CZ.js, es.js and the fallback in `activate()`.
+`review-tool.js` went with them — and its copy under `harvest/` turned out to
+read *only* the old name, so that copy would have broken the moment the alias
+went. Both copies now read `__kaPacks`. **Two copies of a file are two places to
+change**, which is the same lesson the v32 sweep left.
 
 ## Node properties
 

@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v110';
+  var VERSION = 'v111';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -939,7 +939,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v77';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v78';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1203,16 +1203,16 @@
   /* Everything arrived: validate hard before touching the DOM. */
   function activate(locale) {
     /* RENAMED v76 to the ka prefix — these three escaped the v32 sweep because
-       they are set by the DATA files, which the sweep never grepped. The old
-       names are read as a FALLBACK for one release: the engine file can sit in
-       a browser's cache for ~10 minutes after a deploy while the data files
-       load fresh, and an old engine meeting new names (or the reverse) would
-       find nothing and switch the layer off. The data files set BOTH names for
-       the same reason. Remove the old names once no cached copy can remain —
-       see NAMESPACE.md. */
-    var R = window.__kaRules || window.I18nRules;
-    var SS = window.__kaSource || window.GhlSourceRules;
-    var PP = window.__kaPacks || window.GhlLangPacks;
+       they are set by the DATA files, which that sweep never grepped. For one
+       release the old names (I18nRules, GhlSourceRules, GhlLangPacks) were read
+       as a fallback, because an engine can sit in a browser's cache for ~10
+       minutes after a deploy while the data files load fresh, and an old engine
+       meeting only new names would find nothing and switch the layer off.
+       ALIASES REMOVED 12 Sep, thirty-odd releases later: no cached engine that
+       old can still exist. */
+    var R = window.__kaRules;
+    var SS = window.__kaSource;
+    var PP = window.__kaPacks;
     var S = SS && SS.en;
     var P = PP && PP[locale];
 

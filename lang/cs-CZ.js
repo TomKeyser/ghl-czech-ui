@@ -6937,9 +6937,6 @@
   pack.reviewFirst = ["Manage","Map","Submissions","Search for a sub-account","Bulk WhatsApp","Change","By","here","Connecting...","Failed","Error","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Manual"];
 
   if (typeof module !== 'undefined' && module.exports) module.exports = pack;
-  /* __kaPacks is the name; GhlLangPacks is the pre-v76 alias for one release. */
-  else {
-    root.__kaPacks = root.__kaPacks || {}; root.__kaPacks['cs-CZ'] = pack;
-    root.GhlLangPacks = root.GhlLangPacks || {}; root.GhlLangPacks['cs-CZ'] = pack;
-  }
+  /* The pre-v76 alias GhlLangPacks was removed 12 Sep 2026. */
+  else { root.__kaPacks = root.__kaPacks || {}; root.__kaPacks['cs-CZ'] = pack; }
 })(typeof window !== 'undefined' ? window : globalThis);

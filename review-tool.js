@@ -110,13 +110,13 @@
   }
 
   /* ---------- reverse dictionary: translated text -> the English it came from
-     The packs register themselves on window.GhlLangPacks. Several English keys
+     The packs register themselves on window.__kaPacks. Several English keys
      can share one translation, so this returns every candidate rather than
      pretending to know which one fired. ---------------------------------- */
   var REVERSE = null;
   function reverse(czech) {
     if (!REVERSE) {
-      var packs = window.__kaPacks || window.GhlLangPacks || {};
+      var packs = window.__kaPacks || {};
       /* Do NOT cache an empty map. If this runs before the packs have finished
          loading we would remember "no English for anything" forever, and every
          flag after that would lose its source string. Build only once there is

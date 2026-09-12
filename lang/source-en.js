@@ -302,9 +302,6 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = source;
-  /* __kaSource is the name; GhlSourceRules is the pre-v76 alias for one release. */
-  else {
-    root.__kaSource = root.__kaSource || {}; root.__kaSource.en = source;
-    root.GhlSourceRules = root.GhlSourceRules || {}; root.GhlSourceRules.en = source;
-  }
+  /* The pre-v76 alias GhlSourceRules was removed 12 Sep 2026. */
+  else { root.__kaSource = root.__kaSource || {}; root.__kaSource.en = source; }
 })(typeof window !== 'undefined' ? window : globalThis);

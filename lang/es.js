@@ -347,9 +347,6 @@
   ];
 
   if (typeof module !== 'undefined' && module.exports) module.exports = pack;
-  /* __kaPacks is the name; GhlLangPacks is the pre-v76 alias for one release. */
-  else {
-    root.__kaPacks = root.__kaPacks || {}; root.__kaPacks['es'] = pack;
-    root.GhlLangPacks = root.GhlLangPacks || {}; root.GhlLangPacks['es'] = pack;
-  }
+  /* The pre-v76 alias GhlLangPacks was removed 12 Sep 2026. */
+  else { root.__kaPacks = root.__kaPacks || {}; root.__kaPacks['es'] = pack; }
 })(typeof window !== 'undefined' ? window : globalThis);
