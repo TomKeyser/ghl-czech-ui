@@ -453,6 +453,50 @@
     return Object.prototype.hasOwnProperty.call(NEVER, t.toLowerCase()) ? t : null;
   }
 
+  /* ---------- HIGHLEVEL'S OWN DEFAULT VALUES (v107) -----------------------
+     The only input values the engine is allowed to rewrite.
+
+     WHY IT EXISTS. Prefill translation was asked for so that a create form
+     offering "New smart list" offers it in Czech. Until now it translated ANY
+     value that matched the dictionary — and because doValues dispatches input
+     and change so the framework takes the new value, an EDIT form could put
+     our Czech into somebody's record the next time they pressed Save.
+
+     A Czech user types Czech and our keys are English, so their own values
+     never match. The exposure is English values someone ELSE entered: the
+     agency setting the account up, and SNAPSHOTS, which is how agencies build
+     client accounts. Measured 11 Sep against 59 record names typical of an
+     English snapshot — pipeline stages, products, tags — 25 collided: New
+     Lead, Won, Lost, Contacted, Booked, New, Open, Pending, Scheduled,
+     Completed, Monthly, Yearly, Appointment, Membership, Website, Support,
+     Sales, General, Default, Customer, Setup, Installation.
+
+     So the rule is inverted: nothing is translated unless it is one of
+     HighLevel's own defaults, named here. A snapshot record called "New Lead"
+     is then untouchable, while "New smart list" still appears in Czech.
+
+     EXACT, CASE-SENSITIVE MATCH, unlike NEVER above. NEVER is asking "is this
+     a brand", where case is noise. Here we are asking "did HighLevel write
+     this, or did a person" — and a record someone typed as "new invoice" is
+     theirs, not HighLevel's. Case is evidence, so it is kept.
+
+     ENGLISH SOURCE STRINGS, so this belongs here and not in a pack: a default
+     is a default whatever language it is being translated into, and Slovak and
+     Polish inherit the list for nothing.
+
+     ⚠ THE LIST IS BOUNDED BY WHAT HAS BEEN SEEN IN A REAL FORM, and a default
+     that is missing from it is INVISIBLE: input values never reach the miss
+     hook, so the collector cannot report one. Somebody has to notice a form
+     reading English. That is the cheap direction to fail in, and it is the
+     trade that was chosen deliberately. */
+  var PREFILL_DEFAULTS = {};
+  ('New smart list,New Invoice,New Recurring Invoice'
+  ).split(',').forEach(function (n) { PREFILL_DEFAULTS[n] = 1; });
+
+  function isPrefillDefault(s) {
+    return Object.prototype.hasOwnProperty.call(PREFILL_DEFAULTS, String(s).trim());
+  }
+
   /* ---------- entry point --------------------------------------------------
      source : a lang/source-*.js rule set (regexes for the rendered language)
      pack   : a lang/<locale>.js target pack (every emitted word)
@@ -490,6 +534,8 @@
     category: category,
     pluralForm: pluralForm,
     neverTranslate: neverTranslate,
+    isPrefillDefault: isPrefillDefault,
+    prefillDefaults: Object.keys(PREFILL_DEFAULTS),
     FORMATTERS: FORMATTERS
   };
 

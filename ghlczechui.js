@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v106';
+  var VERSION = 'v107';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -870,10 +870,11 @@
      only HighLevel's OWN defaults colliding ("New Invoice", "New smart list").
      The 25 above are the honest number.
 
-     DECISION OPEN (task t63, Tom's): translate only HighLevel's own defaults
-     from a short list — which is exactly what was asked for — or turn this
-     off. The measurement says "leave it as is" is not the cheap option it
-     looked like. */
+     ✅ DECIDED 12 Sep by Tom: translate ONLY HighLevel's own defaults, from a
+     named list. Built in v107 — the list and the reasoning are in
+     i18n-rules.js (PREFILL_DEFAULTS), and doValues refuses anything not on
+     it. This switch now turns the whole feature off in one move; it no longer
+     decides how much of the page is at risk. */
   var TRANSLATE_PREFILLS = true;
 
   /* Longest string the layer will touch, measured on the ENGLISH SOURCE, not
@@ -938,7 +939,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v73';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v74';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1760,6 +1761,14 @@
     var v = el.value;
     if (!v || v.length > MAX_LEN) return;
     if (el.__kaVal === v) return;                       /* already handled */
+    /* ONLY HIGHLEVEL'S OWN DEFAULTS, v107 (task t63, Tom's decision 12 Sep).
+       Everything else in a text field is somebody's record, and this function
+       dispatches input/change so whatever it writes is what gets SAVED. The
+       list lives in i18n-rules.js beside the brand set, with the measurement
+       that decided it. No list, no rewriting: if the rules file is not loaded
+       we do nothing rather than fall back to the old behaviour. */
+    if (!RULES || typeof RULES.isPrefillDefault !== 'function') return;
+    if (!RULES.isPrefillDefault(v)) return;
     var out = translate(v);
     if (out === null || out === v) return;
     el.value = out;
