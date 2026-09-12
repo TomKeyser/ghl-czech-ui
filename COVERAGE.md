@@ -352,16 +352,32 @@ area on a real sub-account showed the wall is wider than that, and also narrower
 than it sounds. Detection: a viewport-sized iframe whose `contentDocument` is
 `null` and whose `contentWindow.location` throws `SecurityError`.
 
-| Area | Reachable | Host, where walled |
-|---|---|---|
-| Launchpad, Dashboard, Conversations, Contacts, Opportunities, Payments | ✅ | |
-| Websites, Funnels, **Forms**, Surveys, Media library | ✅ | |
-| Social Planner, AI Agents, Reputation | ✅ | |
-| **Automation** (workflows) | ❌ | `client-app-automation-workflows.leadconnectorhq.com` |
-| **Marketing → Emails** | ❌ | `email-home-prod.leadconnectorhq.com` |
-| **Page builder** (websites *and* funnels) | ❌ | `page-builder.leadconnectorhq.com` |
+Reachable, swept, and at **zero misses** on real data:
 
-The page builder is the most complete wall of the three: it fills the viewport
+Launchpad · Dashboard · Conversations (+ manual actions, templates, trigger
+links, analytics, settings) · Contacts (+ import, tasks, companies, smart
+lists) · Opportunities · Payments (invoices, estimates, proposals, recurring,
+templates, subscriptions, transactions, orders, products, **invoice
+settings**) · Calendars (+ appointments) · Websites · Funnels · Stores ·
+Webinars · **Forms** · Surveys · Quizzes · Chat widget · QR codes · Media
+library · Social Planner · Marketing (templates, countdown, trigger links,
+brand boards) · Reporting (reports, Google Ads, Meta Ads, attribution, calls,
+appointments) · Reputation (overview, requests, reviews, widgets, listings,
+settings) · Memberships (courses, offers, client portal) · AI Agents ·
+App Marketplace · Logo Showcase · the notifications drawer · the profile menu
+
+Walled off — six, every one a cross-origin micro-frontend:
+
+| Area | Host |
+|---|---|
+| **Automation** (workflows) | `client-app-automation-workflows.leadconnectorhq.com` |
+| **Marketing → Emails** | `email-home-prod.leadconnectorhq.com` |
+| **Page builder** (websites *and* funnels) | `page-builder.leadconnectorhq.com` |
+| **Settings** (company, profile, users, …) | `client-app-crm-settings.leadconnectorhq.com` |
+| **Affiliate Manager** | `client-app-affiliate-manager.leadconnectorhq.com` |
+| **AI Studio** (vibe builder) | `leadgen-vibe-ai-builder.leadconnectorhq.com` |
+
+The page builder is the most complete wall of the six: it fills the viewport
 and the parent document contains **zero** characters of text.
 
 **The cost is not evenly distributed, and that matters more than the count.**
@@ -370,9 +386,18 @@ and the parent document contains **zero** characters of text.
   instant visual feedback. The origin user built websites in it in English,
   unprompted, before this layer existed. It is the surface that needs language
   least, and losing it costs almost nothing.
+- **AI Studio** and **Affiliate Manager** cost this business nothing at all: it
+  uses neither.
+- **Settings** is configured once, usually by the agency, not the operator.
+- **Marketing → Emails** matters only when campaigns start.
 - **Automation** is the expensive one. Triggers, conditions, action names, wait
   steps: all language, all consequence, and no visual scaffolding to guess
   from. A wrong guess there sends the wrong message to a real customer.
+
+So of six walled areas, **one** hurts a working operator daily. That is the
+number to quote — not six, which invites the reply that most of them do not
+matter, and not one without the other five, which hides how much of the
+product HighLevel has moved out of an agency's reach.
 
 So "three walled areas" overstates the damage and understates the argument. The
 wall does not fall on decoration. It falls hardest on the one area where being
