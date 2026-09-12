@@ -185,6 +185,30 @@ settings/labs  settings/audit/logs
 button, so these are opened and closed **unsaved** (Escape, then Zrušit).
 Afterwards, check the lists: the v89 walk left nothing behind.
 
+**Create forms and menus, swept 12 September.** Every create form below was
+opened and abandoned unsaved; nothing was created, and the lists were checked
+afterwards. Coupons, tags, payment links, gift cards, custom values, fields,
+QR codes, blogs, trigger links and scoring all came back clean but two:
+
+- The invoice list's **New** menu held three untranslated descriptions
+  ("Send a one-time invoice to the customer right away.", and two more). No
+  route walk can reach a dropdown, which is exactly the blind spot the picker
+  exists for — these were found only because the menu happened to be open.
+- The **scoring rule builder** composes a sentence around three controls and
+  its opener, "If a", was untranslated. Now `Pokud`, scoped to that route.
+
+**Only two lists expose a row menu that declares itself** (`aria-haspopup`):
+invoices and products, both clean. On the rest the trigger is undeclared, and
+per the v93 rule an undeclared element in an action column must not be clicked
+by a machine — on Tax settings that was the delete icon. Those menus need a
+human with the picker.
+
+**A transient leak worth knowing about:** HighLevel renders raw i18n keys for
+a beat before resolving them — `crmObjectsSettingsApp.manageTags.newTag` and
+four siblings flash in the create-tag dialog, then read correctly. They are
+not translated and should not be: an entry per frame-long string would sit in
+the pack for ever fixing something nobody can read.
+
 **Row menus** (v93). Open each list's first-row "…" menu and read it. **Only
 click an element that declares itself a menu trigger** (`aria-haspopup`, a
 dropdown class). The first row-menu walk clicked "whatever is in the last
