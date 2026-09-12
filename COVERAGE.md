@@ -309,6 +309,25 @@ The rest of the template editor walks clean: 34 strings translated, one miss,
 and that is a `12 / 40` character counter. The recurring-invoice list is clean
 as well.
 
+## What this layer can never reach
+
+Three surfaces, one reason: they are not under `/location/<id>`, or they are a cross-origin frame.
+Measured 12 September 2026, and worth keeping in one place because each was discovered separately.
+
+| Surface | Why |
+|---|---|
+| The customer's **invoice, estimate and receipt** | HighLevel renders them on its own page. Our engine never loads there. |
+| The **booking widget** | Served *only* from `api.leadconnectorhq.com` — the white-label domain 404s — and it ships `iframeResizer.contentWindow.js`, so the embed is an iframe **by design**. Custom JS on the agency's own funnel page cannot reach into it. `?locale=` and `?lang=` are ignored. |
+| **Settings** company, profile, users, calendars, and the workflow builder | Cross-origin micro-frontends. |
+
+**This is the ceiling of a DOM layer, not of this implementation.** No competitor reaches them
+either. The only thing that would is HighLevel rendering those surfaces in the account's locale, or
+letting an account supply its own strings — which is the ask in the founders brief.
+
+**Still open on the booking widget:** whether it follows the account's platform language the way the
+invoice document does. Untested — the language was already back to English when the widget was
+checked. It changes nothing about reachability.
+
 ## Honest caveats
 
 - One sub-account, one dataset. A screen with no records shows fewer strings.
