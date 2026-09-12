@@ -328,6 +328,23 @@ letting an account supply its own strings — which is the ask in the founders b
 invoice document does. Untested — the language was already back to English when the widget was
 checked. It changes nothing about reachability.
 
+### The notifications drawer — a deliberate trade, 12 September
+
+`#notification-list` is blocked whole, so **notification titles stay English**
+("New Email from …", "New Live Chat message from …"). Tom's decision, same day:
+*"english titles are fine for now, we can revisit it later."*
+
+Blocked whole rather than body-only because each row welds HighLevel's frame to
+the record inside it to the message body below it, and one account's drawer is
+not enough structure to carve safely. The refinement, once more notification
+shapes have been seen, is a pattern per title with the record as a raw capture —
+exactly what the activity feed already does.
+
+Worth remembering what it was hiding: opening the bell put a customer's full
+name, their phone number, an email address and the body of a reply sent to them
+into the engine in one pass. Nothing was mistranslated; they were misses, and
+misses feed the harvest queue.
+
 ### The map, measured route by route — 12 September, the real account
 
 The row above said "the workflow builder" from one observation. Walking every nav
