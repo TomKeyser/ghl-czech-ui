@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v124';
+  var VERSION = 'v125';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1822,12 +1822,72 @@
     });
   }
 
+  /* ---------- frames: what we cannot reach, and when it loaded --------------
+     Six areas of HighLevel are cross-origin micro-frontends and no DOM layer
+     reaches inside them. What IS legal across that boundary is knowing they
+     exist and when they finished, and it is worth having for two reasons:
+     a sweep can wait for a real signal instead of a guessed timeout, and the
+     engine can say "this screen is not ours" rather than reporting zero
+     strings as though it had translated everything.
+
+     frames() reads the DOM on demand. watchFrames() is OPT-IN and off by
+     default: it attaches one message listener, so it costs nothing until a
+     human asks for it, and a production page never carries it.
+
+     Deliberately NOT collected here: the rrweb stream the child posts to the
+     parent, which carries the frame's entire DOM. It is read-only, it is
+     customer data, and it belongs to HighLevel's analytics vendor rather than
+     to us. See COVERAGE.md. */
+  function frames() {
+    var out = [];
+    document.querySelectorAll('iframe').forEach(function (f) {
+      var host = '';
+      try { host = new URL(f.src, location.href).host; } catch (e) { host = '(no src)'; }
+      var reachable;
+      try { reachable = f.contentDocument !== null; } catch (e) { reachable = false; }
+      out.push({
+        host: host,
+        w: f.clientWidth, h: f.clientHeight,
+        /* a viewport-sized frame we cannot read IS the wall */
+        wall: !reachable && f.clientWidth > 400 && f.clientHeight > 300,
+        reachable: reachable
+      });
+    });
+    return out;
+  }
+  var frameLog = null;
+  function watchFrames() {
+    if (frameLog) return frameLog;
+    frameLog = [];
+    window.addEventListener('message', function (e) {
+      if (!/leadconnectorhq\.com$/.test(String(e.origin).replace('https://', ''))) return;
+      var d = e.data, kind = null, detail = null;
+      if (d && d.type === 'load') { kind = 'load'; detail = d.url; }
+      else if (d && d.postmate === 'emit' && d.value) {
+        if (d.value.name === 'route-change') {
+          kind = 'route-change';
+          detail = d.value.data && d.value.data.path;
+        } else if (d.value.name === 'update-document-title') {
+          kind = 'title';
+          detail = d.value.data && d.value.data.title;
+        }
+      }
+      if (!kind) return;               /* rrweb and the rest are ignored */
+      frameLog.push({ t: Math.round(performance.now()), kind: kind, detail: detail });
+      if (frameLog.length > 200) frameLog.shift();
+    });
+    return frameLog;
+  }
+
   window.__kaDebug = {
     version: VERSION,
     translate: translate,
     why: why,
     describe: describe,
     dead: dead,
+    frames: frames,
+    watchFrames: watchFrames,
+    frameLog: function () { return frameLog ? frameLog.slice() : null; },
     zones: CONTENT_ZONES,
     /* the phrases each zone lets through, v98: [{ zone, phrases }] */
     phrases: ZONE_PHRASES.map(function (z) { return { zone: z.zone, phrases: z.phrases.slice() }; }),
