@@ -180,6 +180,7 @@
       unsavedChanges: { one: 'neuloženou změnu', few: 'neuložené změny', other: 'neuložených změn' },
       new:            { one: 'nový',      few: 'nové',      other: 'nových' },
       characters:     { one: 'znak',      few: 'znaky',     other: 'znaků' },
+      conversations:  { one: 'konverzace', few: 'konverzace', other: 'konverzací' },
       words:          { one: 'slovo',     few: 'slova',     other: 'slov' },
       segments:       { one: 'segment',   few: 'segmenty',  other: 'segmentů' },
       members:        { one: 'člen',      few: 'členové',   other: 'členů' },
@@ -449,6 +450,15 @@
        {N} capture · {~form:N} plural · {=N} glossary (rule fails on miss)
        {?N} glossary with fallback · {*N} recursive translate with fallback  */
     patterns: {
+      /* The launchpad greeting. {1} is the signed-in user's first name, raw.
+         Czech would normally decline a name in the vocative ("Tomáši"), and we
+         deliberately do not: declining a name we did not author goes wrong in
+         a language with seven cases, and getting someone's own name wrong on
+         the first screen they ever see is worse than the nominative. Same
+         reasoning as CAL_PERSONAL. */
+      LP_GREETING: 'Dobrý den, {1}. Tady je váš osobní seznam kroků – vše, čím je dobré začít.',
+      LP_PROGRESS_ARIA: 'Průběh dokončení: {?1}',
+      CONV_UNREAD: 'Nepřečtené, {1} {~conversations:1}',
       /* {1} passes the capture through untouched: the status word is ours, the
          record name belongs to whoever created it. */
       /* Activity feed. ⚠ NEEDS A NATIVE EYE ON ONE POINT: "přesunuto" is the
@@ -4782,6 +4792,58 @@
     "Unarchive Conversation": "Obnovit konverzaci z archivu",
     "Delete contact": "Smazat kontakt",
     "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
+    "Change message channel, current: Live Chat": "Změnit kanál zprávy, aktuálně: Živý chat",
+
+    /* THE LAUNCHPAD — the first screen a sub-account opens. Every string below
+       is HighLevel's own onboarding copy, harvested from the origin user's
+       real account on 12 Sep; twenty-five of them, and the whole screen was
+       English. The task titles are also looked up by LP_PROGRESS_ARIA, which
+       builds each progress bar's screen-reader label from the title. */
+    "Setup tasks": "Kroky nastavení",
+    "Setup categories": "Kategorie nastavení",
+    "Your Foundational setup Progress.": "Průběh základního nastavení.",
+    "Import Existing Contacts": "Importovat stávající kontakty",
+
+    "Import and engage with all your contacts instantly":
+      "Importujte všechny kontakty a začněte s nimi ihned komunikovat",
+    "Add your first contact effortlessly and begin building meaningful engagement right away.":
+      "Snadno přidejte první kontakt a hned začněte budovat vztah.",
+    "Import your existing contacts from various platforms and start engaging with them immediately. Bring all your audience into one place and kickstart your outreach.":
+      "Importujte stávající kontakty z různých platforem a začněte s nimi ihned komunikovat. Sjednoťte celé publikum na jednom místě a rozjeďte oslovování.",
+
+    "Generate new leads with a high-converting funnel":
+      "Získávejte nové zájemce pomocí výkonného trychtýře",
+    "Set up a high-converting funnel and form to capture leads efficiently. Optimize your lead generation and grow your customer base.":
+      "Nastavte výkonný trychtýř a formulář pro efektivní sběr zájemců. Optimalizujte získávání kontaktů a rozšiřte zákaznickou základnu.",
+
+    "Set up multi-channel communication & start engaging in minutes":
+      "Nastavte komunikaci na více kanálech a začněte během pár minut",
+    "Connect your email, SMS, and phone services in minutes and start multi-channel communication. Improve your response rates and customer engagement quickly.":
+      "Během pár minut propojte e-mail, SMS a telefon a začněte komunikovat na více kanálech. Rychle zlepšíte míru odpovědí i zapojení zákazníků.",
+
+    "Launch your first campaign to drive engagement":
+      "Spusťte první kampaň a zvyšte zapojení",
+    "Design and send your first email campaign to engage over 1,000 contacts. Promote your services, stay top of mind, and drive conversions with targeted emails.":
+      "Navrhněte a odešlete první e-mailovou kampaň více než 1 000 kontaktům. Propagujte své služby, zůstaňte na očích a zvyšte konverze cílenými e-maily.",
+
+    "Nurture leads with automated drip campaigns":
+      "Pečujte o zájemce pomocí automatických kampaní",
+    "Set up automated email and SMS drip campaigns to nurture 100+ leads over time. Increase conversion rates by following up consistently without manual intervention.":
+      "Nastavte automatické e-mailové a SMS kampaně a pečujte o více než 100 zájemců. Zvyšte konverze díky důslednému follow-upu bez ruční práce.",
+
+    "Book more appointments with automated scheduling":
+      "Získejte více schůzek díky automatickému objednávání",
+    "Set up your calendar for automatic appointment bookings. Secure 20 appointments in the first week, with 25% fewer no-shows through automated reminders.":
+      "Nastavte kalendář pro automatické objednávání schůzek. Získejte 20 schůzek během prvního týdne a o 25 % méně neúčastí díky automatickým připomínkám.",
+
+    "Accelerate deal closures with a streamlined sales pipeline":
+      "Uzavírejte obchody rychleji díky přehlednému obchodnímu kanálu",
+    /* HighLevel writes this one with a CURLY apostrophe in "lead’s". Matching
+       is exact, so the key has to carry the same character -- a straight one
+       here would silently never match. */
+    "Organize your sales pipeline to track every lead’s progress. Automate follow-ups and close deals faster, ensuring no opportunity is missed.":
+      "Uspořádejte obchodní kanál a sledujte postup každého zájemce. Automatizujte follow-up, uzavírejte obchody rychleji a nenechte si ujít žádnou příležitost.",
+
     "Change message channel, current: Email": "Změnit kanál zprávy, aktuálně: E-mail",
     "Change message channel, current: WhatsApp": "Změnit kanál zprávy, aktuálně: WhatsApp",
     "Write email": "Napsat e-mail",

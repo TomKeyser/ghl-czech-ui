@@ -141,6 +141,23 @@
       ['CREATED_ON_TZ',  /^Created On:\s*(.+?)\s+\(([A-Z]{2,5})\)$/],
       /* "Delete Tax - ZZ DPH 12 %" — the confirm dialog; the tax name is the
          business's own and passes through raw */
+      /* THE LAUNCHPAD, v115 — the first screen a new sub-account lands on, and
+         the only one on the whole app that greets the user by name.
+         "Hey Thomas, here's your personalized setup list ..." — {1} is the
+         signed-in user's own first name and passes through RAW. Never {*1}:
+         a person called "Marketing" is not a section heading. */
+      ['LP_GREETING',    /^Hey (.+), here's your personalized setup list with everything you need to get started\.$/],
+      /* "Import and engage with all your contacts instantly completion progress"
+         — the aria-label on each task's progress bar, built by HighLevel as
+         "<task title> completion progress". {?1} looks the title up in the
+         dictionary and falls back to the raw English if it is a task we have
+         not seen, so a new onboarding task degrades to a half-translated
+         SCREEN-READER label rather than breaking the rule. */
+      ['LP_PROGRESS_ARIA', /^(.+) completion progress$/],
+      /* "Unread, 11 conversations" — the inbox filter's aria-label. The count
+         is real and drives the plural, so the template writes the number
+         itself and picks the form with {~conversations:1}. */
+      ['CONV_UNREAD',    /^Unread, (\d+) conversations?$/],
       ['DELETE_TAX',     /^Delete Tax - (.+)$/],
       /* 'Edit "Zz Test Quebec"' — the opportunity modal's title. The quoted part
          is the record's name and passes through raw. */

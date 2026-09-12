@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v114';
+  var VERSION = 'v115';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -388,6 +388,29 @@
     '.cm-editor',
     /* verified against HighLevel's own DOM, 2026-09-10 */
     '.chat-message', '.chat-content', '[data-testid="CENTRALPANEL_NAME"]',
+    /* THE WHOLE MESSAGE ROW, v115 — found on the origin user's real inbox.
+       .chat-message covers a message BUBBLE, and the customer's actual words
+       were correctly protected by it. What it does not cover is the status
+       lines a thread is also made of, which have no bubble: they sit as bare
+       text in .message-item and so reached the engine as misses.
+
+       Three of them on one thread, and they do not divide the way you would
+       hope. "Please share contact details" is HighLevel's chat widget. "Zdá
+       se, že nikdo není k dispozici..." is the BUSINESS'S OWN configured
+       auto-reply, already in Czech. Same element, same class, no structural
+       difference between the vendor's words and the customer's configuration.
+
+       Following the rule the field labels taught: when the vendor's strings
+       and the customer's cannot be told apart by anything the vendor controls,
+       the firewall wins and the vendor's strings stay English. The cost is a
+       handful of status lines in a thread. The alternative is an exact-phrase
+       allowlist over message bodies, which the customer can type verbatim.
+
+       This was never a visible mistranslation -- the strings were misses, not
+       rewrites. It matters because a miss enters the harvest queue, and the
+       hive reports what installs see. Someone's inbox is the last place that
+       should feed a shared store. */
+    '.message-item',
     /* a whole conversation-list row: the contact name, the message preview and
        the timestamp all sit inside it. Blocking the row costs us translating
        the relative time ("2 days ago") in that list, which is a cosmetic loss
@@ -1012,7 +1035,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v80';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v81';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
