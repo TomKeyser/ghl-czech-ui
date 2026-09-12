@@ -4796,6 +4796,10 @@
     "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
     "Change message channel, current: Live Chat": "Změnit kanál zprávy, aktuálně: Živý chat",
     "Close drawer": "Zavřít panel",
+    /* HighLevel's product name for the AI site builder. Identity entry rather
+       than a translation: it is branding, and without the entry it returns as
+       a miss on every visit to AI Studio. */
+    "Let's Vibe": "Let's Vibe",
 
     /* INVOICE & ESTIMATE SETTINGS, 12 Sep — Payments > Nastavení. The panel
        that decides what the business's own invoices look like, so it matters

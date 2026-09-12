@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v122';
+  var VERSION = 'v123';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -460,6 +460,21 @@
        numbers whenever the marketing changes and every edit would come back
        as a fresh miss. */
     '.hero-stats-value', '.trust-value', '.agent-conversation-panel__user-row',
+    /* THE "NOVINKY" FEATURE-DISCOVERY PANEL, v123 — HighLevel's rotating
+       what's-new feed. Ten entries the night it was opened, every one of them
+       an announcement about a third-party integration: "Asana actions &
+       triggers", "Sync CRM activity with Notion pages, database and docs."
+
+       NOT zoned because it is unimportant -- these are real sentences a user
+       could read. Zoned because the content CHURNS. Ten dictionary entries
+       tonight buys ten more next week, forever, for copy about products this
+       business does not use, whose names have to stay English anyway. The
+       pill itself ("Novinky", "Novinky v automatizaci") sits outside the
+       panel and is already translated.
+
+       Reversible: if the feed ever carries something a user must act on, the
+       answer is to translate that item, not to unzone the treadmill. */
+    '.feature-discovery-main-container',
     /* a whole conversation-list row: the contact name, the message preview and
        the timestamp all sit inside it. Blocking the row costs us translating
        the relative time ("2 days ago") in that list, which is a cosmetic loss
@@ -1084,7 +1099,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v86';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v87';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
