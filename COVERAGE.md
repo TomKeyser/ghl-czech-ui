@@ -328,6 +328,86 @@ letting an account supply its own strings — which is the ask in the founders b
 invoice document does. Untested — the language was already back to English when the widget was
 checked. It changes nothing about reachability.
 
+### The map, measured route by route — 12 September, the real account
+
+The row above said "the workflow builder" from one observation. Walking every nav
+area on a real sub-account showed the wall is wider than that, and also narrower
+than it sounds. Detection: a viewport-sized iframe whose `contentDocument` is
+`null` and whose `contentWindow.location` throws `SecurityError`.
+
+| Area | Reachable | Host, where walled |
+|---|---|---|
+| Launchpad, Dashboard, Conversations, Contacts, Opportunities, Payments | ✅ | |
+| Websites, Funnels, **Forms**, Surveys, Media library | ✅ | |
+| Social Planner, AI Agents, Reputation | ✅ | |
+| **Automation** (workflows) | ❌ | `client-app-automation-workflows.leadconnectorhq.com` |
+| **Marketing → Emails** | ❌ | `email-home-prod.leadconnectorhq.com` |
+| **Page builder** (websites *and* funnels) | ❌ | `page-builder.leadconnectorhq.com` |
+
+The page builder is the most complete wall of the three: it fills the viewport
+and the parent document contains **zero** characters of text.
+
+**The cost is not evenly distributed, and that matters more than the count.**
+
+- The **page builder** is a canvas — icons, drag handles, direct manipulation,
+  instant visual feedback. The origin user built websites in it in English,
+  unprompted, before this layer existed. It is the surface that needs language
+  least, and losing it costs almost nothing.
+- **Automation** is the expensive one. Triggers, conditions, action names, wait
+  steps: all language, all consequence, and no visual scaffolding to guess
+  from. A wrong guess there sends the wrong message to a real customer.
+
+So "three walled areas" overstates the damage and understates the argument. The
+wall does not fall on decoration. It falls hardest on the one area where being
+wrong is expensive — which is the version of this to put in front of HighLevel.
+
+### `onload` as a way in — tested, 12 September
+
+Asked whether the iframe's load event could be used as a hook. It can be
+attached, and it fires. It is a doorbell, not a key:
+
+```
+contentWindow.location.href  →  SecurityError
+contentDocument              →  null
+injecting a <script>         →  impossible
+```
+
+**One trap worth recording.** Read the frame too early and every one of those
+*succeeds* — `contentDocument` returns a real document and reads fine. That is
+the initial `about:blank`, which is same-origin. The shutter comes down when the
+frame navigates to its own origin. Anyone testing this will get a false positive
+first and could spend a day on it.
+
+What *is* available across the boundary, all of it read-only:
+
+| Signal | Use |
+|---|---|
+| `iframe.onload` | the frame finished loading |
+| `{"type":"load","url":…}` | it says so itself, with the URL |
+| postmate `route-change` | every navigation *inside* the frame, with the path |
+| postmate `update-document-title` | the frame's page title |
+
+These are worth wiring into settle detection — guessed wait times produced two
+wrong route sweeps in one session before these were found.
+
+**And one thing deliberately not used.** The child frame serialises its whole
+DOM with rrweb and posts it to the parent — measured at **1,214 KB in 30
+seconds** on the workflows screen. That is Pendo's cross-frame session recording
+(installed natively by HighLevel), and it means the DOM we cannot read is being
+volunteered out the front door. It stays unused: it is read-only anyway, it
+carries customer data, and it belongs to someone else's telemetry channel.
+Reading it in shipped code is exactly what the firewall exists to prevent. As a
+measuring instrument on our own account it could quantify precisely how many
+strings in Automation no agency can localise — which is ammunition, not a
+feature.
+
+**The same measurement, for the record:** 1,214 KB crossed the frame boundary
+inside the browser while **600 bytes** left it, in two requests. The DOM is not
+being uploaded. An earlier claim here that sessions were "sent to Pendo" was
+asserted from the shape of the traffic and was not supported when measured.
+Limits: ~55 seconds of one session, replay is commonly sampled, and the child
+frame's own network is invisible for the same reason its DOM is.
+
 ## Honest caveats
 
 - One sub-account, one dataset. A screen with no records shows fewer strings.
