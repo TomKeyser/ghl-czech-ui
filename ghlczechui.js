@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v119';
+  var VERSION = 'v120';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -448,6 +448,18 @@
        The drawer's own chrome sits OUTSIDE this list -- the tabs, the heading
        and the close button are translated normally. */
     '#notification-list',
+    /* THE AI AGENTS LANDING PAGE, v120 — HighLevel's own marketing figures
+       ("14.7M+", "27M+", "0.8s", "~34 min") and the fictional people in its
+       demo conversation ("John Doe", "Sara Smith", "Lumen Studio", and the
+       "SS"/"LS" initials on their avatars).
+
+       Not customer data, so no leak — twelve entries of harvest-queue noise
+       that would never be translated usefully. A figure has nothing to
+       translate and a name, even an invented one, is a name. Zoned rather
+       than given identity dictionary entries, because HighLevel edits these
+       numbers whenever the marketing changes and every edit would come back
+       as a fresh miss. */
+    '.hero-stats-value', '.trust-value', '.agent-conversation-panel__user-row',
     /* a whole conversation-list row: the contact name, the message preview and
        the timestamp all sit inside it. Blocking the row costs us translating
        the relative time ("2 days ago") in that list, which is a cosmetic loss
@@ -1613,6 +1625,21 @@
   var PHONE_SHAPE = /^(?!\d{4}-\d{2}-\d{2}$)\+?\(?\d[\d\s().-]{6,}\d$/;
   var EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 
+  /* And SOURCE CODE, v120. The contacts smart list rendered a Vue render
+     function into a text node:
+
+       ()=>(0,a.h)("span",null,d("listView.bulkActions.de…
+
+     That is HighLevel's bug -- a function reached a slot that expected a
+     string -- but it arrives at us as a string to translate. Code is never
+     translated, and unlike .cm-editor there is no container to zone: a
+     stringified function can surface anywhere the same mistake is made.
+
+     Deliberately narrow. It requires an arrow or function head AT THE START,
+     so ordinary prose containing brackets is untouched, and there is no
+     natural sentence in any language that opens "()=>" or "function (a, b) {". */
+  var CODE_SHAPE = /^(?:\(\s*[\w\s,{}[\]$.]*\)\s*=>|function\s*\*?\s*[\w$]*\s*\(|\(\s*function\s*[\w$]*\s*\()/;
+
   /* the shapes together: the reason why() gives, or null */
   function recordShape(s) {
     var t = String(s).trim();
@@ -1621,6 +1648,7 @@
     if (OBJECT_ID.test(t)) return 'record-id';
     if (PHONE_SHAPE.test(t)) return 'phone';
     if (EMAIL_SHAPE.test(t)) return 'email';
+    if (CODE_SHAPE.test(t)) return 'source-code';
     return null;
   }
 
