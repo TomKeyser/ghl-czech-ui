@@ -168,7 +168,7 @@ memberships/communities/{community-groups,clientportal-domain-setup,communities-
 memberships/certificates/create-certificates  memberships/gokollab/activation
 reputation/{requests,reviews,video-testimonials,widget,listing,settings}
 reporting/{google-ads,facebook-ads,attribution,call,appointment,local-marketing-audit}
-ai-agents/{agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,content-ai,agent-logs}
+ai-agents/{getting-started,agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,content-ai,agent-logs}
 ```
 
 **Running the sweep through the browser MCP — three things learned on the v128 sweep (12 Sep):**
@@ -182,10 +182,12 @@ ai-agents/{agent-studio,voice-ai,conversation-ai,knowledge-base,agent-templates,
 - **The browser MCP is signed in as the agency owner**, and the engine stands aside for agency
   users. Open the first route with `?csagency=1`. The audience is resolved once at boot,
   so in-app navigation keeps the override.
-- `sweep-routes.js` has drifted from this list: it lacks about 50 of these routes and has
-  `tasks`, `businesses/list`, `ai-agents/getting-started`, `ai-agents/voice-ai` and
-  `wordpress/dashboard` as core routes. This file is the canonical list; the v128 sweep walked the
-  union. Bring the script back in step.
+- `sweep-routes.js` **was brought back in step on 12 Sep (v129)**. It had drifted by about 50
+  routes. It now mirrors these blocks exactly: 117 routes in `CORE`, `SUBMENUS`, `SETTINGS` and
+  `LAST` (`local-marketing-audit` alone, walked last), with `kaSweep.ALL` as the whole walk.
+  `contacts/detail/<one contact>` is left out because it needs a record id. The walker also
+  writes `kaSweep.progress`, so the MCP can start it unawaited and poll. A one-off Node check
+  expanded the brace groups here and compared: nothing missing, nothing extra.
 
 **Settings** (added v86 — DOM pages only; see the iframe caveat):
 

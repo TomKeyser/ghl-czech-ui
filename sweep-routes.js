@@ -9,19 +9,25 @@
    THE RULE IT SERVES: every deploy gets the FULL sweep, not a check of the
    screens the change touched. A new zone, a formatter or a walk-order change
    moves text on screens the deploy never visited, and only the full walk sees
-   that. It takes about three minutes.
+   that. A few minutes in a FOREGROUND tab; a background tab throttles timers
+   and the v128 walk took about 45 minutes.
 
      await kaSweep.start()                  // export, then clear
-     await kaSweep.run(kaSweep.CORE)        // the operator surfaces
-     await kaSweep.run(kaSweep.SUBMENUS)    // everything behind a module's own bar
+     await kaSweep.run(kaSweep.ALL)         // CORE, SUBMENUS, SETTINGS, LAST
      kaSweep.report()                       // what is left, and what is new
+
+   THROUGH THE BROWSER MCP the page-script call times out at 45 s, so do not
+   await run(): start it, then poll kaSweep.progress with short calls.
 
    start() hands back everything the collector held BEFORE clearing — keep it.
    Clearing without exporting first has already lost one session's history.
 
    The route list is the sweep's blind spot: it can only see screens it opens.
-   Read routes off the menus when a module gains a page, and add them here
-   AND in COVERAGE.md.
+   COVERAGE.md ("The sweep route list") is the canonical list and these arrays
+   mirror it exactly — brace groups there are expanded here. Read routes off the
+   menus when a module gains a page, and add them in BOTH places. Brought back in
+   step 12 Sep (v129) after drifting by about 50 routes. Not here, by design:
+   contacts/detail/<one contact>, which needs a record id — open it by hand.
 ============================================================================= */
 
 (function (root) {
@@ -29,33 +35,63 @@
 
   var CORE = [
     'launchpad', 'dashboard', 'conversations/conversations', 'calendars/view',
-    'contacts/smart_list/All', 'opportunities/list', 'tasks', 'businesses/list',
+    'contacts/smart_list/All', 'opportunities/list',
     'payments/invoices', 'payments/recurring-templates', 'payments/invoice-templates',
-    'payments/v2/estimates', 'payments/products', 'payments/v2/orders',
-    'payments/v2/subscriptions', 'payments/v2/transactions', 'payments/coupons',
-    'payments/gift-cards', 'payments/v2/paymentlinks', 'payments/settings/taxes',
-    'media-storage', 'reputation/overview', 'reporting/reports', 'integration',
-    'marketing/social-planner', 'funnels-websites/funnels', 'automation/workflows',
-    'ai-agents/getting-started', 'ai-agents/voice-ai', 'wordpress/dashboard',
-    'settings/company'
+    'payments/v2/estimates', 'payments/integrations/dashboard',
+    'payments/proposals-estimates', 'payments/proposals-estimates/templates',
+    'payments/v2/orders', 'payments/v2/abandoned-checkouts', 'payments/v2/subscriptions',
+    'payments/v2/paymentlinks', 'payments/v2/transactions',
+    'payments/products', 'payments/products/collections', 'payments/products/inventory',
+    'payments/products/reviews', 'payments/coupons', 'payments/gift-cards',
+    'payments/settings/receipts', 'payments/settings/taxes',
+    'marketing/social-planner', 'automation/workflows', 'funnels-websites/funnels',
+    'memberships/client-portal/client-portal-ai', 'media-storage',
+    'reputation/overview', 'reporting/reports', 'integration', 'settings/company'
   ];
 
   var SUBMENUS = [
     'conversations/manual_actions', 'conversations/templates', 'conversations/trigger-links',
     'conversations/analytics', 'conversations/settings', 'calendars/appointments',
-    'contacts/bulk/actions', 'opportunities/forecast', 'opportunities/pipeline',
+    'contacts/bulk/actions', 'tasks', 'businesses/list',
+    'opportunities/forecast', 'opportunities/pipeline', 'opportunities/bulk-actions',
+    'automation/workflows/settings',
     'marketing/emails/statistics', 'marketing/templates', 'marketing/countdown-timer',
     'marketing/trigger-links', 'marketing/affiliate-manager/dashboard',
-    'funnels-websites/websites', 'funnels-websites/stores', 'funnels-websites/chat-widget',
-    'analytics', 'blogs', 'form-builder/main', 'survey-builder/main', 'qr-codes',
+    'marketing/affiliate-manager/media', 'marketing/affiliate-manager/settings',
+    'marketing/ad-manager/home',
+    'funnels-websites/websites', 'funnels-websites/stores', 'funnels-websites/webinars',
+    'funnels-websites/chat-widget', 'analytics', 'blogs',
+    'wordpress', 'funnels-websites/client-portal/dashboard',
+    'funnels-websites/client-portal/settings', 'funnels-websites/client-portal/branded-app',
+    'form-builder/main', 'survey-builder/main', 'quiz-builder/main', 'qr-codes',
+    'memberships/client-portal/settings', 'memberships/client-portal/branded-app',
     'memberships/courses/dashboard-v2', 'memberships/courses/products-v2',
-    'memberships/communities/community-groups', 'reputation/requests', 'reputation/reviews',
-    'reputation/settings', 'reporting/attribution', 'reporting/call',
-    'ai-agents/agent-studio', 'ai-agents/conversation-ai', 'ai-agents/knowledge-base',
-    'ai-agents/agent-templates', 'ai-agents/content-ai', 'ai-agents/agent-logs',
-    'settings/fields', 'settings/custom_values', 'settings/objects', 'settings/scoring',
-    'settings/preferences', 'settings/tags', 'settings/labs', 'settings/audit/logs'
+    'memberships/courses/offers-list-v2', 'memberships/courses/analytics-v2',
+    'memberships/communities/community-groups',
+    'memberships/communities/clientportal-domain-setup',
+    'memberships/communities/communities-branded-app',
+    'memberships/certificates/create-certificates', 'memberships/gokollab/activation',
+    'reputation/requests', 'reputation/reviews', 'reputation/video-testimonials',
+    'reputation/widget', 'reputation/listing', 'reputation/settings',
+    'reporting/google-ads', 'reporting/facebook-ads', 'reporting/attribution',
+    'reporting/call', 'reporting/appointment',
+    'ai-agents/getting-started', 'ai-agents/agent-studio', 'ai-agents/voice-ai',
+    'ai-agents/conversation-ai', 'ai-agents/knowledge-base', 'ai-agents/agent-templates',
+    'ai-agents/content-ai', 'ai-agents/agent-logs'
   ];
+
+  /* DOM pages only: most of Settings is a cross-origin micro-frontend */
+  var SETTINGS = [
+    'settings/company-billing/billing', 'settings/phone_system', 'settings/whatsapp',
+    'settings/objects', 'settings/fields', 'settings/custom_values', 'settings/import-data',
+    'settings/scoring', 'settings/preferences', 'settings/domain', 'settings/external-tracking',
+    'settings/lc-integrations', 'settings/private-integrations', 'settings/tags',
+    'settings/labs', 'settings/audit/logs'
+  ];
+
+  /* froze the renderer for about 2.5 minutes on the v128 sweep; every script
+     call timed out until it recovered, so it goes after everything else */
+  var LAST = ['reporting/local-marketing-audit'];
 
   function base() {
     var m = location.pathname.match(/\/v2\/location\/[^/]+\//);
@@ -85,6 +121,12 @@
   var kaSweep = {
     CORE: CORE,
     SUBMENUS: SUBMENUS,
+    SETTINGS: SETTINGS,
+    LAST: LAST,
+    ALL: CORE.concat(SUBMENUS, SETTINGS, LAST),
+
+    /* { done, total, route, log, finished } — readable while run() is going */
+    progress: null,
 
     /* export first, THEN clear: a sweep answers "what is true now", and
        "first seen after T" would hide old misses that are still live */
@@ -102,12 +144,16 @@
       var R = root.AppUtils && root.AppUtils.RouteHelper;
       if (!R) throw new Error('no RouteHelper');
       var b = base(), out = [];
+      var p = kaSweep.progress = { done: 0, total: routes.length, route: null, log: out, finished: false };
       for (var i = 0; i < routes.length; i++) {
+        p.route = routes[i];
         try { await R.navigate({ path: b + routes[i] }); }
-        catch (e) { out.push([routes[i], 'nav-failed']); continue; }
+        catch (e) { out.push([routes[i], 'nav-failed']); p.done++; continue; }
         var secs = await settle(1800, 14000);
         out.push([routes[i], secs + 's']);
+        p.done++;
       }
+      p.finished = true;
       return out;
     },
 
@@ -135,5 +181,5 @@
   };
 
   root.kaSweep = kaSweep;
-  console.log('[sweep] ready — kaSweep.start(), kaSweep.run(kaSweep.CORE), kaSweep.report()');
+  console.log('[sweep] ready — kaSweep.start(), kaSweep.run(kaSweep.ALL), kaSweep.report()');
 })(window);
