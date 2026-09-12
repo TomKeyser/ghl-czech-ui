@@ -4834,8 +4834,10 @@
     "before enabling it for everyone.": "než jej zapnete pro všechny.",
     "then": "pak",
 
-    /* the Reports upsell strip */
-    "Get listed across 37+ Digital services Global": "Zápis ve více než 37 digitálních službách po celém světě",
+    /* The Reports/Reputation upsell strip. NOTE "Globally", not "Global": the
+       key was first written from a 45-character console preview and silently
+       never matched. Read the full string, never the truncated display. */
+    "Get listed across 37+ Digital services Globally": "Zápis ve více než 37 digitálních službách po celém světě",
 
     /* THE LAUNCHPAD — the first screen a sub-account opens. Every string below
        is HighLevel's own onboarding copy, harvested from the origin user's
