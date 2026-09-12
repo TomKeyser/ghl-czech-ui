@@ -331,6 +331,27 @@ name collides with a dictionary key, but it would reach the harvest.
 Worth watching in the sweeps rather than fixing blind: the fix needs a real
 second user on the account to confirm against, and this one has one.
 
+**The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
+rule renders as one composed sentence — *"if an email is - Opened Add Points
+1"* — in a widget table whose cells carry **no column key and no recognisable
+header title**, so `hrCellBlocked()` blocks the column by default and the whole
+sentence stays English.
+
+It is the right default and the wrong outcome. The sentence genuinely mixes
+our words (*if an email is*, *Add Points*, *In calendar*) with the customer's
+(a calendar named "Boxing Class", a raw tag id), so letting the column through
+would put record names back in front of the dictionary. The shape that fits is
+the one the activity feed uses — a **pattern rule with raw captures** — but a
+pattern never runs, because the cell is blocked before `translate()` is
+reached.
+
+**Left as it is, deliberately, and noted here because nothing else will tell
+you:** a blocked column is silent by construction. It cost nothing to find
+only because somebody opened the screen. Lead scoring is a builder surface
+that a sub-account operator does not configure, so it sits below the operator
+work — but if this is ever picked up, the fix is to let that column through
+*and* add the pattern in the same change, never one without the other.
+
 **Cross-origin iframes** are outside every mechanism here, and outside any
 DOM layer's reach. That now means four Settings pages (company, profile,
 users, calendars), SMTP, and the workflow builder. Most other Settings pages
