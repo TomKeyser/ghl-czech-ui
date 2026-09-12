@@ -5031,13 +5031,14 @@
     "Activity": "Aktivita",
     "First Name": "Jméno",
     "Last Name": "Příjmení",
-    /* the same six labels in sentence case. HighLevel writes the contact
-       panel's own field labels this way while the create/edit forms use title
-       case, and matching is exact, so both spellings have to be present. */
+    /* the same labels in sentence case. HighLevel writes the contact panel's
+       own field labels this way while the create/edit forms use title case,
+       and matching is exact, so both spellings have to be present.
+       "Contact source" / "Contact type" are NOT repeated here -- they already
+       exist further down in the contact block, and check-pack.js caught the
+       duplicate. */
     "First name": "Jméno",
     "Last name": "Příjmení",
-    "Contact source": "Zdroj kontaktu",
-    "Contact type": "Typ kontaktu",
     "Email": "E-mail",
     "Phone": "Telefon",
     "Address": "Adresa",
