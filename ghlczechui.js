@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v115';
+  var VERSION = 'v116';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -411,6 +411,43 @@
        hive reports what installs see. Someone's inbox is the last place that
        should feed a shared store. */
     '.message-item',
+    /* THE MEDIA LIBRARY, v116 — the business's own folder and file names.
+       Seven folders on the origin user's account: Security, Maint, Jitoz,
+       Cleaning, Moving, and two called "Relocated Item".
+
+       Nothing was visibly wrong, and that is the point. "Relocated Item" is
+       HighLevel's own auto-created folder and the pack translates it, which is
+       correct. The other five survived only because "Security", "Cleaning" and
+       "Moving" happen not to be dictionary keys today. They are ordinary
+       English words in a layer whose dictionary grows every session: the first
+       time "Moving" is needed for an interface label, his folder is renamed.
+
+       A record that is safe because of what the dictionary does not yet
+       contain is not protected, it is lucky. Blocking the names costs the
+       "Relocated Item" label its Czech and protects every folder anyone ever
+       names after an English word. */
+    '.folder-card-wrapper .truncate', '.media-file-name',
+    /* THE NOTIFICATIONS DRAWER, v116 — the worst leak found on the real
+       account, and found because Tom guessed where to look.
+
+       Opening the bell put a customer's full name, their phone number, an
+       email address and the body of a reply sent to them into the engine in
+       one pass. The suspect detector flagged the phone and the email, which is
+       the safety net doing its job, but flagged means REPORTED: they were
+       misses, and misses enter the harvest queue that feeds the hive.
+
+       The whole list is blocked rather than the bodies alone. Each row mixes
+       HighLevel's frame ("New Email from ...", "New Live Chat message from
+       ...") with the record inside it and the message body below it, and one
+       account's drawer is not enough structure to carve that safely. The cost
+       is English notification titles, which is a real daily-use loss and is
+       Tom's call to accept or refuse -- see COVERAGE.md. The refinement, when
+       more shapes have been seen, is a pattern per title with the record as a
+       raw capture, exactly as the activity feed already does.
+
+       The drawer's own chrome sits OUTSIDE this list -- the tabs, the heading
+       and the close button are translated normally. */
+    '#notification-list',
     /* a whole conversation-list row: the contact name, the message preview and
        the timestamp all sit inside it. Blocking the row costs us translating
        the relative time ("2 days ago") in that list, which is a cosmetic loss
