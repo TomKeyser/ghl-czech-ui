@@ -202,7 +202,14 @@
       agoHours:       { one: 'hodinou',   few: 'hodinami',  other: 'hodinami' },
       agoDays:        { one: 'dnem',      few: 'dny',       other: 'dny' },
       agoWeeks:       { one: 'týdnem',    few: 'týdny',     other: 'týdny' },
-      agoMonths:      { one: 'měsícem',   few: 'měsíci',    other: 'měsíci' }
+      agoMonths:      { one: 'měsícem',   few: 'měsíci',    other: 'měsíci' },
+      /* ⚠ THE SUPPLETIVE ONE. After "před", Czech says rokem (1), roky (2–4)
+         and then switches stem entirely: lety (5+), not "roků". Nothing in the
+         plural machinery would have guessed that — it is a different word.
+         Added 12 Sep after "1 year ago" turned up untranslated on the first
+         REAL account; the test data was all made this month, so no record in it
+         could ever be a year old. NOT NATIVE-CONFIRMED — goes to pass 3. */
+      agoYears:       { one: 'rokem',     few: 'roky',      other: 'lety' }
     },
 
     /* ---- month tables ----------------------------------------------------
@@ -3751,6 +3758,15 @@
     "No scripting. No setup calls. Just pick the one that fits, tweak the name, and start taking calls.":
       "Žádné skriptování. Žádné nastavovací hovory. Jen vyberte ten, který sedí, upravte jméno a začněte přijímat hovory.",
     "Browse all marketplace templates": "Procházet všechny šablony z Marketplace",
+
+    /* FOUND ON THE FIRST REAL ACCOUNT, 12 Sep. A custom menu link the origin
+       user's agency added — it exists on his business and on neither test
+       sub-account, which is the whole argument for letting the collector run
+       where the work actually happens. NOT NATIVE-CONFIRMED. */
+    "Logo Showcase":                    "Přehlídka log",
+    "Logo Showcase icon":               "Ikona přehlídky log",
+    "Search by Name, Email(primary + additional), Business name, Phone number, Tags":
+      "Hledat podle jména, e-mailu (hlavního i dalších), názvu firmy, telefonu nebo štítků",
 
     /* --- wordpress/dashboard: the hosting pitch -------------------------- */
     /* the toolbar above the pitch, which only renders once the page has

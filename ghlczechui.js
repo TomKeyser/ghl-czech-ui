@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v112';
+  var VERSION = 'v113';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -722,6 +722,19 @@
        Zoned, so the sentence around them stays Czech and the moving part stays
        still. See COVERAGE.md, "Animated text". */
     '.welcome-hero__highlight', '.typewriter-cursor', '.hint-word',
+    /* CUSTOM FIELD LABELS, v113 — found on the origin user's real account, the
+       first with data in it. A custom field's label is the AGENCY'S OWN WORDS,
+       already written in whichever language they chose; fourteen of them on one
+       contact reached the engine as misses and would have filled the harvest
+       queue with someone's field names.
+
+       The selector separates them from HighLevel's own labels by the shape of
+       the id: a custom field's form-item carries a 24-character record id
+       ("45QGujzHl6dkyDBJ8Tov-form-item"), while HighLevel's own fields are
+       "contact.first_name". Their INPUTS both look like contact.<name>, so the
+       id prefix cannot be used there — only the form-item wrapper separates
+       them cleanly. */
+    '#field-container [id$="-form-item"]:not([id^="contact."]) .hr-form-item-label__text',
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -952,7 +965,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v78';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v79';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

@@ -287,7 +287,9 @@
       ['TZ_ABBR',        /^(\([A-Z]{2,5}\))$/],
       ['AXIS_K',         /^(\d+(?:\.\d+)?k)$/],
       ['TOTAL_MEM',      /^(\d+)\s+total members?$/i],
-      ['REL_LONG',       /^(\d+)\s+(second|minute|hour|day|week|month)s?\s+ago$/i, '@relLong'],
+      /* "year" added 12 Sep 2026 — see LONG_UNITS in i18n-rules.js, which had
+         to gain the same unit or a year would have rendered as a month. */
+      ['REL_LONG',       /^(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago$/i, '@relLong'],
       ['LAST_UPD',       /^Last updated:\s*(.+)$/i],
       ['BYTES_USED',     /^([\d.,]+)\s*(Bytes|B|KB|MB|GB|TB)\s+used$/i],
       ['N_ACCOUNTS',     /^(\d+)\s+Accounts?$/i],

@@ -107,8 +107,15 @@
   }
 
   var SHORT_UNITS = { s: 'agoSeconds', m: 'agoMinutes', h: 'agoHours', d: 'agoDays', _default: 'agoWeeks' };
+  /* `year` added 12 Sep 2026, and it had to be added HERE as well as to the
+     regex: the fallthrough is agoMonths, so widening the pattern alone would
+     have rendered "1 year ago" as "před 1 měsícem" — a wrong date rather than
+     an untranslated one, which is far worse. Found on the first real account,
+     because every record in the test data was made this month and nothing
+     there could be a year old. */
   var LONG_UNITS  = { second: 'agoSeconds', minute: 'agoMinutes', hour: 'agoHours',
-                      day: 'agoDays', week: 'agoWeeks', _default: 'agoMonths' };
+                      day: 'agoDays', week: 'agoWeeks', month: 'agoMonths',
+                      year: 'agoYears', _default: 'agoMonths' };
 
   /* `which` selects a month table, so a language that declines month names
      (Czech genitive) and one that does not share this code path.            */

@@ -50,7 +50,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'g2';
+  var VERSION = 'g3';
   var KEY = 'ka_gaps_v1';
   var POS_KEY = 'ka_gap_pos';
   var MAX_BYTES = 4 * 1024 * 1024;             /* headroom under the ~5MB cap */
@@ -68,6 +68,24 @@
     console.info('[gap] disabled via ?nopick=1');
     return;
   }
+
+  /* ---------- OPT-IN PER BROWSER, v3 (12 Sep 2026) -------------------------
+     THIS TOOL USED TO APPEAR WHEREVER THE ENGINE TRANSLATED, which was fine
+     while the only gated accounts were ours. The moment a REAL business joined
+     the list, its owner would have found a badge floating on his screen — and
+     a tester's badge on a user's account changes the very thing it measures
+     (task t50 says so in as many words).
+
+     So the account gate is no longer enough on its own: the picker now also
+     requires this browser to have opted in, once, with ?kapick=1. The choice
+     is remembered per browser, exactly like the engine's own kill switch, and
+     ?kapick=0 forgets it. Nobody who has not asked for it will ever see it. */
+  try {
+    var q = location.search;
+    if (q.indexOf('kapick=1') !== -1) localStorage.setItem('ka_pick', '1');
+    if (q.indexOf('kapick=0') !== -1) localStorage.removeItem('ka_pick');
+    if (localStorage.getItem('ka_pick') !== '1') return;
+  } catch (e) { return; }       /* private mode: stay invisible, not enabled */
   window.__kaPickerActive = true;
   window.__kaPickerVersion = VERSION;
 
