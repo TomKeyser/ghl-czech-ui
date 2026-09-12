@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v113';
+  var VERSION = 'v114';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -330,6 +330,37 @@
      to inspect), NOTE bodies, CUSTOM FIELD values, and contact names in LISTS
      and the right-hand panel. __kaDebug.dead() reports which of these match
      nothing on a given screen; a selector at zero everywhere is decoration.  */
+
+  /* HighLevel's standard contact fields, by the slug on the div inside each
+     form-item. A CLOSED list on purpose: everything not on it is the
+     business's own field and its label is their words, not HighLevel's.
+     Adding a slug here opts that one label into translation; the cost of
+     forgetting one is an English label, the cost of a wrong entry is somebody
+     else's words rewritten, so the list stays short and observed. */
+  var STD_CONTACT_FIELDS = [
+    'contact.first_name', 'contact.last_name', 'contact.name',
+    'contact.email', 'contact.phone', 'contact.source', 'contact.type',
+    'contact.date_of_birth', 'contact.company_name', 'contact.website',
+    'contact.address1', 'contact.city', 'contact.state',
+    'contact.postal_code', 'contact.country', 'contact.timezone',
+    'contact.assigned_to', 'contact.tags', 'contact.dnd'
+  ];
+  var FIELD_LABEL_ZONE = (function () {
+    var all = '#field-container [id$="-form-item"] .hr-form-item-label__text';
+    var not = ':not(:has(' + STD_CONTACT_FIELDS.map(function (s) {
+      return '[id="' + s + '"]';
+    }).join(',') + '))';
+    var scoped = '#field-container [id$="-form-item"]' + not +
+                 ' .hr-form-item-label__text';
+    /* :has() is Chrome 105+/Safari 15.4+. If it is missing, querySelectorAll
+       throws on the whole joined selector string and the firewall stops
+       working everywhere -- so prove it parses before shipping it, and fall
+       back to blocking every label. An English "First name" is a blemish; a
+       firewall that throws is a data leak. */
+    try { document.querySelector(scoped); return scoped; }
+    catch (e) { return all; }
+  })();
+
   var CONTENT_ZONES = [
     /* OUR OWN INJECTED UI MARKS ITSELF. Tom's idea, 10 Sep. Anything Keytone
        puts on the page sets data-ka-ignore on its root and the engine leaves the
@@ -728,13 +759,29 @@
        contact reached the engine as misses and would have filled the harvest
        queue with someone's field names.
 
-       The selector separates them from HighLevel's own labels by the shape of
-       the id: a custom field's form-item carries a 24-character record id
-       ("45QGujzHl6dkyDBJ8Tov-form-item"), while HighLevel's own fields are
-       "contact.first_name". Their INPUTS both look like contact.<name>, so the
-       id prefix cannot be used there — only the form-item wrapper separates
-       them cleanly. */
-    '#field-container [id$="-form-item"]:not([id^="contact."]) .hr-form-item-label__text',
+       v114 REPLACES THE FIRST ATTEMPT, WHICH WAS WRONG. That one read
+       ":not([id^='contact.'])" on the form-item, believing HighLevel's own
+       fields were wrapped in "contact.first_name-form-item". They are not. On
+       a real account EVERY form-item carries a 24-character record id — the
+       business's fields and HighLevel's alike — so the escape never fired and
+       the firewall swallowed HighLevel's own six labels ("First name",
+       "Contact source", ...) along with the business's fourteen. The test
+       account never showed it because it has no custom fields.
+
+       What actually separates them is one level down. Each form-item contains
+       a div whose id is the field's slug, and HighLevel's standard fields use
+       a FIXED, CLOSED vocabulary of slugs, while a custom field's slug is a
+       slugified version of whatever the business typed:
+
+         contact.first_name          <- HighLevel's, always this string
+         contact.ostraha_service_request  <- the business's own words
+
+       So the zone blocks every label EXCEPT the form-items holding a known
+       standard slug. Matching the slug rather than the English label is what
+       makes this safe: a business is free to name a custom field "Email" and
+       it still passes through untouched, because its slug is not contact.email
+       on the standard list — it is a record id's worth of their own text. */
+    FIELD_LABEL_ZONE,
     /* our own tooling, so the engine never rewrites its own overlays */
     '#claude-agent-glow-border', '#claude-agent-stop-container', '#claude-phantom-cursor'
   ];
@@ -965,7 +1012,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v79';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v80';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

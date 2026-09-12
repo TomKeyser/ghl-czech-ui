@@ -177,6 +177,11 @@
       if (m[7]) out += ' (' + m[7] + ')';
       return f.replace('{stamp}', out);
     },
+    /* the same stamp with day and month swapped. Rather than a second copy of
+       the logic, put the groups back in the order createdOnStamp expects. */
+    createdOnStampDmy: function (pack, m) {
+      return FORMATTERS.createdOnStamp(pack, [m[0], m[2], m[1], m[3], m[4], m[5], m[6], m[7]]);
+    },
     /* "Overdue - 9/5/2026" — US month/day/year behind an English label */
     overdueSlash: function (pack, m) {
       var f = pack.frames && pack.frames.overdue;

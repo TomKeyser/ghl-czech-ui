@@ -76,6 +76,14 @@
          mistake that has a competitor shipping "Created (BST)" to a CEST
          location, where the header then stays English because of a timezone. */
       ['CREATED_ON_TZ',  /^Created on:\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4}),\s*(\d{1,2}):(\d{2})\s*(AM|PM)(?:\s*\(([A-Za-z]{2,5})\))?$/i, '@createdOnStamp'],
+      /* "Created on: 8 Aug 2026, 2:06 AM (CEST)" — the SAME stamp, day first.
+         Found on the origin user's real account on 12 Sep; the test accounts
+         only ever produced the month-first shape above. HighLevel renders this
+         one field from the browser's own locale, so the order flips for a
+         European user while the words stay English. Both shapes are real and
+         both have to be matched — assuming one order was the reason this read
+         as English on the first real screen it was ever shown. */
+      ['CREATED_ON_TZ_DMY', /^Created on:\s*(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{4}),\s*(\d{1,2}):(\d{2})\s*(AM|PM)(?:\s*\(([A-Za-z]{2,5})\))?$/i, '@createdOnStampDmy'],
       ['OVERDUE_SLASH',  /^Overdue\s*-\s*(\d{1,2})\/(\d{1,2})\/(\d{4})$/i, '@overdueSlash'],
       ['MON_DAY',        /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})$/i, '@monDay'],
       /* ACTIVITY FEED on contact detail. Inspected before writing these: the

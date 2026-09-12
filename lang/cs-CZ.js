@@ -4782,6 +4782,13 @@
     "Unarchive Conversation": "Obnovit konverzaci z archivu",
     "Delete contact": "Smazat kontakt",
     "Change message channel, current: SMS": "Změnit kanál zprávy, aktuálně: SMS",
+    "Change message channel, current: Email": "Změnit kanál zprávy, aktuálně: E-mail",
+    "Change message channel, current: WhatsApp": "Změnit kanál zprávy, aktuálně: WhatsApp",
+    "Write email": "Napsat e-mail",
+    "Write message": "Napsat zprávu",
+    /* the empty conversation pane — the first thing on screen for a contact
+       who came in from a form and has never been replied to */
+    "Start a new conversation": "Začněte novou konverzaci",
     "Please select a to number": "Vyberte cílové číslo",
     "Page visits, form submissions, appointments, calls, and more will appear here. Engage now to start tracking!":
       "Zde se zobrazí návštěvy stránek, odeslané formuláře, schůzky, hovory a další. Začněte a uvidíte je tu.",
@@ -4890,6 +4897,13 @@
     "Activity": "Aktivita",
     "First Name": "Jméno",
     "Last Name": "Příjmení",
+    /* the same six labels in sentence case. HighLevel writes the contact
+       panel's own field labels this way while the create/edit forms use title
+       case, and matching is exact, so both spellings have to be present. */
+    "First name": "Jméno",
+    "Last name": "Příjmení",
+    "Contact source": "Zdroj kontaktu",
+    "Contact type": "Typ kontaktu",
     "Email": "E-mail",
     "Phone": "Telefon",
     "Address": "Adresa",
