@@ -225,7 +225,7 @@ shown and in which mode, and `__kaStatus.userReason` carries the reason code.
   Tom, 13 Sep):** *"the same colour as the Claude logo, and make the text bold"*.
   Fill `#D97757`, bold text in `#1a1a1a`. Near-black rather than white, because
   white on that orange is about 3.1:1 against the 4.5:1 that 14 px text needs;
-  near-black is about 5.6:1. No stylesheet is injected, and HighLevel's CSS reaches it only through
+  near-black is about 5.6:1. **Tom saw it live and confirmed: "keep dark text".** No stylesheet is injected, and HighLevel's CSS reaches it only through
   inheritance, which the inline font and colour reset.
 - **Throttled** to one check per 400 ms. The observer fires constantly and
   measuring frames forces layout. Nothing runs while notices are off.
