@@ -192,6 +192,10 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
    - It disappears only when the condition it describes is gone, i.e. the next
      check no longer finds the cause (e.g. the platform language is English
      again).
+   - It shows on **every page**, using the page anchor rather than a region,
+     for as long as the cause exists. Tom: *"if they see it on every page and
+     can't dismiss it, they will fix it."* The persistence is the point: it is
+     the pressure that gets the fix made.
    - A **no-action** notice keeps the × and the session-and-page dismissal from
      answer 1.
 
