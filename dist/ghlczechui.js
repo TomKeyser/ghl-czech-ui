@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v140';
+  var VERSION = 'v141';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -527,7 +527,7 @@
     var title = hrHeaderTitle(td);
     return !(title && HR_TITLE_LET.test(title));
   }
-  var RECORD_MENU = '.hr-select-menu-container';
+  var RECORD_MENU = '.hr-select__menu-container';
   var RECORD_MENU_LABEL = '.hr-select-option-label';
   var RECORD_MENU_HEADS = ['All users', 'All pipelines'];
   var recordHeadSet = null;

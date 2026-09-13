@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v140';
+  var VERSION = 'v141';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1609,9 +1609,16 @@
      must stay blocked. Only heads that NAME a record type belong here: a bare
      "All" also heads status and type menus, which must keep translating.
 
-     Class names are from FIREWALL.md's 11 Sep measurement. If HighLevel renames
-     them, nothing matches and the menu behaves exactly as it did before v140. */
-  var RECORD_MENU = '.hr-select-menu-container';
+     v141, measured live 13 Sep on the dashboard user picker: the WHOLE menu is
+     .hr-select__menu-container (with .hr-base-select-menu). The similarly named
+     .hr-select-menu-container that v140 used wraps ONE option each, so v140
+     marked the head's own box and left the name beside it unprotected. Chain:
+       .hr-select__menu-container > .hr-scrollbar > … > .v-vl-visible-items
+         > .hr-base-select-option > __content > .hr-select-menu-container
+         > .hr-select-option-label
+     If HighLevel renames these, nothing matches and the menu behaves exactly as
+     it did before v140. */
+  var RECORD_MENU = '.hr-select__menu-container';
   var RECORD_MENU_LABEL = '.hr-select-option-label';
   var RECORD_MENU_HEADS = ['All users', 'All pipelines'];
   var recordHeadSet = null;

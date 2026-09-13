@@ -470,7 +470,7 @@ items below ignore."* He confirmed that the dashboard user picker's list opens
 with "All users". Tying the portalled menu back to its select turned out to be
 unnecessary; the menu's own first option says what it lists.
 
-A `.hr-select-menu-container` holding an option labelled with a
+A menu (`.hr-select__menu-container`, v141) holding an option labelled with a
 `RECORD_MENU_HEADS` phrase ("All users", "All pipelines", English or our Czech)
 is marked on the container. From then on, only that head translates. Every
 other option is blocked text, attributes included, and goes to the record
@@ -481,8 +481,12 @@ Bare "All" and "Please Select" are deliberately NOT heads: they also open
 status and type menus. Those pickers (workflow, campaign, GBP) still rely on
 the record backstop.
 
-⚠ Not yet verified live when written. The class names come from the 11 Sep
-measurement; if either is wrong, nothing matches and behaviour is unchanged.
+**The live check corrected v140.** `.hr-select-menu-container`, the class the
+11 Sep note gave for the menu, wraps each option on its own. The whole menu is
+`.hr-select__menu-container` (note the double underscore). v140 therefore
+marked the head's own box: "zz tom zz keyser" was still covered only by
+`record-mirror`. v141 uses the real menu. The status picker beside it ("Vše /
+Čeká / Dokončeno") was unmarked and translated under v140.
 
 **The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
 rule renders as one composed sentence — *"if an email is - Opened Add Points
