@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v142';
+  var VERSION = 'v143';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -986,9 +986,13 @@
     { zone: '[id="select-id"] .hr-base-selection-label', phrases: ['No pipeline available'] },
     { zone: '[id*="-select-pipeline_"] .hr-base-selection-label', phrases: ['All pipelines'] },
     /* the dashboard's other record pickers. Both cases of "all" are real:
-       HighLevel sends the campaign picker a lower-case one. */
-    { zone: '[id*="manual-action-workflow-selection"] .hr-base-selection-label', phrases: ['All', 'all'] },
-    { zone: '[id*="manual-action-campaign-selection"] .hr-base-selection-label', phrases: ['All', 'all'] },
+       HighLevel sends the campaign picker a lower-case one. v143: both also
+       read "Please Select" while the widget is still loading, before "All"
+       arrives. Seen in English on ZZ My Gym on 13 Sep, on the first read after
+       load; the same labels read "Vše" moments later. The GBP picker's
+       identical "Please Select" was already let through as "Vyberte". */
+    { zone: '[id*="manual-action-workflow-selection"] .hr-base-selection-label', phrases: ['All', 'all', 'Please Select'] },
+    { zone: '[id*="manual-action-campaign-selection"] .hr-base-selection-label', phrases: ['All', 'all', 'Please Select'] },
     { zone: '[id*="task-user-selection"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="user-sales-efficiency"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="gbp-page"] .hr-base-selection-label', phrases: ['Please Select'] }
@@ -1007,9 +1011,39 @@
   /* true when a text node sits in a blocked element only because of a
      phrase zone, and its text is one of that zone's phrases (or our own
      translation of one, written on an earlier pass) */
+  /* THE LEAD-SCORING RULES TABLE, v143 (settings/scoring). Its cells carry no
+     column key, so hrCellBlocked() blocks both columns and every saved rule
+     stayed English. FIREWALL.md's condition for fixing it: never let the
+     column through without the pattern. So the column is NOT opened. A text
+     node in it is let through only when it is ours:
+       "Action"      a SCORE_* rule matches, and that rule passes the
+                     business's tag or calendar name through raw
+       "Calculation" an exact dictionary entry ("Add Points")
+     Anything else, including a sentence shape we have not seen, stays blocked
+     and is remembered as a record. Returns null when the node is not in this
+     table, so the normal phrase-zone logic decides. */
+  function scoringCell(el, n) {
+    if (window.location.pathname.indexOf('/settings/scoring') === -1) return null;
+    var td = el.closest('td.hr-data-table__body-cell');
+    if (!td) return null;
+    var title = hrHeaderTitle(td);
+    if (title !== 'Action' && title !== 'Calculation') return null;
+    if (n.__kaDone !== undefined && n.__kaDone === n.textContent) return true;
+    var key = String(n.textContent).trim();
+    if (title === 'Calculation') return !!(DICT && own(DICT, key));
+    var rules = (SOURCE && SOURCE.rules) || [];
+    for (var i = 0; i < rules.length; i++) {
+      if (rules[i][0].indexOf('SCORE_') === 0 && rules[i][1].test(key)) return true;
+    }
+    return false;
+  }
+
   function zonePhrase(n) {
     var el = n && n.parentElement;
-    if (!el || !el.closest || !PHRASE_ZONES || !el.closest(PHRASE_ZONES)) return false;
+    if (!el || !el.closest) return false;
+    var sc = scoringCell(el, n);
+    if (sc !== null) return sc;
+    if (!PHRASE_ZONES || !el.closest(PHRASE_ZONES)) return false;
     for (var i = 0; i < ZONE_PHRASES.length; i++) {
       var zp = ZONE_PHRASES[i];
       if (!el.closest(zp.zone)) continue;
@@ -1163,7 +1197,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v95';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v96';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.

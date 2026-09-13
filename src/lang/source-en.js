@@ -164,6 +164,18 @@
          longer sentence. Patterns are not route-scoped, so this applies on any
          screen; message bubbles and threads are zoned and never reach it. */
       ['GREET_HI_BANG',  /^Hi (?!(?:[Tt]here|[Aa]ll|[Ee]veryone|[Tt]eam)!$)([A-Za-zÀ-ÖØ-öø-ž][A-Za-zÀ-ÖØ-öø-ž'’.\-]{1,30})!$/],
+      /* THE SAVED LEAD-SCORING RULES, v143 (settings/scoring, "Action" column).
+         HighLevel composes each rule as ONE text node: its wording, " - ", then
+         the value. The engine only lets this column through for a node one of
+         these rules matches (scoringCell), so an unseen shape stays blocked.
+         Email events and appointment statuses are HighLevel's own fixed lists,
+         so their value may go through the glossary. A TAG or CALENDAR value is
+         the business's own record and always passes through raw. Shapes as
+         measured on ZZ My Gym, 13 Sep. */
+      ['SCORE_EMAIL',       /^if an email is - (.+)$/],
+      ['SCORE_APPT_STATUS', /^if an appointment Status is - (.+)$/],
+      ['SCORE_REPLY_TAG',   /^if a contact reply and contact Has tag - (.+)$/],
+      ['SCORE_BOOKED_CAL',  /^if a contact booked appointment and In calendar - (.+)$/],
       /* "Import and engage with all your contacts instantly completion progress"
          — the aria-label on each task's progress bar, built by HighLevel as
          "<task title> completion progress". {?1} looks the title up in the

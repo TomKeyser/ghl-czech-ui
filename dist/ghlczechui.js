@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v142';
+  var VERSION = 'v143';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -219,8 +219,8 @@
     { zone: '#views-bar .lists .view-label', phrases: ['All'] },
     { zone: '[id="select-id"] .hr-base-selection-label', phrases: ['No pipeline available'] },
     { zone: '[id*="-select-pipeline_"] .hr-base-selection-label', phrases: ['All pipelines'] },
-    { zone: '[id*="manual-action-workflow-selection"] .hr-base-selection-label', phrases: ['All', 'all'] },
-    { zone: '[id*="manual-action-campaign-selection"] .hr-base-selection-label', phrases: ['All', 'all'] },
+    { zone: '[id*="manual-action-workflow-selection"] .hr-base-selection-label', phrases: ['All', 'all', 'Please Select'] },
+    { zone: '[id*="manual-action-campaign-selection"] .hr-base-selection-label', phrases: ['All', 'all', 'Please Select'] },
     { zone: '[id*="task-user-selection"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="user-sales-efficiency"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="gbp-page"] .hr-base-selection-label', phrases: ['Please Select'] }
@@ -235,9 +235,27 @@
     }
   })();
   var PHRASE_ZONES = ZONE_PHRASES.map(function (z) { return z.zone; }).join(',');
+  function scoringCell(el, n) {
+    if (window.location.pathname.indexOf('/settings/scoring') === -1) return null;
+    var td = el.closest('td.hr-data-table__body-cell');
+    if (!td) return null;
+    var title = hrHeaderTitle(td);
+    if (title !== 'Action' && title !== 'Calculation') return null;
+    if (n.__kaDone !== undefined && n.__kaDone === n.textContent) return true;
+    var key = String(n.textContent).trim();
+    if (title === 'Calculation') return !!(DICT && own(DICT, key));
+    var rules = (SOURCE && SOURCE.rules) || [];
+    for (var i = 0; i < rules.length; i++) {
+      if (rules[i][0].indexOf('SCORE_') === 0 && rules[i][1].test(key)) return true;
+    }
+    return false;
+  }
   function zonePhrase(n) {
     var el = n && n.parentElement;
-    if (!el || !el.closest || !PHRASE_ZONES || !el.closest(PHRASE_ZONES)) return false;
+    if (!el || !el.closest) return false;
+    var sc = scoringCell(el, n);
+    if (sc !== null) return sc;
+    if (!PHRASE_ZONES || !el.closest(PHRASE_ZONES)) return false;
     for (var i = 0; i < ZONE_PHRASES.length; i++) {
       var zp = ZONE_PHRASES[i];
       if (!el.closest(zp.zone)) continue;
@@ -266,7 +284,7 @@
   var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
   var TRANSLATE_PREFILLS = true;
   var MAX_LEN = 400;
-  var DATA_VERSION  = 'v95';
+  var DATA_VERSION  = 'v96';
   var DEFAULT_LOCALE = 'cs-CZ';
   var AVAILABLE = { 'cs-CZ': 1, 'es': 1 };
   var LOAD_TIMEOUT_MS = 15000;

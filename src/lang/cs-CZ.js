@@ -483,6 +483,14 @@
       /* same reasoning as LP_GREETING: the name is not declined */
       GREET_HI: 'Dobrý den, {1}',
       GREET_HI_BANG: 'Dobrý den, {1}!',
+      /* Saved lead-scoring rules, v143. MY CZECH, for the native reviewer.
+         {?1} only for HighLevel's own fixed values (Opened, Confirmed); a tag
+         or calendar name is the business's and stays raw ({1}). "Pokud" matches
+         the rule builder's opener (byRoute /settings/scoring). */
+      SCORE_EMAIL:       'Pokud je e-mail – {?1}',
+      SCORE_APPT_STATUS: 'Pokud je stav schůzky – {?1}',
+      SCORE_REPLY_TAG:   'Pokud kontakt odpoví a má štítek – {1}',
+      SCORE_BOOKED_CAL:  'Pokud si kontakt rezervuje schůzku v kalendáři – {1}',
       CONV_UNREAD: 'Nepřečtené, {1} {~conversations:1}',
       /* {1} passes the capture through untouched: the status word is ours, the
          record name belongs to whoever created it. */
@@ -1234,6 +1242,9 @@
     "Phones Numbers": "Telefonní čísla",
     "Please select a primary email": "Vyberte prosím hlavní e-mail",
     "Points": "Body",
+    /* lead-scoring "Calculation" column, v143 (the builder offers Add | Subtract) */
+    "Add Points": "Přidat body",
+    "Subtract Points": "Odečíst body",
     "primary": "hlavní",
     "Purchase Processing Step": "Krok zpracování nákupu",
     "quiz": "kvíz",
