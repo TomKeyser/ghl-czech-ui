@@ -494,6 +494,21 @@ marked the head's own box: "zz tom zz keyser" was still covered only by
 status menu next to it stayed a separate, unmarked container: All / Pending / Completed all read
 `translated`. The feared reuse of one container across pickers was not seen.
 
+**v145, by trigger, verified live 13 Sep on JITOZ (the real account, impersonating its user).**
+The manual-actions WORKFLOW menu is headed by a bare "All", so no head rule can mark it. Under v143 its
+9 workflow names reported `missing` and all 9 were in the collector. They were cleared, and the
+collector held nothing else. A menu is now also marked when it first appears while the workflow,
+campaign or GBP trigger carries `.hr-base-selection--active`; only that select's trigger does while
+its menu is open. Result:
+- The workflow menu is marked `trigger`: "All" → "Vše" translated, 9 names `record-menu`.
+- The task status menu opened next is a separate, unmarked container: Vše / Čeká / Dokončeno all
+  `translated`.
+- The collector stayed at 0 after opening both.
+
+The manual-actions USER picker was missing from the zone list (v145 adds it); its menu was already
+marked by head. GBP on JITOZ lists only "No Data". The campaign picker sits behind the automation-type
+select and was not opened.
+
 **The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
 rule renders as one composed sentence — *"if an email is - Opened Add Points
 1"* — in a widget table whose cells carry **no column key and no recognisable
