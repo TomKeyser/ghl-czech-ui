@@ -170,7 +170,25 @@ diagnose from the page instead of the console. End users never see it.
 Dismiss reachable by keyboard with a visible focus ring. Respects
 `prefers-reduced-motion` if it animates in at all.
 
-### Questions for Tom before this is built
+### Tom's answers, 13 September
+
+1. **Once or every time?** *"The dismissed notice stays hidden for the session,
+   only for that page."* Built in v136: dismissals live in `sessionStorage`,
+   keyed by notice and screen. They survive reloads in the same tab, and a new
+   session (a new tab or browser) shows the notice again. Permanent dismissals
+   written by v132–v135 are dropped once.
+2. **How much "why"?** *"It explains it perfectly."* The wording stands, pending
+   the native reviewer (row `r3-775` in the review page).
+3. **Does it ever offer an action?** Tom asked what "no action" means.
+   Definition given: a notice offers an action when the reader can do something
+   to change what it describes. `frame-unreachable` offers none, since nobody on
+   that screen can make it translatable. A future `wrong-platform-language`
+   notice would offer one: switch the platform language back to English.
+   Answer 1 already settles the no-action case (it returns each session).
+   **Still open:** should a notice the user CAN act on stay visible until they
+   act, even after being dismissed? Recommended: yes.
+
+### Questions for Tom before this is built (answered above, kept for the record)
 
 1. **Once or every time?** A permanently dismissible notice risks being
    dismissed on day one and never seen again by a user who later wonders why

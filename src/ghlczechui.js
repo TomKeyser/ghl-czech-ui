@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v135';
+  var VERSION = 'v136';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1991,9 +1991,13 @@
     var on = window.__kaNotices !== false;
     try {
       var qs = window.location.search;
+      /* v136: dismissals moved to sessionStorage. The permanent ones v132–v135
+         wrote to localStorage are dropped once, so nobody keeps a notice hidden
+         for ever under the old rule. */
+      localStorage.removeItem(NOTICE_DISMISSED_KEY);
       if (/[?&]kanotes=1(?:&|$)/.test(qs)) {
         localStorage.removeItem('ka_notes');
-        localStorage.removeItem(NOTICE_DISMISSED_KEY);
+        sessionStorage.removeItem(NOTICE_DISMISSED_KEY);
       }
       if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.setItem('ka_notes', '0');
       if (localStorage.getItem('ka_notes') === '0') on = false;
@@ -2008,7 +2012,10 @@
     return N && typeof N[code] === 'string' ? N[code] : null;
   }
 
-  /* dismissal is per notice AND per screen: the user learns each boundary once */
+  /* DISMISSAL LASTS THE SESSION, FOR THAT PAGE ONLY — Tom, 13 Sep: "the
+     dismissed notice stays hidden for the session, only for that page".
+     sessionStorage, keyed by notice and screen. It survives reloads in the
+     same tab and ends with the tab, so a new session shows the notice again. */
   function noticeRoute() {
     return window.location.pathname.replace(/^.*\/location\/[^/]+\//, '').split('/').slice(0, 2).join('/');
   }
@@ -2016,15 +2023,15 @@
      notice is a smaller harm than a silently suppressed one. */
   function noticeDismissed(id) {
     try {
-      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}');
+      var m = JSON.parse(sessionStorage.getItem(NOTICE_DISMISSED_KEY) || '{}');
       return !!(m && m[id + '|' + noticeRoute()]);
     } catch (e) { return false; }
   }
   function dismissNotice(id) {
     try {
-      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}') || {};
-      m[id + '|' + noticeRoute()] = new Date().toISOString().slice(0, 10);
-      localStorage.setItem(NOTICE_DISMISSED_KEY, JSON.stringify(m));
+      var m = JSON.parse(sessionStorage.getItem(NOTICE_DISMISSED_KEY) || '{}') || {};
+      m[id + '|' + noticeRoute()] = 1;
+      sessionStorage.setItem(NOTICE_DISMISSED_KEY, JSON.stringify(m));
     } catch (e) {}
     removeNotice(id);
   }

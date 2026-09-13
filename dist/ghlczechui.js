@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v135';
+  var VERSION = 'v136';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -720,9 +720,10 @@
     var on = window.__kaNotices !== false;
     try {
       var qs = window.location.search;
+      localStorage.removeItem(NOTICE_DISMISSED_KEY);
       if (/[?&]kanotes=1(?:&|$)/.test(qs)) {
         localStorage.removeItem('ka_notes');
-        localStorage.removeItem(NOTICE_DISMISSED_KEY);
+        sessionStorage.removeItem(NOTICE_DISMISSED_KEY);
       }
       if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.setItem('ka_notes', '0');
       if (localStorage.getItem('ka_notes') === '0') on = false;
@@ -740,15 +741,15 @@
   }
   function noticeDismissed(id) {
     try {
-      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}');
+      var m = JSON.parse(sessionStorage.getItem(NOTICE_DISMISSED_KEY) || '{}');
       return !!(m && m[id + '|' + noticeRoute()]);
     } catch (e) { return false; }
   }
   function dismissNotice(id) {
     try {
-      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}') || {};
-      m[id + '|' + noticeRoute()] = new Date().toISOString().slice(0, 10);
-      localStorage.setItem(NOTICE_DISMISSED_KEY, JSON.stringify(m));
+      var m = JSON.parse(sessionStorage.getItem(NOTICE_DISMISSED_KEY) || '{}') || {};
+      m[id + '|' + noticeRoute()] = 1;
+      sessionStorage.setItem(NOTICE_DISMISSED_KEY, JSON.stringify(m));
     } catch (e) {}
     removeNotice(id);
   }
