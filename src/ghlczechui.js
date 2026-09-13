@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v132';
+  var VERSION = 'v133';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1956,19 +1956,20 @@
        CONTENT_ZONES, so the engine never rewrites or harvests a notice.
      - WHITE LABEL: the words come from pack.notices and name nobody. No
        literal sentence lives in the engine, in any language.
-     - NEVER TOUCH THE FRAME. The notice goes in as the frame's previous
-       sibling. MEASURED 12 Sep: on Automation the frame's column clips at the
-       viewport (overflow hidden), so a sibling above it pushes the frame's
-       bottom out of sight with no scrollbar to get it back. Marketing > Emails
-       scrolls instead and loses nothing. So after inserting, the frame's bottom
-       is measured against the nearest clipping ancestor. If the notice cost the
-       frame visible height, it comes out of the flow and floats at the frame's
-       bottom-left corner. That overlaps a corner of the frame, which is the one
-       trade the design did not settle. It is written up as a question for Tom.
+     - THE FRAME GIVES UP EXACTLY THE NOTICE'S HEIGHT. Tom's idea, 12 Sep
+       night: "insert it above and call iframe resize on our own". Measured
+       first: Automation has no iframe-resizer at all. Its frame is height: 100%
+       of a container HighLevel sizes in CSS (calc(100vh - 92px) !important).
+       So the notice goes in as the frame's previous sibling, and when the frame
+       fills its container, one rule of ours, calc(100% - <notice height>px),
+       shrinks the frame by that much. Measured live: 827 -> 789 px with the
+       bottom edge unmoved, and back to 827 the moment the notice was removed.
+       The frame's own attributes are never written. A frame that does not fill
+       its container (Marketing > Emails, which scrolls) simply moves down.
 
      The agency-only developer line in the design is NOT built: it carries a
      host name, and its gate needs a test, not a comment. */
-  var NOTICES = {};                      /* id -> { el, frame, mode, route } */
+  var NOTICES = {};              /* id -> { el, style, slot, h, frame, mode, route } */
   var NOTICES_ON = null;
   var NOTICE_DISMISSED_KEY = 'ka_notes_dismissed';
   var NOTICE_KINDS = {                   /* left border, tint */
@@ -2022,6 +2023,7 @@
   function removeNotice(id) {
     var c = NOTICES[id];
     if (c && c.el.parentNode) c.el.parentNode.removeChild(c.el);
+    if (c && c.style && c.style.parentNode) c.style.parentNode.removeChild(c.style);
     delete NOTICES[id];
   }
   function removeAllNotices() {
@@ -2062,40 +2064,39 @@
     return box;
   }
 
-  /* the nearest ancestor that hides overflow. One that scrolls ends the
-     search: that column grows, and nothing becomes unreachable. */
-  function clippingAncestor(el) {
-    for (var e = el.parentElement; e && e !== document.body; e = e.parentElement) {
-      var o = getComputedStyle(e).overflowY;
-      if (o === 'hidden' || o === 'clip') return e;
-      if (o === 'auto' || o === 'scroll') return null;
+  /* the rule that makes the frame give up the notice's height. Scoped by
+     :has() to the container holding THIS notice, so it cannot reach any other
+     frame, and it is removed with the notice. */
+  var noticeSlots = 0;
+  function fitRule(slot, h) {
+    return ':has(> [data-ka-notice-slot="' + slot + '"]) > iframe { height: calc(100% - ' + h + 'px) !important; }';
+  }
+  /* re-measured on every check: the sentence wraps to two lines on a narrow
+     window, and the frame must give up the new height, not the old one */
+  function fitHeight(c) {
+    var h = Math.ceil(c.el.getBoundingClientRect().height);
+    if (h === c.h) return;
+    c.h = h;
+    c.style.textContent = fitRule(c.slot, h);
+  }
+
+  /* 'fit' when the frame fills its container (it shrinks by the notice's
+     height, so the screen does not move), 'inline' otherwise (it moves down) */
+  function placeAbove(id, box, frame) {
+    var parent = frame.parentNode;
+    var fills = Math.abs(frame.getBoundingClientRect().height - parent.clientHeight) < 2;
+    parent.insertBefore(box, frame);
+    var c = { el: box, style: null, slot: null, h: 0, frame: frame, mode: 'inline', route: noticeRoute() };
+    if (fills) {
+      c.slot = 'n' + (++noticeSlots);
+      box.setAttribute('data-ka-notice-slot', c.slot);
+      c.style = document.createElement('style');
+      c.style.setAttribute('data-ka-ignore', '');
+      document.head.appendChild(c.style);
+      c.mode = 'fit';
+      fitHeight(c);
     }
-    return null;
-  }
-
-  function positionFloat(box, frame) {
-    var r = frame.getBoundingClientRect();
-    box.style.left = Math.max(8, r.left + 16) + 'px';
-    box.style.bottom = Math.max(8, window.innerHeight - r.bottom + 16) + 'px';
-  }
-
-  /* 'inline' above the frame when that costs the frame nothing; otherwise
-     'float' over its bottom-left corner. */
-  function placeAbove(box, frame) {
-    var before = frame.getBoundingClientRect().bottom;
-    frame.parentNode.insertBefore(box, frame);
-    var clip = clippingAncestor(frame);
-    if (!clip) return 'inline';
-    var after = frame.getBoundingClientRect().bottom;
-    if (after <= Math.max(clip.getBoundingClientRect().bottom, before) + 1) return 'inline';
-    box.parentNode.removeChild(box);
-    box.style.position = 'fixed';
-    box.style.zIndex = '1000';
-    box.style.maxWidth = 'min(480px, calc(100vw - 32px))';
-    box.style.boxShadow = '0 4px 12px rgba(0,0,0,.15)';
-    document.body.appendChild(box);
-    positionFloat(box, frame);
-    return 'float';
+    return (NOTICES[id] = c);
   }
 
   function wallFrame() {
@@ -2118,12 +2119,11 @@
     var cur = NOTICES['frame-unreachable'];
     if (!want || noticeDismissed(want.id)) { if (cur) removeNotice('frame-unreachable'); return; }
     if (cur && cur.el.isConnected && cur.frame === want.frame && cur.frame.isConnected) {
-      if (cur.mode === 'float') positionFloat(cur.el, cur.frame);
+      if (cur.mode === 'fit') fitHeight(cur);
       return;
     }
     if (cur) removeNotice('frame-unreachable');
-    var box = buildNotice(want.id, want.kind, noticeText(want.id));
-    NOTICES[want.id] = { el: box, frame: want.frame, mode: placeAbove(box, want.frame), route: noticeRoute() };
+    placeAbove(want.id, buildNotice(want.id, want.kind, noticeText(want.id)), want.frame);
   }
 
   /* at most every 400 ms: the observer fires constantly, and measuring frames
@@ -2532,8 +2532,8 @@
     if (shouldTranslate()) injectPackCss();
     walk(document.body);
 
-    /* notices (v132): nothing here while they are off. A floating notice
-       follows its frame when the window resizes. */
+    /* notices (v132): nothing here while they are off. On resize the notice
+       may wrap, so the frame's share of the height is re-measured. */
     window.__kaDebug.notices = function () {
       var out = [];
       for (var id in NOTICES) if (own(NOTICES, id)) {

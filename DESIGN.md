@@ -193,14 +193,31 @@ turns notices on and clears every dismissal. `__kaDebug.notices()` lists what is
 shown and in which mode, and `__kaStatus.userReason` carries the reason code.
 
 **Decided in the build, all reversible:**
-- **Anchoring, measured first.** Automation → Workflows puts its frame in a
-  column that clips at the viewport (`overflow: hidden`, frame 827 px in a
-  919 px window). A sibling above it would push the frame's bottom out of sight
-  with no scrollbar. Marketing → Emails scrolls instead and loses nothing. So
-  the notice is inserted above the frame, then the frame is measured against its
-  nearest clipping ancestor. **If the notice cost the frame visible height, it
-  floats at the frame's bottom-left corner instead** (`position: fixed`,
-  z-index 1000, max 480 px wide). It follows the frame on resize.
+- **Anchoring: the frame gives up exactly the notice's height.** This is Tom's
+  idea from the night of 12 Sep: *"insert it above and call iframe resize on our
+  own"*. Measured first on Automation → Workflows:
+  - There is **no iframe-resizer on that screen**: no inline height, no
+    resizer object, no global.
+  - The frame is `height: 100%` of `#workflowBuilder`, which HighLevel sizes in
+    CSS as `calc(100vh - 92px) !important`.
+
+  So the notice goes in as the frame's previous sibling. When the frame fills
+  its container, one rule of ours (`calc(100% - <notice height>px)`, scoped by
+  `:has()` to the container holding that notice) shrinks the frame by exactly
+  that much.
+  - **Tried live on Automation:** a 38 px notice took the frame from 827 to
+    789 px with its bottom edge unmoved, and it returned to 827 px when the
+    notice was removed.
+  - The rule is re-measured when the sentence wraps on a narrow window. The
+    frame's own attributes are never written.
+  - A frame that does not fill its container (Marketing → Emails scrolls) just
+    moves down.
+
+  ⚠ **Correction:** an earlier draft of this build said Automation clips a
+  notice's worth of the frame, and floated the notice over a corner to avoid
+  it. That came from reading the numbers, not measuring. Measured with a real
+  notice inserted, the frame's bottom stayed 54 px inside the window. The float
+  was removed.
 - **Words only from `pack.notices`**, keyed by reason code. No sentence in the
   engine, in any language, so the white-label rule holds by construction.
 - **Styling is inline** on a `data-ka-ignore` root, in a neutral grey for
@@ -217,14 +234,8 @@ shown and in which mode, and `__kaStatus.userReason` carries the reason code.
   it in is a design question of its own. The primitive is ready for both.
 - The page-level anchor. No screen needs it yet.
 
-**New question the build raised, for Tom:**
-4. **On Automation the notice floats over a corner of the workflow screen.**
-   The alternatives are to push the screen down and lose its bottom edge
-   (rejected above), or to show nothing there. Is a small dismissible card over
-   the bottom-left corner acceptable?
-
-⚠ **Verified on the test account only** (ZZ My Gym, impersonating the account
-user). Nothing appears for anyone who has not opened `?kanotes=1` in their browser.
+**Off for everyone who has not opened `?kanotes=1` in their own browser.** Only
+the test account (ZZ My Gym, impersonating the account user) is used to check it.
 
 ### Other uses this unlocks, once the primitive exists
 

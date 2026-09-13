@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v132';
+  var VERSION = 'v133';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -755,6 +755,7 @@
   function removeNotice(id) {
     var c = NOTICES[id];
     if (c && c.el.parentNode) c.el.parentNode.removeChild(c.el);
+    if (c && c.style && c.style.parentNode) c.style.parentNode.removeChild(c.style);
     delete NOTICES[id];
   }
   function removeAllNotices() {
@@ -790,34 +791,31 @@
     }
     return box;
   }
-  function clippingAncestor(el) {
-    for (var e = el.parentElement; e && e !== document.body; e = e.parentElement) {
-      var o = getComputedStyle(e).overflowY;
-      if (o === 'hidden' || o === 'clip') return e;
-      if (o === 'auto' || o === 'scroll') return null;
+  var noticeSlots = 0;
+  function fitRule(slot, h) {
+    return ':has(> [data-ka-notice-slot="' + slot + '"]) > iframe { height: calc(100% - ' + h + 'px) !important; }';
+  }
+  function fitHeight(c) {
+    var h = Math.ceil(c.el.getBoundingClientRect().height);
+    if (h === c.h) return;
+    c.h = h;
+    c.style.textContent = fitRule(c.slot, h);
+  }
+  function placeAbove(id, box, frame) {
+    var parent = frame.parentNode;
+    var fills = Math.abs(frame.getBoundingClientRect().height - parent.clientHeight) < 2;
+    parent.insertBefore(box, frame);
+    var c = { el: box, style: null, slot: null, h: 0, frame: frame, mode: 'inline', route: noticeRoute() };
+    if (fills) {
+      c.slot = 'n' + (++noticeSlots);
+      box.setAttribute('data-ka-notice-slot', c.slot);
+      c.style = document.createElement('style');
+      c.style.setAttribute('data-ka-ignore', '');
+      document.head.appendChild(c.style);
+      c.mode = 'fit';
+      fitHeight(c);
     }
-    return null;
-  }
-  function positionFloat(box, frame) {
-    var r = frame.getBoundingClientRect();
-    box.style.left = Math.max(8, r.left + 16) + 'px';
-    box.style.bottom = Math.max(8, window.innerHeight - r.bottom + 16) + 'px';
-  }
-  function placeAbove(box, frame) {
-    var before = frame.getBoundingClientRect().bottom;
-    frame.parentNode.insertBefore(box, frame);
-    var clip = clippingAncestor(frame);
-    if (!clip) return 'inline';
-    var after = frame.getBoundingClientRect().bottom;
-    if (after <= Math.max(clip.getBoundingClientRect().bottom, before) + 1) return 'inline';
-    box.parentNode.removeChild(box);
-    box.style.position = 'fixed';
-    box.style.zIndex = '1000';
-    box.style.maxWidth = 'min(480px, calc(100vw - 32px))';
-    box.style.boxShadow = '0 4px 12px rgba(0,0,0,.15)';
-    document.body.appendChild(box);
-    positionFloat(box, frame);
-    return 'float';
+    return (NOTICES[id] = c);
   }
   function wallFrame() {
     var fs = document.querySelectorAll('iframe');
@@ -834,12 +832,11 @@
     var cur = NOTICES['frame-unreachable'];
     if (!want || noticeDismissed(want.id)) { if (cur) removeNotice('frame-unreachable'); return; }
     if (cur && cur.el.isConnected && cur.frame === want.frame && cur.frame.isConnected) {
-      if (cur.mode === 'float') positionFloat(cur.el, cur.frame);
+      if (cur.mode === 'fit') fitHeight(cur);
       return;
     }
     if (cur) removeNotice('frame-unreachable');
-    var box = buildNotice(want.id, want.kind, noticeText(want.id));
-    NOTICES[want.id] = { el: box, frame: want.frame, mode: placeAbove(box, want.frame), route: noticeRoute() };
+    placeAbove(want.id, buildNotice(want.id, want.kind, noticeText(want.id)), want.frame);
   }
   var noticeTimer = null, noticeLast = 0;
   function scheduleNotices() {
