@@ -107,6 +107,12 @@
        line for the reviewer. */
     notices: {
       'frame-unreachable': 'Tuto část se zatím nedaří přeložit – načítá se z jiného systému.',
+      /* ACTIONABLE (engine v137): shown on every page, with no dismiss, while the
+         platform language is not English. Tom's English: "platform language must
+         be set to English for czech translation to function". "Jazyk platformy"
+         is new to the pack: nothing else names HighLevel's setting. MY CZECH, for
+         the reviewer. */
+      'wrong-platform-language': 'Aby český překlad fungoval, musí být jazyk platformy nastaven na angličtinu.',
       dismiss:             'Skrýt toto upozornění'
     },
 

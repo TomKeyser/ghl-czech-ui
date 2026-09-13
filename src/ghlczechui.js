@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v136';
+  var VERSION = 'v137';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1163,7 +1163,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v93';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v94';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1979,7 +1979,9 @@
      white-label rule is untouched. */
   var NOTICE_KINDS = {
     limit: ['#D97757', '#D97757', '#1a1a1a'], info: ['#2563eb', '#eff6ff', '#1f2937'],
-    warn:  ['#d97706', '#fffbeb', '#1f2937'], error: ['#dc2626', '#fef2f2', '#1f2937']
+    /* warn = actionable (wrong-platform-language, v137): the same orange, since
+       Tom wants status messages to stand out */
+    warn:  ['#D97757', '#D97757', '#1a1a1a'], error: ['#dc2626', '#fef2f2', '#1f2937']
   };
 
   /* ON BY DEFAULT since v134 — Tom, 13 Sep: "leave our status messages on".
@@ -2046,7 +2048,9 @@
     for (var id in NOTICES) if (own(NOTICES, id)) removeNotice(id);
   }
 
-  function buildNotice(id, kind, text) {
+  /* dismissible: false for an ACTIONABLE notice (Tom: "only the corrective
+     action can dismiss it"), so it renders with no button at all */
+  function buildNotice(id, kind, text, dismissible) {
     var colours = NOTICE_KINDS[kind] || NOTICE_KINDS.limit;
     var box = document.createElement('div');
     box.setAttribute('data-ka-ignore', '');
@@ -2066,7 +2070,7 @@
     /* a real button, so it is keyboard-reachable with the browser's own focus
        ring. The label comes from the pack; without one there is no dismiss. */
     var label = noticeText('dismiss');
-    if (label) {
+    if (label && dismissible) {
       var b = document.createElement('button');
       b.type = 'button';
       b.textContent = '×';
@@ -2121,25 +2125,71 @@
     return null;
   }
 
+  /* ---- the page notice, v137 ----------------------------------------------
+     ACTIONABLE: 'wrong-platform-language'. Tom, 13 Sep: "platform language must
+     be set to English for czech translation to function. Our system will
+     display this in the czech language before it bails out." His rules for this
+     kind: it cannot be dismissed, only the fix removes it, and it shows on every
+     page ("if they see it on every page and cant dismiss it, they will fix it").
+
+     PLACEMENT, Tom's choice: a bar pinned just below HighLevel's header, across
+     the content column. The header is position: fixed, so the bar is too, and it
+     is re-measured on every check so a collapsed sidebar or a taller header
+     moves it. It sits ONE LAYER BELOW the header, so the avatar menu (where a
+     user's language is changed) still drops down over it and the fix stays
+     reachable. It covers the top of each screen while the cause exists. That is
+     the trade Tom chose. */
+  function placePage(box) {
+    var hdr = document.querySelector('header.hl_header');
+    var r = hdr ? hdr.getBoundingClientRect() : null;
+    var z = hdr ? parseInt(getComputedStyle(hdr).zIndex, 10) : NaN;
+    box.style.top = (r ? Math.max(0, Math.round(r.bottom)) : 0) + 'px';
+    box.style.left = (r ? Math.round(r.left) : 0) + 'px';
+    box.style.width = (r ? Math.round(r.width) : window.innerWidth) + 'px';
+    box.style.zIndex = String(isNaN(z) ? 999 : Math.max(1, z - 1));
+  }
+
+  function syncPageNotice(id, want) {
+    var cur = NOTICES[id];
+    if (!want) { if (cur) removeNotice(id); return; }
+    if (!cur || !cur.el.isConnected) {
+      if (cur) removeNotice(id);
+      var box = buildNotice(id, 'warn', noticeText(id), false);   /* no dismiss: Tom's rule */
+      box.style.position = 'fixed';
+      box.style.margin = '0';
+      box.style.borderRadius = '0';
+      document.body.appendChild(box);
+      cur = NOTICES[id] = { el: box, style: null, slot: null, h: 0, frame: null, mode: 'page', route: noticeRoute() };
+    }
+    placePage(cur.el);
+  }
+
   /* IDEMPOTENT, because inserting a notice is itself a mutation that brings
      the observer back here: a notice already attached to the same live frame
      is left alone. */
-  function updateNotices() {
-    var want = null;
-    if (noticesOn() && STATUS.translatingHere && PACK) {
-      var fr = wallFrame();
-      if (fr && noticeText('frame-unreachable')) want = { id: 'frame-unreachable', kind: 'limit', frame: fr };
-    }
-    STATUS.userReason = want ? want.id : null;
-
-    var cur = NOTICES['frame-unreachable'];
-    if (!want || noticeDismissed(want.id)) { if (cur) removeNotice('frame-unreachable'); return; }
-    if (cur && cur.el.isConnected && cur.frame === want.frame && cur.frame.isConnected) {
+  function syncFrameNotice(fr) {
+    var id = 'frame-unreachable', cur = NOTICES[id];
+    if (!fr || noticeDismissed(id)) { if (cur) removeNotice(id); return; }
+    if (cur && cur.el.isConnected && cur.frame === fr && fr.isConnected) {
       if (cur.mode === 'fit') fitHeight(cur);
       return;
     }
-    if (cur) removeNotice('frame-unreachable');
-    placeAbove(want.id, buildNotice(want.id, want.kind, noticeText(want.id)), want.frame);
+    if (cur) removeNotice(id);
+    placeAbove(id, buildNotice(id, 'limit', noticeText(id), true), fr);
+  }
+
+  function updateNotices() {
+    var on = noticesOn() && !!PACK;
+    /* the same gate that decides not to translate: an allowed sub-account, a
+       viewer who is not agency, and a platform language that is not the pack's
+       source. The two notices can never both show: the frame one needs the
+       layer to be translating, and this one exists because it is not. */
+    var langWrong = on && allowedHere() && audience === true && !sourceMatches() &&
+                    !!noticeText('wrong-platform-language');
+    var fr = on && STATUS.translatingHere && noticeText('frame-unreachable') ? wallFrame() : null;
+    STATUS.userReason = langWrong ? 'wrong-platform-language' : (fr ? 'frame-unreachable' : null);
+    syncPageNotice('wrong-platform-language', langWrong);
+    syncFrameNotice(fr);
   }
 
   /* at most every 400 ms: the observer fires constantly, and measuring frames

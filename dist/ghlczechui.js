@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v136';
+  var VERSION = 'v137';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -266,7 +266,7 @@
   var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
   var TRANSLATE_PREFILLS = true;
   var MAX_LEN = 400;
-  var DATA_VERSION  = 'v93';
+  var DATA_VERSION  = 'v94';
   var DEFAULT_LOCALE = 'cs-CZ';
   var AVAILABLE = { 'cs-CZ': 1, 'es': 1 };
   var LOAD_TIMEOUT_MS = 15000;
@@ -713,7 +713,7 @@
   var NOTICE_DISMISSED_KEY = 'ka_notes_dismissed';
   var NOTICE_KINDS = {
     limit: ['#D97757', '#D97757', '#1a1a1a'], info: ['#2563eb', '#eff6ff', '#1f2937'],
-    warn:  ['#d97706', '#fffbeb', '#1f2937'], error: ['#dc2626', '#fef2f2', '#1f2937']
+    warn:  ['#D97757', '#D97757', '#1a1a1a'], error: ['#dc2626', '#fef2f2', '#1f2937']
   };
   function noticesOn() {
     if (NOTICES_ON !== null) return NOTICES_ON;
@@ -762,7 +762,7 @@
   function removeAllNotices() {
     for (var id in NOTICES) if (own(NOTICES, id)) removeNotice(id);
   }
-  function buildNotice(id, kind, text) {
+  function buildNotice(id, kind, text, dismissible) {
     var colours = NOTICE_KINDS[kind] || NOTICE_KINDS.limit;
     var box = document.createElement('div');
     box.setAttribute('data-ka-ignore', '');
@@ -779,7 +779,7 @@
     msg.style.cssText = 'flex:1 1 auto;min-width:0;';
     box.appendChild(msg);
     var label = noticeText('dismiss');
-    if (label) {
+    if (label && dismissible) {
       var b = document.createElement('button');
       b.type = 'button';
       b.textContent = '×';
@@ -823,21 +823,47 @@
     for (var i = 0; i < fs.length; i++) if (isWallFrame(fs[i])) return fs[i];
     return null;
   }
-  function updateNotices() {
-    var want = null;
-    if (noticesOn() && STATUS.translatingHere && PACK) {
-      var fr = wallFrame();
-      if (fr && noticeText('frame-unreachable')) want = { id: 'frame-unreachable', kind: 'limit', frame: fr };
+  function placePage(box) {
+    var hdr = document.querySelector('header.hl_header');
+    var r = hdr ? hdr.getBoundingClientRect() : null;
+    var z = hdr ? parseInt(getComputedStyle(hdr).zIndex, 10) : NaN;
+    box.style.top = (r ? Math.max(0, Math.round(r.bottom)) : 0) + 'px';
+    box.style.left = (r ? Math.round(r.left) : 0) + 'px';
+    box.style.width = (r ? Math.round(r.width) : window.innerWidth) + 'px';
+    box.style.zIndex = String(isNaN(z) ? 999 : Math.max(1, z - 1));
+  }
+  function syncPageNotice(id, want) {
+    var cur = NOTICES[id];
+    if (!want) { if (cur) removeNotice(id); return; }
+    if (!cur || !cur.el.isConnected) {
+      if (cur) removeNotice(id);
+      var box = buildNotice(id, 'warn', noticeText(id), false);
+      box.style.position = 'fixed';
+      box.style.margin = '0';
+      box.style.borderRadius = '0';
+      document.body.appendChild(box);
+      cur = NOTICES[id] = { el: box, style: null, slot: null, h: 0, frame: null, mode: 'page', route: noticeRoute() };
     }
-    STATUS.userReason = want ? want.id : null;
-    var cur = NOTICES['frame-unreachable'];
-    if (!want || noticeDismissed(want.id)) { if (cur) removeNotice('frame-unreachable'); return; }
-    if (cur && cur.el.isConnected && cur.frame === want.frame && cur.frame.isConnected) {
+    placePage(cur.el);
+  }
+  function syncFrameNotice(fr) {
+    var id = 'frame-unreachable', cur = NOTICES[id];
+    if (!fr || noticeDismissed(id)) { if (cur) removeNotice(id); return; }
+    if (cur && cur.el.isConnected && cur.frame === fr && fr.isConnected) {
       if (cur.mode === 'fit') fitHeight(cur);
       return;
     }
-    if (cur) removeNotice('frame-unreachable');
-    placeAbove(want.id, buildNotice(want.id, want.kind, noticeText(want.id)), want.frame);
+    if (cur) removeNotice(id);
+    placeAbove(id, buildNotice(id, 'limit', noticeText(id), true), fr);
+  }
+  function updateNotices() {
+    var on = noticesOn() && !!PACK;
+    var langWrong = on && allowedHere() && audience === true && !sourceMatches() &&
+                    !!noticeText('wrong-platform-language');
+    var fr = on && STATUS.translatingHere && noticeText('frame-unreachable') ? wallFrame() : null;
+    STATUS.userReason = langWrong ? 'wrong-platform-language' : (fr ? 'frame-unreachable' : null);
+    syncPageNotice('wrong-platform-language', langWrong);
+    syncFrameNotice(fr);
   }
   var noticeTimer = null, noticeLast = 0;
   function scheduleNotices() {

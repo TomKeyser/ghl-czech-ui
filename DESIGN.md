@@ -199,9 +199,29 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
    - A **no-action** notice keeps the × and the session-and-page dismissal from
      answer 1.
 
-   **Not built yet, on purpose:** no actionable notice exists. The first one
-   (`wrong-platform-language`) brings the switch with it, so the primitive does
-   not carry a flag that nothing uses.
+   **The first actionable notice, from Tom (13 Sep):** *"platform language must be
+   set to English for czech translation to function. Our system will display
+   this in the czech language before it bails out."*
+   - **Reason code:** `wrong-platform-language`. The condition is the gate that
+     already exists: the sub-account is allowed, the viewer is not agency, and
+     `localStorage.locale` is not English.
+   - **Draft Czech (MY CZECH, for review):** *„Aby český překlad fungoval, musí
+     být jazyk platformy nastaven na angličtinu."* The pack has no existing term
+     for HighLevel's "Platform Language" setting, so "jazyk platformy" is new
+     and goes to the reviewer.
+   - **Placement is Tom's decision, measured 13 Sep.** HighLevel's header is
+     `position: fixed` over the content column, and its avatar menu is likely
+     where a user's language is changed, so a top bar would cover the fix.
+     Screens scroll in their own containers and some are full-height, so there
+     is no single in-flow slot at the top of every page.
+   - **Tom chose: a top bar just below the header** (over a bottom bar or the
+     sidebar), knowing it covers the top ~42 px of each screen while the cause
+     exists. Built in v137:
+     - `position: fixed` under `header.hl_header`, re-measured on every check.
+     - One layer below the header, so the avatar menu drops over it.
+     - No ×, ignores dismissals, removed on the first check after the language
+       is English.
+     - Uses the orange of the other notice.
 
 ### Questions for Tom before this is built (answered above, kept for the record)
 

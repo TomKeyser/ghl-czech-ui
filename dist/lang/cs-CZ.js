@@ -11,6 +11,7 @@
     ],
     notices: {
       'frame-unreachable': 'Tuto část se zatím nedaří přeložit – načítá se z jiného systému.',
+      'wrong-platform-language': 'Aby český překlad fungoval, musí být jazyk platformy nastaven na angličtinu.',
       dismiss:             'Skrýt toto upozornění'
     },
     dateStyle: 'numeric',
