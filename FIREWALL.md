@@ -515,6 +515,17 @@ that a sub-account operator does not configure, so it sits below the operator
 work — but if this is ever picked up, the fix is to let that column through
 *and* add the pattern in the same change, never one without the other.
 
+**Fixed in v143 / data v96, verified live 13 Sep (ZZ My Gym, impersonating the
+account user).** The column was NOT let through. `scoringCell()` admits a text
+node only when it is ours: a `SCORE_*` rule matches in "Action", or an exact
+dictionary entry appears in "Calculation". A sentence shape we have not seen
+stays blocked. All four saved rules read Czech, and `why()` gives `translated`
+for each: "Pokud je e-mail – Otevřeno", "Pokud je stav schůzky – Potvrzeno",
+"Pokud kontakt odpoví a má štítek – Jxn3s89awJOjROhjUOcu" and "Pokud si kontakt
+rezervuje schůzku v kalendáři – Boxing Class". Tag and calendar values pass
+through raw; "Add Points" reads "Přidat body". The Czech is MY CZECH and needs
+native review.
+
 **Cross-origin iframes** are outside every mechanism here, and outside any
 DOM layer's reach. That now means four Settings pages (company, profile,
 users, calendars), SMTP, and the workflow builder. Most other Settings pages
