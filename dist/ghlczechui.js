@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v130';
+  var VERSION = 'v131';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -266,7 +266,7 @@
   var ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
   var TRANSLATE_PREFILLS = true;
   var MAX_LEN = 400;
-  var DATA_VERSION  = 'v91';
+  var DATA_VERSION  = 'v92';
   var DEFAULT_LOCALE = 'cs-CZ';
   var AVAILABLE = { 'cs-CZ': 1, 'es': 1 };
   var LOAD_TIMEOUT_MS = 15000;

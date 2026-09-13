@@ -570,8 +570,6 @@
       DUE_TZ:         'Termín: {*1} ({2})',
       CREATED_ON_TZ:  'Vytvořeno: {*1} ({2})',
       TIME_RANGE:     '{*1}–{*2}',
-      /* the marketplace's developer line; the name stays raw. MY CZECH, pass 3. */
-      BY_DEVELOPER:   'Od {1}',
       EDIT_QUOTED:    'Upravit „{1}“',
       DELETE_TAX:     'Smazat daň – {1}',
       N_PAGES:        '{1} {~pages:1}',

@@ -83,7 +83,6 @@
       ['DATE_ABBR',      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})$/, '@dateAbbr'],
       ['TIME_AMPM',      /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@timeAmPm'],
       ['TODAY_AT',       /^Today at (\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@todayAt'],
-      ['BY_DEVELOPER',   /^By ([A-Z0-9][\w&.'’+-]*(?: [A-Z0-9][\w&.'’+-]*){0,4})$/],
       ['N_NEW',          /^(\d+)\s+new$/i],
       ['AGO',            /^(\d+)\s*([smhdw])\s+ago$/i, '@ago'],
       ['NAME_AGO',       /^(.+?)\s*·\s*(\d+)\s*([smhdw])\s+ago$/i, '@nameAgo'],

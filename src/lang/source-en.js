@@ -259,14 +259,11 @@
          matched: no "Yesterday at" has been seen, and a rule for an unseen
          shape is a guess. */
       ['TODAY_AT',       /^Today at (\d{1,2}):(\d{2})\s*(AM|PM)$/i, '@todayAt'],
-      /* "By LeadConnector", "By All The Apps" — the developer line on every app
-         card in the marketplace (integration), one text node. The name is the
-         developer's and passes through RAW. Patterns are not route-scoped, so the
-         shape does the scoping: EVERY word must start with a capital or a digit,
-         and the rule is case-SENSITIVE. HighLevel's own "By ..." strings, read out
-         of their bundles on 12 Sep, are all consent sentences ("By signing in you
-         agree to our ...") with a lowercase second word, so none can match. */
-      ['BY_DEVELOPER',   /^By ([A-Z0-9][\w&.'’+-]*(?: [A-Z0-9][\w&.'’+-]*){0,4})$/],
+      /* NO RULE FOR "By <developer>" on the marketplace cards — REMOVED in v131.
+         v130 added one, and it never fired: the whole card header is a content
+         zone since v81 (the developer's own words), so the text never reaches a
+         rule. __kaDebug.why(element) says so in one call. Ask why() BEFORE writing
+         a rule for text that looks untranslated. */
       ['N_NEW',          /^(\d+)\s+new$/i],
       ['AGO',            /^(\d+)\s*([smhdw])\s+ago$/i, '@ago'],
       ['NAME_AGO',       /^(.+?)\s*·\s*(\d+)\s*([smhdw])\s+ago$/i, '@nameAgo'],
