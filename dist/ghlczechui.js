@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v139';
+  var VERSION = 'v140';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -527,10 +527,42 @@
     var title = hrHeaderTitle(td);
     return !(title && HR_TITLE_LET.test(title));
   }
+  var RECORD_MENU = '.hr-select-menu-container';
+  var RECORD_MENU_LABEL = '.hr-select-option-label';
+  var RECORD_MENU_HEADS = ['All users', 'All pipelines'];
+  var recordHeadSet = null;
+  function isRecordHead(text) {
+    var t = String(text || '').trim();
+    if (!recordHeadSet) {
+      var set = Object.create(null);
+      for (var i = 0; i < RECORD_MENU_HEADS.length; i++) {
+        var h = RECORD_MENU_HEADS[i];
+        set[h] = 1;
+        if (DICT && own(DICT, h) && typeof DICT[h] === 'string') set[DICT[h]] = 1;
+      }
+      if (!DICT) return set[t] === 1;
+      recordHeadSet = set;
+    }
+    return recordHeadSet[t] === 1;
+  }
+  function recordMenuBlocked(el) {
+    var menu = el && el.closest && el.closest(RECORD_MENU);
+    if (!menu) return false;
+    if (!menu.__kaRecordMenu) {
+      var labels = menu.querySelectorAll(RECORD_MENU_LABEL);
+      for (var i = 0; i < labels.length; i++) {
+        if (isRecordHead(labels[i].textContent)) { menu.__kaRecordMenu = true; break; }
+      }
+      if (!menu.__kaRecordMenu) return false;
+    }
+    var label = el.closest(RECORD_MENU_LABEL);
+    return !(label && isRecordHead(label.textContent));
+  }
   function blockedText(el) {
     if (!el || !el.closest) return true;
     if (el.closest(BLOCKED_TEXT)) return true;
     if (hrCellBlocked(el)) return true;
+    if (recordMenuBlocked(el)) return true;
     if (el.tagName === 'OPTION' || el.closest('option')) return inDataPicker(el);
     return false;
   }
@@ -538,7 +570,7 @@
     if (!el) return true;
     if (el.matches && el.matches(SELF_ATTR)) return true;
     if (!el.closest) return true;
-    return !!el.closest(BLOCKED_ATTR) || hrCellBlocked(el);
+    return !!el.closest(BLOCKED_ATTR) || hrCellBlocked(el) || recordMenuBlocked(el);
   }
   var RECORDS = Object.create(null);
   var RECORDS_N = 0;
@@ -636,6 +668,10 @@
     if (wall) {
       return { reason: 'declared-wall', wall: wall.id, zone: wall.zone,
                note: wall.note, text: key, attr: attr || null };
+    }
+    if (recordMenuBlocked(el)) {
+      return { reason: 'record-menu', on: describe(el.closest(RECORD_MENU)), text: key,
+               attr: attr || null, note: 'an option below a record menu\'s head (v140)' };
     }
     if (attr) {
       if (blockedAttr(el)) {

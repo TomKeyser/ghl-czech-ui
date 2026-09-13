@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v139';
+  var VERSION = 'v140';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1594,10 +1594,61 @@
     return !(title && HR_TITLE_LET.test(title));
   }
 
+  /* RECORD MENUS, v140. Tom, 13 Sep: "only translate the top item of a
+     specific picker and just mark the other items below ignore".
+
+     HighLevel portals a select's open list to body level
+     (.hr-select-menu-container) with nothing tying it back to the select that
+     opened it, so the list is recognised by its HEAD instead. A menu offering
+     "All users" lists people; Tom confirmed that head on the dashboard's user
+     picker. The head translates. Every other option in that menu is a record:
+     blocked, and remembered by the record backstop.
+
+     The verdict is stored on the container. The list is virtual, so the head
+     scrolls out of the DOM while the menu stays open, and the names below it
+     must stay blocked. Only heads that NAME a record type belong here: a bare
+     "All" also heads status and type menus, which must keep translating.
+
+     Class names are from FIREWALL.md's 11 Sep measurement. If HighLevel renames
+     them, nothing matches and the menu behaves exactly as it did before v140. */
+  var RECORD_MENU = '.hr-select-menu-container';
+  var RECORD_MENU_LABEL = '.hr-select-option-label';
+  var RECORD_MENU_HEADS = ['All users', 'All pipelines'];
+  var recordHeadSet = null;
+  /* English head, or our Czech for it once a pass has translated it */
+  function isRecordHead(text) {
+    var t = String(text || '').trim();
+    if (!recordHeadSet) {
+      var set = Object.create(null);
+      for (var i = 0; i < RECORD_MENU_HEADS.length; i++) {
+        var h = RECORD_MENU_HEADS[i];
+        set[h] = 1;
+        if (DICT && own(DICT, h) && typeof DICT[h] === 'string') set[DICT[h]] = 1;
+      }
+      if (!DICT) return set[t] === 1;           /* not ready: don't cache a partial set */
+      recordHeadSet = set;
+    }
+    return recordHeadSet[t] === 1;
+  }
+  function recordMenuBlocked(el) {
+    var menu = el && el.closest && el.closest(RECORD_MENU);
+    if (!menu) return false;
+    if (!menu.__kaRecordMenu) {
+      var labels = menu.querySelectorAll(RECORD_MENU_LABEL);
+      for (var i = 0; i < labels.length; i++) {
+        if (isRecordHead(labels[i].textContent)) { menu.__kaRecordMenu = true; break; }
+      }
+      if (!menu.__kaRecordMenu) return false;
+    }
+    var label = el.closest(RECORD_MENU_LABEL);
+    return !(label && isRecordHead(label.textContent));
+  }
+
   function blockedText(el) {
     if (!el || !el.closest) return true;
     if (el.closest(BLOCKED_TEXT)) return true;
     if (hrCellBlocked(el)) return true;
+    if (recordMenuBlocked(el)) return true;
     /* an <option> is allowed unless it belongs to a record picker */
     if (el.tagName === 'OPTION' || el.closest('option')) return inDataPicker(el);
     return false;
@@ -1607,7 +1658,7 @@
     if (!el) return true;
     if (el.matches && el.matches(SELF_ATTR)) return true;
     if (!el.closest) return true;
-    return !!el.closest(BLOCKED_ATTR) || hrCellBlocked(el);
+    return !!el.closest(BLOCKED_ATTR) || hrCellBlocked(el) || recordMenuBlocked(el);
   }
 
   /* ---------- MIRRORED RECORDS: the backstop behind the selectors ---------
@@ -1785,7 +1836,7 @@
 
   /* why(node[, attr]) -> { reason, ... }
      reasons: not-ready | empty | too-long | iframe | declared-wall |
-              content-zone | data-picker | record-mirror | file-name |
+              content-zone | record-menu | data-picker | record-mirror | file-name |
               missing | translated                                      */
   function why(node, attr) {
     if (!node) return { reason: 'no-node' };
@@ -1835,6 +1886,10 @@
        The gap picker's first export therefore blamed seven perfectly ordinary
        menu items on a suppression that had not happened. A diagnostic that does
        not match the code it describes is worse than none. */
+    if (recordMenuBlocked(el)) {
+      return { reason: 'record-menu', on: describe(el.closest(RECORD_MENU)), text: key,
+               attr: attr || null, note: 'an option below a record menu\'s head (v140)' };
+    }
     if (attr) {
       if (blockedAttr(el)) {
         return { reason: 'content-zone', zone: zoneOf(el, true) || 'hr-data-table column',

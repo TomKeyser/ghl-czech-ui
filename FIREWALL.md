@@ -464,6 +464,26 @@ name collides with a dictionary key, but it would reach the harvest.
 Worth watching in the sweeps rather than fixing blind: the fix needs a real
 second user on the account to confirm against, and this one has one.
 
+**Built in v140, 13 Sep: record menus are recognised by their head.** Tom:
+*"only translate the top item of a specific picker and just mark the other
+items below ignore."* He confirmed that the dashboard user picker's list opens
+with "All users". Tying the portalled menu back to its select turned out to be
+unnecessary; the menu's own first option says what it lists.
+
+A `.hr-select-menu-container` holding an option labelled with a
+`RECORD_MENU_HEADS` phrase ("All users", "All pipelines", English or our Czech)
+is marked on the container. From then on, only that head translates. Every
+other option is blocked text, attributes included, and goes to the record
+backstop. The mark is sticky because the list is virtual: the head scrolls out
+of the DOM while the names stay on screen. `why()` answers `record-menu`.
+
+Bare "All" and "Please Select" are deliberately NOT heads: they also open
+status and type menus. Those pickers (workflow, campaign, GBP) still rely on
+the record backstop.
+
+⚠ Not yet verified live when written. The class names come from the 11 Sep
+measurement; if either is wrong, nothing matches and behaviour is unchanged.
+
 **The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
 rule renders as one composed sentence — *"if an email is - Opened Add Points
 1"* — in a widget table whose cells carry **no column key and no recognisable
