@@ -229,6 +229,27 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
    - **Testing:** Tom will change the platform language himself. Nothing is
      simulated, and no profile is written by us.
 
+   **Verified live, v138, 13 Sep** (Tom set the platform language to Spanish on
+   ZZ My Gym, then I read the page):
+   - The UI rendered in Spanish, the layer stopped translating
+     (`translatingHere: false`), and `userReason` was `wrong-platform-language`.
+   - The bar sits exactly under the header: top 50 px = header bottom, left
+     224 px and width 1696 px = the header's. It is 38 px tall, at z-index 10
+     against the header's 11.
+   - It has no button, its text is the pack's Czech sentence, and it shows in
+     `page` mode.
+   - Clicking the avatar opened its menu **over** the bar.
+   - ⚠ **Correction:** the avatar menu holds only the name, email and log-out.
+     The platform language is not changed there, so the "keeps the fix
+     reachable" reasoning for the z-order was wrong. Keeping the header's menus
+     on top is still right; it just is not where the fix is.
+   - **Every page, and priority, on Automation:**
+     - The bar showed there too. The header is taller on that screen (bottom
+       106 px) and the bar followed it to 106 px, so the re-measure works.
+     - The walled frame was present, but no frame notice was shown and the frame
+       kept its full 771 px. Priority 1 won, and only one notice was on screen.
+   - Still to verify: the bar disappears once the language is back to English.
+
    **Priority (Tom, 13 Sep):** the platform-language notice is **priority 1**,
    the frame notice **priority 2**. One notice at a time, and the lowest number
    wins. *"The first message to be displayed stays"* is built as: between notices
