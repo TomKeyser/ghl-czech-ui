@@ -9,6 +9,10 @@
     css: [
       ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i], :is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i] * { text-transform: none !important; }'
     ],
+    notices: {
+      'frame-unreachable': 'Tuto část se zatím nedaří přeložit – načítá se z jiného systému.',
+      dismiss:             'Skrýt toto upozornění'
+    },
     dateStyle: 'numeric',
     number: {
       group:   ' ',

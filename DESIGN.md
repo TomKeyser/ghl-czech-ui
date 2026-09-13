@@ -8,7 +8,12 @@ decided on, so they stop living only in a session transcript. See
 
 ## 1. The user message area — status notices in the user's own language
 
-**Raised by Tom, 12 September 2026. Design only; no code.**
+**Raised by Tom, 12 September 2026. BUILT, off by default, in engine v132** (the
+night of 12 Sep, at Tom's request: "work on the status message div").
+On with `?kanotes=1`, off with `?kanotes=0`, or a loader can set `window.__kaNotices = true`.
+It stays off for everyone until the native reviewer has read the sentence and
+the three questions at the end of this section are answered.
+See **"As built"** below for what the build decided and what it deliberately left out.
 
 > *"It's time to add a message area for the end user to the page for status
 > messages. Example: if you're on a page with an iframe I'd like to have the
@@ -177,6 +182,49 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
 3. **Does it ever offer an action?** For `wrong-platform-language` there *is* a
    fix the user can make. For the frames there is none — and a notice with no
    action is only worth showing once.
+
+### As built — engine v132, 12 Sep night
+
+**What it does.** When a screen is walled (a viewport-sized frame the page
+cannot read, using the same test as `__kaDebug.frames()`), a notice appears with the
+pack's sentence and a dismiss button. Dismissal is remembered per notice and
+per screen in `localStorage`. If storage fails, the notice shows. `?kanotes=1`
+turns notices on and clears every dismissal. `__kaDebug.notices()` lists what is
+shown and in which mode, and `__kaStatus.userReason` carries the reason code.
+
+**Decided in the build, all reversible:**
+- **Anchoring, measured first.** Automation → Workflows puts its frame in a
+  column that clips at the viewport (`overflow: hidden`, frame 827 px in a
+  919 px window). A sibling above it would push the frame's bottom out of sight
+  with no scrollbar. Marketing → Emails scrolls instead and loses nothing. So
+  the notice is inserted above the frame, then the frame is measured against its
+  nearest clipping ancestor. **If the notice cost the frame visible height, it
+  floats at the frame's bottom-left corner instead** (`position: fixed`,
+  z-index 1000, max 480 px wide). It follows the frame on resize.
+- **Words only from `pack.notices`**, keyed by reason code. No sentence in the
+  engine, in any language, so the white-label rule holds by construction.
+- **Styling is inline** on a `data-ka-ignore` root, in a neutral grey for
+  `limit`. No stylesheet is injected, and HighLevel's CSS reaches it only through
+  inheritance, which the inline font and colour reset.
+- **Throttled** to one check per 400 ms. The observer fires constantly and
+  measuring frames forces layout. Nothing runs while notices are off.
+
+**Not built, on purpose:**
+- The **agency developer line**. It carries a host name, and its gate needs a
+  test, not a comment.
+- The other reason codes (`wrong-platform-language`, `pack-failed`). The first
+  is shown precisely when we are *not* translating, so which language to write
+  it in is a design question of its own. The primitive is ready for both.
+- The page-level anchor. No screen needs it yet.
+
+**New question the build raised, for Tom:**
+4. **On Automation the notice floats over a corner of the workflow screen.**
+   The alternatives are to push the screen down and lose its bottom edge
+   (rejected above), or to show nothing there. Is a small dismissible card over
+   the bottom-left corner acceptable?
+
+⚠ **Verified on the test account only** (ZZ My Gym, impersonating the account
+user). Nothing appears for anyone who has not opened `?kanotes=1` in their browser.
 
 ### Other uses this unlocks, once the primitive exists
 

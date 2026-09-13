@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v131';
+  var VERSION = 'v132';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1163,7 +1163,7 @@
      Diagnose with  window.__kaStatus  in the console.
      =================================================================== */
 
-  var DATA_VERSION  = 'v92';          /* bump when lang/<locale>.js changes */
+  var DATA_VERSION  = 'v93';          /* bump when lang/<locale>.js changes */
   var DEFAULT_LOCALE = 'cs-CZ';
   /* Whitelist of packs that exist at BASE + 'lang/<locale>.js'. A locale not
      listed here is refused by pickLocale() -- see the security note there.
@@ -1913,23 +1913,231 @@
      parent, which carries the frame's entire DOM. It is read-only, it is
      customer data, and it belongs to HighLevel's analytics vendor rather than
      to us. See COVERAGE.md. */
+  function frameReachable(f) {
+    try { return f.contentDocument !== null; } catch (e) { return false; }
+  }
+  /* a viewport-sized frame we cannot read IS the wall. One definition, shared
+     by frames() and the notices, so the diagnostic and the user-facing
+     sentence can never disagree about which screens are walled. */
+  function isWallFrame(f) {
+    return !frameReachable(f) && f.clientWidth > 400 && f.clientHeight > 300;
+  }
   function frames() {
     var out = [];
     document.querySelectorAll('iframe').forEach(function (f) {
       var host = '';
       try { host = new URL(f.src, location.href).host; } catch (e) { host = '(no src)'; }
-      var reachable;
-      try { reachable = f.contentDocument !== null; } catch (e) { reachable = false; }
       out.push({
         host: host,
         w: f.clientWidth, h: f.clientHeight,
-        /* a viewport-sized frame we cannot read IS the wall */
-        wall: !reachable && f.clientWidth > 400 && f.clientHeight > 300,
-        reachable: reachable
+        wall: isWallFrame(f),
+        reachable: frameReachable(f)
       });
     });
     return out;
   }
+
+  /* ---------- notices: the user message area, v132 -------------------------
+     DESIGN.md §1, Tom 12 Sep: "a message area for the end user ... above the
+     iframe that says we can't translate this page and why." One primitive, so
+     other notices can reuse it. The first and only reason code today is
+     'frame-unreachable'.
+
+     OFF BY DEFAULT. On with ?kanotes=1, remembered per browser because the SPA
+     drops the query on the first click, and off again with ?kanotes=0. A loader
+     can set window.__kaNotices = true. It stays off until the native reviewer
+     has read the wording and Tom has answered the design's three questions
+     (once or every visit, how much "why", whether it offers an action).
+     ?kanotes=1 also clears every dismissal, which is the design's "bring them
+     all back".
+
+     THREE RULES CARRIED FROM THE DESIGN:
+     - OUR OWN UI MARKS ITSELF: data-ka-ignore, which is the first entry in
+       CONTENT_ZONES, so the engine never rewrites or harvests a notice.
+     - WHITE LABEL: the words come from pack.notices and name nobody. No
+       literal sentence lives in the engine, in any language.
+     - NEVER TOUCH THE FRAME. The notice goes in as the frame's previous
+       sibling. MEASURED 12 Sep: on Automation the frame's column clips at the
+       viewport (overflow hidden), so a sibling above it pushes the frame's
+       bottom out of sight with no scrollbar to get it back. Marketing > Emails
+       scrolls instead and loses nothing. So after inserting, the frame's bottom
+       is measured against the nearest clipping ancestor. If the notice cost the
+       frame visible height, it comes out of the flow and floats at the frame's
+       bottom-left corner. That overlaps a corner of the frame, which is the one
+       trade the design did not settle. It is written up as a question for Tom.
+
+     The agency-only developer line in the design is NOT built: it carries a
+     host name, and its gate needs a test, not a comment. */
+  var NOTICES = {};                      /* id -> { el, frame, mode, route } */
+  var NOTICES_ON = null;
+  var NOTICE_DISMISSED_KEY = 'ka_notes_dismissed';
+  var NOTICE_KINDS = {                   /* left border, tint */
+    limit: ['#6b7280', '#f3f4f6'], info: ['#2563eb', '#eff6ff'],
+    warn:  ['#d97706', '#fffbeb'], error: ['#dc2626', '#fef2f2']
+  };
+
+  function noticesOn() {
+    if (NOTICES_ON !== null) return NOTICES_ON;
+    var on = window.__kaNotices === true;
+    try {
+      var qs = window.location.search;
+      if (/[?&]kanotes=1(?:&|$)/.test(qs)) {
+        localStorage.setItem('ka_notes', '1');
+        localStorage.removeItem(NOTICE_DISMISSED_KEY);
+      }
+      if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.removeItem('ka_notes');
+      if (localStorage.getItem('ka_notes') === '1') on = true;
+    } catch (e) {
+      if (/[?&]kanotes=1(?:&|$)/.test(window.location.search)) on = true;
+    }
+    return (NOTICES_ON = on);
+  }
+
+  function noticeText(code) {
+    var N = PACK && PACK.notices;
+    return N && typeof N[code] === 'string' ? N[code] : null;
+  }
+
+  /* dismissal is per notice AND per screen: the user learns each boundary once */
+  function noticeRoute() {
+    return window.location.pathname.replace(/^.*\/location\/[^/]+\//, '').split('/').slice(0, 2).join('/');
+  }
+  /* storage can throw or come back empty. Then the notice SHOWS: a repeated
+     notice is a smaller harm than a silently suppressed one. */
+  function noticeDismissed(id) {
+    try {
+      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}');
+      return !!(m && m[id + '|' + noticeRoute()]);
+    } catch (e) { return false; }
+  }
+  function dismissNotice(id) {
+    try {
+      var m = JSON.parse(localStorage.getItem(NOTICE_DISMISSED_KEY) || '{}') || {};
+      m[id + '|' + noticeRoute()] = new Date().toISOString().slice(0, 10);
+      localStorage.setItem(NOTICE_DISMISSED_KEY, JSON.stringify(m));
+    } catch (e) {}
+    removeNotice(id);
+  }
+
+  function removeNotice(id) {
+    var c = NOTICES[id];
+    if (c && c.el.parentNode) c.el.parentNode.removeChild(c.el);
+    delete NOTICES[id];
+  }
+  function removeAllNotices() {
+    for (var id in NOTICES) if (own(NOTICES, id)) removeNotice(id);
+  }
+
+  function buildNotice(id, kind, text) {
+    var colours = NOTICE_KINDS[kind] || NOTICE_KINDS.limit;
+    var box = document.createElement('div');
+    box.setAttribute('data-ka-ignore', '');
+    box.setAttribute('data-ka-notice', id);
+    box.setAttribute('role', 'status');
+    box.setAttribute('aria-live', 'polite');
+    box.style.cssText =
+      'box-sizing:border-box;display:flex;align-items:center;gap:12px;margin:0;' +
+      'padding:8px 8px 8px 12px;font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;' +
+      'color:#1f2937;background:' + colours[1] + ';border:1px solid #d1d5db;' +
+      'border-left:4px solid ' + colours[0] + ';border-radius:6px;';
+    var msg = document.createElement('span');
+    msg.textContent = text;
+    msg.style.cssText = 'flex:1 1 auto;min-width:0;';
+    box.appendChild(msg);
+
+    /* a real button, so it is keyboard-reachable with the browser's own focus
+       ring. The label comes from the pack; without one there is no dismiss. */
+    var label = noticeText('dismiss');
+    if (label) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = '×';
+      b.setAttribute('aria-label', label);
+      b.title = label;
+      b.style.cssText = 'flex:none;border:0;background:transparent;color:#4b5563;' +
+        'font-size:20px;line-height:1;padding:2px 8px;border-radius:4px;cursor:pointer;';
+      b.addEventListener('click', function () { dismissNotice(id); });
+      box.appendChild(b);
+    }
+    return box;
+  }
+
+  /* the nearest ancestor that hides overflow. One that scrolls ends the
+     search: that column grows, and nothing becomes unreachable. */
+  function clippingAncestor(el) {
+    for (var e = el.parentElement; e && e !== document.body; e = e.parentElement) {
+      var o = getComputedStyle(e).overflowY;
+      if (o === 'hidden' || o === 'clip') return e;
+      if (o === 'auto' || o === 'scroll') return null;
+    }
+    return null;
+  }
+
+  function positionFloat(box, frame) {
+    var r = frame.getBoundingClientRect();
+    box.style.left = Math.max(8, r.left + 16) + 'px';
+    box.style.bottom = Math.max(8, window.innerHeight - r.bottom + 16) + 'px';
+  }
+
+  /* 'inline' above the frame when that costs the frame nothing; otherwise
+     'float' over its bottom-left corner. */
+  function placeAbove(box, frame) {
+    var before = frame.getBoundingClientRect().bottom;
+    frame.parentNode.insertBefore(box, frame);
+    var clip = clippingAncestor(frame);
+    if (!clip) return 'inline';
+    var after = frame.getBoundingClientRect().bottom;
+    if (after <= Math.max(clip.getBoundingClientRect().bottom, before) + 1) return 'inline';
+    box.parentNode.removeChild(box);
+    box.style.position = 'fixed';
+    box.style.zIndex = '1000';
+    box.style.maxWidth = 'min(480px, calc(100vw - 32px))';
+    box.style.boxShadow = '0 4px 12px rgba(0,0,0,.15)';
+    document.body.appendChild(box);
+    positionFloat(box, frame);
+    return 'float';
+  }
+
+  function wallFrame() {
+    var fs = document.querySelectorAll('iframe');
+    for (var i = 0; i < fs.length; i++) if (isWallFrame(fs[i])) return fs[i];
+    return null;
+  }
+
+  /* IDEMPOTENT, because inserting a notice is itself a mutation that brings
+     the observer back here: a notice already attached to the same live frame
+     is left alone. */
+  function updateNotices() {
+    var want = null;
+    if (noticesOn() && STATUS.translatingHere && PACK) {
+      var fr = wallFrame();
+      if (fr && noticeText('frame-unreachable')) want = { id: 'frame-unreachable', kind: 'limit', frame: fr };
+    }
+    STATUS.userReason = want ? want.id : null;
+
+    var cur = NOTICES['frame-unreachable'];
+    if (!want || noticeDismissed(want.id)) { if (cur) removeNotice('frame-unreachable'); return; }
+    if (cur && cur.el.isConnected && cur.frame === want.frame && cur.frame.isConnected) {
+      if (cur.mode === 'float') positionFloat(cur.el, cur.frame);
+      return;
+    }
+    if (cur) removeNotice('frame-unreachable');
+    var box = buildNotice(want.id, want.kind, noticeText(want.id));
+    NOTICES[want.id] = { el: box, frame: want.frame, mode: placeAbove(box, want.frame), route: noticeRoute() };
+  }
+
+  /* at most every 400 ms: the observer fires constantly, and measuring frames
+     forces layout */
+  var noticeTimer = null, noticeLast = 0;
+  function scheduleNotices() {
+    if (noticeTimer) return;
+    noticeTimer = window.setTimeout(function () {
+      noticeTimer = null;
+      noticeLast = Date.now();
+      try { updateNotices(); } catch (e) { /* never break the app */ }
+    }, Math.max(0, 400 - (Date.now() - noticeLast)));
+  }
+
   var frameLog = null;
   function watchFrames() {
     if (frameLog) return frameLog;
@@ -2289,6 +2497,9 @@
       try { revertAll(); } catch (e) { /* never break the app */ }
     }
     if (STATUS.translatingHere) injectPackCss();   /* cheap; restores it if removed */
+    /* notices follow the screen: re-anchored when a frame is replaced, removed
+       when the gate closes. Nothing is scheduled while they are off. */
+    if (noticesOn()) scheduleNotices();
     var batch = queue;
     queue = [];
     for (var i = 0; i < batch.length; i++) {
@@ -2320,6 +2531,21 @@
     refreshStatus();
     if (shouldTranslate()) injectPackCss();
     walk(document.body);
+
+    /* notices (v132): nothing here while they are off. A floating notice
+       follows its frame when the window resizes. */
+    window.__kaDebug.notices = function () {
+      var out = [];
+      for (var id in NOTICES) if (own(NOTICES, id)) {
+        out.push({ id: id, mode: NOTICES[id].mode, route: NOTICES[id].route,
+                   connected: NOTICES[id].el.isConnected, text: NOTICES[id].el.textContent });
+      }
+      return { on: noticesOn(), userReason: STATUS.userReason || null, shown: out };
+    };
+    if (noticesOn()) {
+      window.addEventListener('resize', scheduleNotices);
+      scheduleNotices();
+    }
 
     new MutationObserver(function (muts) {
       try {

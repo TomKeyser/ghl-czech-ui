@@ -96,6 +96,19 @@
       ':is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i], :is(td.hr-data-table-td, td.n-data-table-td)[data-col-key*="status" i] * { text-transform: none !important; }'
     ],
 
+    /* ---- notices: OUR OWN words on the page, engine v132 ------------------
+       The user message area (DESIGN.md §1). NOT dictionary entries: these are
+       sentences we author, never matched against the page. Keyed by the
+       engine's reason code. A pack without a code shows no notice for it.
+       WHITE LABEL: no vendor, no product, no Keytone, and no word that points
+       back at a platform ("iframe", a host name). "Jiný systém" is the design's
+       wording. ⚠ MY CZECH — for the native reviewer BEFORE notices are on by
+       default; until then they show only with ?kanotes=1. */
+    notices: {
+      'frame-unreachable': 'Tuto část se zatím nedaří přeložit – načítá se z jiného systému.',
+      dismiss:             'Skrýt toto upozornění'
+    },
+
     /* ---- date style ------------------------------------------------------
        'numeric' -> 31. 8. 2026.  Confirmed by a native speaker (2026-09-05):
        Czechs always write numeric days. Applies to DATE STAMPS ONLY. Month and
