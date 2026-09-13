@@ -177,6 +177,10 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
    keyed by notice and screen. They survive reloads in the same tab, and a new
    session (a new tab or browser) shows the notice again. Permanent dismissals
    written by v132–v135 are dropped once.
+   A "page" is the first two path segments after the location id
+   (`automation/workflows`), so screens below it share one dismissal —
+   dismissing on the workflow list also covers an open workflow. Tom, 12 Sep:
+   *"keep it per page as built."*
 2. **How much "why"?** *"It explains it perfectly."* The wording stands, pending
    the native reviewer (row `r3-775` in the review page).
 3. **Does it ever offer an action?** Tom asked what "no action" means.
