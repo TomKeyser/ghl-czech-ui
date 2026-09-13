@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v134';
+  var VERSION = 'v135';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -712,8 +712,8 @@
   var NOTICES_ON = null;
   var NOTICE_DISMISSED_KEY = 'ka_notes_dismissed';
   var NOTICE_KINDS = {
-    limit: ['#6b7280', '#f3f4f6'], info: ['#2563eb', '#eff6ff'],
-    warn:  ['#d97706', '#fffbeb'], error: ['#dc2626', '#fef2f2']
+    limit: ['#D97757', '#D97757', '#1a1a1a'], info: ['#2563eb', '#eff6ff', '#1f2937'],
+    warn:  ['#d97706', '#fffbeb', '#1f2937'], error: ['#dc2626', '#fef2f2', '#1f2937']
   };
   function noticesOn() {
     if (NOTICES_ON !== null) return NOTICES_ON;
@@ -770,8 +770,8 @@
     box.setAttribute('aria-live', 'polite');
     box.style.cssText =
       'box-sizing:border-box;display:flex;align-items:center;gap:12px;margin:0;' +
-      'padding:8px 8px 8px 12px;font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;' +
-      'color:#1f2937;background:' + colours[1] + ';border:1px solid #d1d5db;' +
+      'padding:8px 8px 8px 12px;font:700 14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;' +
+      'color:' + colours[2] + ';background:' + colours[1] + ';border:1px solid ' + colours[0] + ';' +
       'border-left:4px solid ' + colours[0] + ';border-radius:6px;';
     var msg = document.createElement('span');
     msg.textContent = text;
@@ -784,7 +784,7 @@
       b.textContent = '×';
       b.setAttribute('aria-label', label);
       b.title = label;
-      b.style.cssText = 'flex:none;border:0;background:transparent;color:#4b5563;' +
+      b.style.cssText = 'flex:none;border:0;background:transparent;color:' + colours[2] + ';' +
         'font-size:20px;line-height:1;padding:2px 8px;border-radius:4px;cursor:pointer;';
       b.addEventListener('click', function () { dismissNotice(id); });
       box.appendChild(b);
