@@ -248,7 +248,11 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
        106 px) and the bar followed it to 106 px, so the re-measure works.
      - The walled frame was present, but no frame notice was shown and the frame
        kept its full 771 px. Priority 1 won, and only one notice was on screen.
-   - Still to verify: the bar disappears once the language is back to English.
+   - **Removal, verified:** Tom switched back to English and I reloaded Automation.
+     - The locale read `en-US`, the layer translated again (the sidebar was back
+       in Czech), and the platform-language bar was gone.
+     - The frame notice returned in its place, in `fit` mode.
+     - Tom watched the whole test: *"looks good"*.
 
    **Priority (Tom, 13 Sep):** the platform-language notice is **priority 1**,
    the frame notice **priority 2**. One notice at a time, and the lowest number
