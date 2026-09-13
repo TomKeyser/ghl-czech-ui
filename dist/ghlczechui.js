@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v133';
+  var VERSION = 'v134';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -717,17 +717,17 @@
   };
   function noticesOn() {
     if (NOTICES_ON !== null) return NOTICES_ON;
-    var on = window.__kaNotices === true;
+    var on = window.__kaNotices !== false;
     try {
       var qs = window.location.search;
       if (/[?&]kanotes=1(?:&|$)/.test(qs)) {
-        localStorage.setItem('ka_notes', '1');
+        localStorage.removeItem('ka_notes');
         localStorage.removeItem(NOTICE_DISMISSED_KEY);
       }
-      if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.removeItem('ka_notes');
-      if (localStorage.getItem('ka_notes') === '1') on = true;
+      if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.setItem('ka_notes', '0');
+      if (localStorage.getItem('ka_notes') === '0') on = false;
     } catch (e) {
-      if (/[?&]kanotes=1(?:&|$)/.test(window.location.search)) on = true;
+      if (/[?&]kanotes=0(?:&|$)/.test(window.location.search)) on = false;
     }
     return (NOTICES_ON = on);
   }

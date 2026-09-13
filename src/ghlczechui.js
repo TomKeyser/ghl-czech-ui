@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v133';
+  var VERSION = 'v134';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1977,19 +1977,23 @@
     warn:  ['#d97706', '#fffbeb'], error: ['#dc2626', '#fef2f2']
   };
 
+  /* ON BY DEFAULT since v134 — Tom, 13 Sep: "leave our status messages on".
+     A loader can set window.__kaNotices = false for a whole agency. One browser
+     opts out with ?kanotes=0 (remembered). ?kanotes=1 opts back in and clears
+     every dismissal. */
   function noticesOn() {
     if (NOTICES_ON !== null) return NOTICES_ON;
-    var on = window.__kaNotices === true;
+    var on = window.__kaNotices !== false;
     try {
       var qs = window.location.search;
       if (/[?&]kanotes=1(?:&|$)/.test(qs)) {
-        localStorage.setItem('ka_notes', '1');
+        localStorage.removeItem('ka_notes');
         localStorage.removeItem(NOTICE_DISMISSED_KEY);
       }
-      if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.removeItem('ka_notes');
-      if (localStorage.getItem('ka_notes') === '1') on = true;
+      if (/[?&]kanotes=0(?:&|$)/.test(qs)) localStorage.setItem('ka_notes', '0');
+      if (localStorage.getItem('ka_notes') === '0') on = false;
     } catch (e) {
-      if (/[?&]kanotes=1(?:&|$)/.test(window.location.search)) on = true;
+      if (/[?&]kanotes=0(?:&|$)/.test(window.location.search)) on = false;
     }
     return (NOTICES_ON = on);
   }

@@ -8,11 +8,12 @@ decided on, so they stop living only in a session transcript. See
 
 ## 1. The user message area — status notices in the user's own language
 
-**Raised by Tom, 12 September 2026. BUILT, off by default, in engine v132** (the
-night of 12 Sep, at Tom's request: "work on the status message div").
-On with `?kanotes=1`, off with `?kanotes=0`, or a loader can set `window.__kaNotices = true`.
-It stays off for everyone until the native reviewer has read the sentence and
-the three questions at the end of this section are answered.
+**Raised by Tom, 12 September 2026. BUILT in engine v132/v133, and ON BY DEFAULT
+since v134.** Tom, 13 Sep: *"leave our status messages on"*. He chose that
+knowing the Czech sentence is not yet native-reviewed and the three questions
+below are still open. A browser opts out with `?kanotes=0`, and opts back in
+(clearing dismissals) with `?kanotes=1`. A loader can set
+`window.__kaNotices = false` to switch notices off for a whole agency.
 See **"As built"** below for what the build decided and what it deliberately left out.
 
 > *"It's time to add a message area for the end user to the page for status
@@ -249,7 +250,7 @@ user, with `?kanotes=1`):
 - The frame's own `style` attribute stayed `null` throughout.
 - Turned off again afterwards with `?kanotes=0` (confirmed: flag cleared, `on: false`).
 
-**Off for everyone who has not opened `?kanotes=1` in their own browser.**
+**On for everyone since v134**, unless a browser has opted out with `?kanotes=0`.
 Not yet exercised: the sentence wrapping to two lines on a narrow window (the
 re-measure path), and a frame replaced by in-app navigation while a notice is shown.
 

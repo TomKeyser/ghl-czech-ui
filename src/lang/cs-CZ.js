@@ -102,8 +102,9 @@
        engine's reason code. A pack without a code shows no notice for it.
        WHITE LABEL: no vendor, no product, no Keytone, and no word that points
        back at a platform ("iframe", a host name). "Jiný systém" is the design's
-       wording. ⚠ MY CZECH — for the native reviewer BEFORE notices are on by
-       default; until then they show only with ?kanotes=1. */
+       wording. ⚠ MY CZECH, not yet native-reviewed. Notices are ON by default
+       since engine v134 (Tom, 13 Sep), so this sentence is live. It is first in
+       line for the reviewer. */
     notices: {
       'frame-unreachable': 'Tuto část se zatím nedaří přeložit – načítá se z jiného systému.',
       dismiss:             'Skrýt toto upozornění'
