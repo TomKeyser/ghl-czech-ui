@@ -155,7 +155,15 @@
          /^Hi (.+)$/: that would match the opening line of any message a
          customer ever wrote. One capitalised word, no spaces, so it can only
          be a name. */
-      ['GREET_HI',       /^Hi ([A-Za-zÀ-ÖØ-öø-ž][A-Za-zÀ-ÖØ-öø-ž'’.\-]{1,30})$/],
+      /* The lookahead refuses the greetings that are not a name ("Hi there"),
+         which the name shape alone accepted — found testing GREET_HI_BANG. */
+      ['GREET_HI',       /^Hi (?!(?:[Tt]here|[Aa]ll|[Ee]veryone|[Tt]eam)$)([A-Za-zÀ-ÖØ-öø-ž][A-Za-zÀ-ÖØ-öø-ž'’.\-]{1,30})$/],
+      /* "Hi Tom!" — the contacts screens (smart list, bulk actions), its own
+         paragraph, 12 Sep sweep. Tom: HighLevel's greeting, translate it with a
+         pattern. Same one-word name shape as GREET_HI, so it cannot swallow a
+         longer sentence. Patterns are not route-scoped, so this applies on any
+         screen; message bubbles and threads are zoned and never reach it. */
+      ['GREET_HI_BANG',  /^Hi (?!(?:[Tt]here|[Aa]ll|[Ee]veryone|[Tt]eam)!$)([A-Za-zÀ-ÖØ-öø-ž][A-Za-zÀ-ÖØ-öø-ž'’.\-]{1,30})!$/],
       /* "Import and engage with all your contacts instantly completion progress"
          — the aria-label on each task's progress bar, built by HighLevel as
          "<task title> completion progress". {?1} looks the title up in the

@@ -482,6 +482,7 @@
       LP_PROGRESS_ARIA: 'Průběh dokončení: {?1}',
       /* same reasoning as LP_GREETING: the name is not declined */
       GREET_HI: 'Dobrý den, {1}',
+      GREET_HI_BANG: 'Dobrý den, {1}!',
       CONV_UNREAD: 'Nepřečtené, {1} {~conversations:1}',
       /* {1} passes the capture through untouched: the status word is ours, the
          record name belongs to whoever created it. */

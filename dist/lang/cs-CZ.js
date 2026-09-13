@@ -174,6 +174,7 @@
       LP_GREETING: 'Dobrý den, {1}. Tady je váš osobní seznam kroků – vše, čím je dobré začít.',
       LP_PROGRESS_ARIA: 'Průběh dokončení: {?1}',
       GREET_HI: 'Dobrý den, {1}',
+      GREET_HI_BANG: 'Dobrý den, {1}!',
       CONV_UNREAD: 'Nepřečtené, {1} {~conversations:1}',
       ACT_MOVE_LINE:  'z {1} → {2} v {3}',
       ACT_IN_STAGE:   'v {1} – {2}',
