@@ -251,8 +251,17 @@ user, with `?kanotes=1`):
 - Turned off again afterwards with `?kanotes=0` (confirmed: flag cleared, `on: false`).
 
 **On for everyone since v134**, unless a browser has opted out with `?kanotes=0`.
-Not yet exercised: the sentence wrapping to two lines on a narrow window (the
-re-measure path), and a frame replaced by in-app navigation while a notice is shown.
+
+**Wrapping, verified 13 Sep:** the notice was narrowed to 260 px so its sentence wrapped, and a
+resize event was fired. The notice grew 42 → 58 px, the rule re-measured to `58px`, and the frame
+went 785 → 769 px. Restored, it went back to 42 px and 785 px. Frame plus notice filled the
+container exactly at every step. (Resizing the real window did not change the viewport, since the
+window was maximized, so the notice's own width was the lever.)
+
+**In-app navigation, verified 13 Sep:** Automation → Emails → Automation through the app's own
+router, with no reload. Each screen got a new frame object, exactly one notice directly above it
+(`fit`: 782 of 824 px on Emails, 785 of 827 px back on Automation), and exactly one style rule of
+ours, so nothing leaked between screens.
 
 ### Other uses this unlocks, once the primitive exists
 
