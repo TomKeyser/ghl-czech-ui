@@ -488,6 +488,12 @@ marked the head's own box: "zz tom zz keyser" was still covered only by
 `record-mirror`. v141 uses the real menu. The status picker beside it ("Vše /
 Čeká / Dokončeno") was unmarked and translated under v140.
 
+**Verified live under v142, 13 Sep, ZZ My Gym dashboard.** The Tasks widget's user menu is marked.
+"Všichni uživatelé" (source "All users") reports `translated`, and "zz tom zz keyser" reports
+`record-menu`, so it is no longer covered by `record-mirror` coincidence. With both menus open, the
+status menu next to it stayed a separate, unmarked container: All / Pending / Completed all read
+`translated`. The feared reuse of one container across pickers was not seen.
+
 **The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
 rule renders as one composed sentence — *"if an email is - Opened Add Points
 1"* — in a widget table whose cells carry **no column key and no recognisable
