@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v141';
+  var VERSION = 'v142';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -505,7 +505,7 @@
     return th['__kaAttrSrc_aria-label'] || th.getAttribute('data-col-key') ||
            th.getAttribute('aria-label') || null;
   }
-  var HR_TITLE_LET = /^(?:(?:date\s+)?(?:created|updated|modified|added)(?:\s+(?:on|at|date))?|date|due date|last (?:updated|modified)|status)$/i;
+  var HR_TITLE_LET = /^(?:(?:date\s+)?(?:created|updated|modified|added|completed)(?:\s+(?:on|at|date))?|date|due date|last (?:updated|modified)|status)(?:\s*\([A-Z]{2,5}\))?$/i;
   function hrHeaderTitle(td) {
     var table = td.closest('table');
     var head = table && table.tHead;

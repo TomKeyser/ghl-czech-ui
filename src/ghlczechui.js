@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v141';
+  var VERSION = 'v142';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -1568,8 +1568,15 @@
      Their header's own TITLE is HighLevel's column name. It's read in the
      ORIGINAL English (the text node's __kaSrc, since we translate headers)
      and let through only on an exact date-or-status title. Anchored at both
-     ends, so "Last Name" or "Created By" can never open a column. */
-  var HR_TITLE_LET = /^(?:(?:date\s+)?(?:created|updated|modified|added)(?:\s+(?:on|at|date))?|date|due date|last (?:updated|modified)|status)$/i;
+     ends, so "Last Name" or "Created By" can never open a column.
+
+     v142, 13 Sep: contacts > bulk actions titles its stamp columns
+     "Created (PDT)" and "Completed (PDT)": the date in one text node, the time
+     in another, both left English by this gate. Tom asked for them fixed. So
+     "completed" joins the verbs, and the viewer's time zone may follow any
+     title as a bracketed abbreviation. The rules already render both halves
+     (DATE_ABBR, TIME_AMPM). */
+  var HR_TITLE_LET = /^(?:(?:date\s+)?(?:created|updated|modified|added|completed)(?:\s+(?:on|at|date))?|date|due date|last (?:updated|modified)|status)(?:\s*\([A-Z]{2,5}\))?$/i;
 
   function hrHeaderTitle(td) {
     var table = td.closest('table');
