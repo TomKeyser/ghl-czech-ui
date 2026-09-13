@@ -222,6 +222,19 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
      - No ×, ignores dismissals, removed on the first check after the language
        is English.
      - Uses the orange of the other notice.
+   - **Why the pack has no Czech name for the setting:** Tom, *"there is nothing
+     for platform language because that page is behind an iframe"*. The
+     setting's own screen is one we cannot translate, so the notice names it in
+     plain Czech.
+   - **Testing:** Tom will change the platform language himself. Nothing is
+     simulated, and no profile is written by us.
+
+   **Priority (Tom, 13 Sep):** the platform-language notice is **priority 1**,
+   the frame notice **priority 2**. One notice at a time, and the lowest number
+   wins. *"The first message to be displayed stays"* is built as: between notices
+   of equal priority, the one already on screen is kept. Today the two cannot
+   both qualify, so the order governs later notices. Built in v138
+   (`NOTICE_PRIORITY`).
 
 ### Questions for Tom before this is built (answered above, kept for the record)
 

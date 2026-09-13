@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v137';
+  var VERSION = 'v138';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -856,14 +856,25 @@
     if (cur) removeNotice(id);
     placeAbove(id, buildNotice(id, 'limit', noticeText(id), true), fr);
   }
+  var NOTICE_PRIORITY = { 'wrong-platform-language': 1, 'frame-unreachable': 2 };
   function updateNotices() {
     var on = noticesOn() && !!PACK;
     var langWrong = on && allowedHere() && audience === true && !sourceMatches() &&
                     !!noticeText('wrong-platform-language');
     var fr = on && STATUS.translatingHere && noticeText('frame-unreachable') ? wallFrame() : null;
-    STATUS.userReason = langWrong ? 'wrong-platform-language' : (fr ? 'frame-unreachable' : null);
-    syncPageNotice('wrong-platform-language', langWrong);
-    syncFrameNotice(fr);
+    var eligible = [];
+    if (langWrong) eligible.push('wrong-platform-language');
+    if (fr && !noticeDismissed('frame-unreachable')) eligible.push('frame-unreachable');
+    var best = null, i;
+    for (i = 0; i < eligible.length; i++) {
+      if (best === null || NOTICE_PRIORITY[eligible[i]] < NOTICE_PRIORITY[best]) best = eligible[i];
+    }
+    for (i = 0; i < eligible.length; i++) {
+      if (NOTICES[eligible[i]] && NOTICE_PRIORITY[eligible[i]] === NOTICE_PRIORITY[best]) best = eligible[i];
+    }
+    STATUS.userReason = best;
+    syncPageNotice('wrong-platform-language', best === 'wrong-platform-language');
+    syncFrameNotice(best === 'frame-unreachable' ? fr : null);
   }
   var noticeTimer = null, noticeLast = 0;
   function scheduleNotices() {

@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v137';
+  var VERSION = 'v138';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -2178,18 +2178,39 @@
     placeAbove(id, buildNotice(id, 'limit', noticeText(id), true), fr);
   }
 
+  /* PRIORITY — Tom, 13 Sep: the platform-language message "takes priority over
+     the iframe message ... Make this a priority one message, and the iframe
+     message a priority too". ONE notice at a time: the lowest number wins.
+     "The first message to be displayed stays": between notices of EQUAL
+     priority, the one already on screen is kept rather than swapped.
+     Today the two cannot both qualify (the frame notice needs the layer to be
+     translating, the language notice exists because it is not), so this order
+     governs notices added later. */
+  var NOTICE_PRIORITY = { 'wrong-platform-language': 1, 'frame-unreachable': 2 };
+
   function updateNotices() {
     var on = noticesOn() && !!PACK;
     /* the same gate that decides not to translate: an allowed sub-account, a
        viewer who is not agency, and a platform language that is not the pack's
-       source. The two notices can never both show: the frame one needs the
-       layer to be translating, and this one exists because it is not. */
+       source */
     var langWrong = on && allowedHere() && audience === true && !sourceMatches() &&
                     !!noticeText('wrong-platform-language');
     var fr = on && STATUS.translatingHere && noticeText('frame-unreachable') ? wallFrame() : null;
-    STATUS.userReason = langWrong ? 'wrong-platform-language' : (fr ? 'frame-unreachable' : null);
-    syncPageNotice('wrong-platform-language', langWrong);
-    syncFrameNotice(fr);
+
+    var eligible = [];
+    if (langWrong) eligible.push('wrong-platform-language');
+    if (fr && !noticeDismissed('frame-unreachable')) eligible.push('frame-unreachable');
+    var best = null, i;
+    for (i = 0; i < eligible.length; i++) {
+      if (best === null || NOTICE_PRIORITY[eligible[i]] < NOTICE_PRIORITY[best]) best = eligible[i];
+    }
+    for (i = 0; i < eligible.length; i++) {
+      if (NOTICES[eligible[i]] && NOTICE_PRIORITY[eligible[i]] === NOTICE_PRIORITY[best]) best = eligible[i];
+    }
+
+    STATUS.userReason = best;
+    syncPageNotice('wrong-platform-language', best === 'wrong-platform-language');
+    syncFrameNotice(best === 'frame-unreachable' ? fr : null);
   }
 
   /* at most every 400 ms: the observer fires constantly, and measuring frames
