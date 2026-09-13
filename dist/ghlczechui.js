@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v144';
+  var VERSION = 'v145';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -194,6 +194,7 @@
     '[id*="manual-action-campaign-selection"] .hr-base-selection-label',
     '[id*="task-user-selection"] .hr-base-selection-label',
     '[id*="user-sales-efficiency"] .hr-base-selection-label',
+    '[id*="manual-action-user-selection"] .hr-base-selection-label',
     '[id*="gbp-page"] .hr-base-selection-label',
     '#views-bar .lists .view-label',
     '.opportunitiesCard tr[id] td + td',
@@ -223,6 +224,7 @@
     { zone: '[id*="manual-action-campaign-selection"] .hr-base-selection-label', phrases: ['All', 'all', 'Please Select'] },
     { zone: '[id*="task-user-selection"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="user-sales-efficiency"] .hr-base-selection-label', phrases: ['All users'] },
+    { zone: '[id*="manual-action-user-selection"] .hr-base-selection-label', phrases: ['All users'] },
     { zone: '[id*="gbp-page"] .hr-base-selection-label', phrases: ['Please Select'] }
   ];
   (function () {
@@ -548,33 +550,41 @@
   var RECORD_MENU = '.hr-select__menu-container';
   var RECORD_MENU_LABEL = '.hr-select-option-label';
   var RECORD_MENU_HEADS = ['All users', 'All pipelines'];
-  var recordHeadSet = null;
-  function isRecordHead(text) {
+  var RECORD_TRIGGERS = ['manual-action-workflow-selection', 'manual-action-campaign-selection', 'gbp-page']
+    .map(function (k) { return '.hr-select[id*="' + k + '"] .hr-base-selection--active'; }).join(',');
+  var TRIGGER_MENU_HEADS = ['All', 'all', 'Please Select', 'No Data'];
+  var phraseSets = Object.create(null);
+  function inPhraseSet(name, list, text) {
     var t = String(text || '').trim();
-    if (!recordHeadSet) {
-      var set = Object.create(null);
-      for (var i = 0; i < RECORD_MENU_HEADS.length; i++) {
-        var h = RECORD_MENU_HEADS[i];
-        set[h] = 1;
-        if (DICT && own(DICT, h) && typeof DICT[h] === 'string') set[DICT[h]] = 1;
+    var set = phraseSets[name];
+    if (!set) {
+      set = Object.create(null);
+      for (var i = 0; i < list.length; i++) {
+        set[list[i]] = 1;
+        if (DICT && own(DICT, list[i]) && typeof DICT[list[i]] === 'string') set[DICT[list[i]]] = 1;
       }
       if (!DICT) return set[t] === 1;
-      recordHeadSet = set;
+      phraseSets[name] = set;
     }
-    return recordHeadSet[t] === 1;
+    return set[t] === 1;
   }
+  function isRecordHead(text) { return inPhraseSet('head', RECORD_MENU_HEADS, text); }
   function recordMenuBlocked(el) {
     var menu = el && el.closest && el.closest(RECORD_MENU);
     if (!menu) return false;
     if (!menu.__kaRecordMenu) {
       var labels = menu.querySelectorAll(RECORD_MENU_LABEL);
       for (var i = 0; i < labels.length; i++) {
-        if (isRecordHead(labels[i].textContent)) { menu.__kaRecordMenu = true; break; }
+        if (isRecordHead(labels[i].textContent)) { menu.__kaRecordMenu = 'head'; break; }
       }
+      if (!menu.__kaRecordMenu && document.querySelector(RECORD_TRIGGERS)) menu.__kaRecordMenu = 'trigger';
       if (!menu.__kaRecordMenu) return false;
     }
     var label = el.closest(RECORD_MENU_LABEL);
-    return !(label && isRecordHead(label.textContent));
+    if (!label) return true;
+    return menu.__kaRecordMenu === 'trigger'
+      ? !inPhraseSet('trigger', TRIGGER_MENU_HEADS, label.textContent)
+      : !isRecordHead(label.textContent);
   }
   function blockedText(el) {
     if (!el || !el.closest) return true;
