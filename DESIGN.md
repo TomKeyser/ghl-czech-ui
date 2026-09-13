@@ -234,8 +234,24 @@ shown and in which mode, and `__kaStatus.userReason` carries the reason code.
   it in is a design question of its own. The primitive is ready for both.
 - The page-level anchor. No screen needs it yet.
 
-**Off for everyone who has not opened `?kanotes=1` in their own browser.** Only
-the test account (ZZ My Gym, impersonating the account user) is used to check it.
+**Verified live, engine v133, 13 Sep just after midnight** (ZZ My Gym, impersonating the account
+user, with `?kanotes=1`):
+
+| | Automation → Workflows | Marketing → Emails |
+|---|---|---|
+| mode | `fit` | `fit` (this frame fills its container too) |
+| notice | 42 px, directly above the frame | 42 px, directly above the frame |
+| frame | 827 → 785 px, bottom edge unmoved | 824 → 782 px, bottom edge unmoved (1838 px before and after) |
+| dismiss (×) | removed, dismissal stored for `automation/workflows` | removed, frame back to 824 px, stored for `marketing/emails` |
+
+- `__kaDebug.why()` on the notice returns `content-zone` / `[data-ka-ignore]`, and none
+  of its text reached the collector.
+- The frame's own `style` attribute stayed `null` throughout.
+- Turned off again afterwards with `?kanotes=0` (confirmed: flag cleared, `on: false`).
+
+**Off for everyone who has not opened `?kanotes=1` in their own browser.**
+Not yet exercised: the sentence wrapping to two lines on a narrow window (the
+re-measure path), and a frame replaced by in-app navigation while a notice is shown.
 
 ### Other uses this unlocks, once the primitive exists
 
