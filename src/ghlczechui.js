@@ -1940,16 +1940,14 @@
   /* ---------- notices: the user message area, v132 -------------------------
      DESIGN.md §1, Tom 12 Sep: "a message area for the end user ... above the
      iframe that says we can't translate this page and why." One primitive, so
-     other notices can reuse it. The first and only reason code today is
-     'frame-unreachable'.
+     other notices can reuse it. Two reason codes today, by priority:
+     'wrong-platform-language' (1, actionable, a bar under the header on every
+     page, no dismiss) and 'frame-unreachable' (2, above a walled frame,
+     dismissible for the session on that page). Tom answered the design's
+     questions on 13 Sep; DESIGN.md §1 has his words.
 
-     OFF BY DEFAULT. On with ?kanotes=1, remembered per browser because the SPA
-     drops the query on the first click, and off again with ?kanotes=0. A loader
-     can set window.__kaNotices = true. It stays off until the native reviewer
-     has read the wording and Tom has answered the design's three questions
-     (once or every visit, how much "why", whether it offers an action).
-     ?kanotes=1 also clears every dismissal, which is the design's "bring them
-     all back".
+     ON BY DEFAULT since v134 (Tom: "leave our status messages on"). See
+     noticesOn() for the per-browser opt-out (?kanotes=0) and the loader switch.
 
      THREE RULES CARRIED FROM THE DESIGN:
      - OUR OWN UI MARKS ITSELF: data-ka-ignore, which is the first entry in

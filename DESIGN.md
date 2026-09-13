@@ -299,9 +299,9 @@ shown and in which mode, and `__kaStatus.userReason` carries the reason code.
 **Not built, on purpose:**
 - The **agency developer line**. It carries a host name, and its gate needs a
   test, not a comment.
-- The other reason codes (`wrong-platform-language`, `pack-failed`). The first
-  is shown precisely when we are *not* translating, so which language to write
-  it in is a design question of its own. The primitive is ready for both.
+- `pack-failed`. (`wrong-platform-language` was built in v137. Tom settled its
+  language, Czech, and its placement, a bar under the header; see "Tom's
+  answers" below.)
 - The page-level anchor. No screen needs it yet.
 
 **Verified live, engine v133, 13 Sep just after midnight** (ZZ My Gym, impersonating the account
