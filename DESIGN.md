@@ -185,8 +185,19 @@ Dismiss reachable by keyboard with a visible focus ring. Respects
    that screen can make it translatable. A future `wrong-platform-language`
    notice would offer one: switch the platform language back to English.
    Answer 1 already settles the no-action case (it returns each session).
-   **Still open:** should a notice the user CAN act on stay visible until they
-   act, even after being dismissed? Recommended: yes.
+   **Tom's rule for the other case:** *"a message that requires an action can not
+   be dismissed, only the corrective action can dismiss it."*
+   - An **actionable** notice renders **without the ×** and ignores stored
+     dismissals.
+   - It disappears only when the condition it describes is gone, i.e. the next
+     check no longer finds the cause (e.g. the platform language is English
+     again).
+   - A **no-action** notice keeps the × and the session-and-page dismissal from
+     answer 1.
+
+   **Not built yet, on purpose:** no actionable notice exists. The first one
+   (`wrong-platform-language`) brings the switch with it, so the primitive does
+   not carry a flag that nothing uses.
 
 ### Questions for Tom before this is built (answered above, kept for the record)
 
