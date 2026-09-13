@@ -51,7 +51,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 'c5';
+  var VERSION = 'c6';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;         /* well under the ~5MB origin cap */
@@ -185,6 +185,14 @@
   var SETTLE_MS = 700;
   var pending = new Map();
 
+  /* c6 / engine v144: a miss the engine found to CONTAIN a string its firewall
+     blocked elsewhere on the page ("Hi Tom!", a name glued into a sentence).
+     Names match none of the LOOKS_LIKE_DATA shapes, so this is the only way
+     they surface: record() marks the entry suspect 'record'. The engine says
+     THAT a record is inside, never which one. Keyed by text, so the flag
+     survives the settle queue without threading it through every path. */
+  var RECORD_INSIDE = new Set();
+
   /* "Status: Pe..." arrives already cut off — the ellipsis is IN the text, not
      in CSS. No dictionary entry can ever match it, and one entry appears per
      column width. Marked rather than dropped: a marked row can still be counted
@@ -233,6 +241,7 @@
         first: new Date().toISOString()
       };
     }
+    if (!rec.suspect && RECORD_INSIDE.has(text)) rec.suspect = 'record';
     rec.seen++;
     if (rec.routes.indexOf(route) === -1 && rec.routes.length < 25) rec.routes.push(route);
     var acc = locationId();
@@ -240,7 +249,7 @@
     schedule();
   }
 
-  window.__kaOnMiss = function (raw, node, attr) {
+  window.__kaOnMiss = function (raw, node, attr, info) {
     if (!allowedHere()) return;
     var text = String(raw == null ? '' : raw).trim();
     if (!text) return;
@@ -248,6 +257,7 @@
        dictionary entry and would swamp the frequency ranking */
     if (text.length < 2) return;
     if (/^[\s\W\d]+$/.test(text)) return;
+    if (info && info.recordInside) RECORD_INSIDE.add(text);
 
     if (attr || !node || node.nodeType !== 3) { record(text, node, attr); return; }
 

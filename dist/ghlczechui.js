@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'v143';
+  var VERSION = 'v144';
   if (window.__kaActive) return;
   window.__kaActive = true;
   window.__kaVersion = VERSION;
@@ -994,7 +994,19 @@
     var h = window.__kaOnMiss;
     if (typeof h !== 'function') return;
     if (isOurOutput(String(raw).trim())) return;
-    try { h(String(raw), node, attr || null); } catch (e) {   }
+    var info = recordInside(raw) ? { recordInside: true } : null;
+    try { h(String(raw), node, attr || null, info); } catch (e) {   }
+  }
+  function recordInside(raw) {
+    if (!RECORDS_N) return false;
+    var s = String(raw).trim().toLowerCase();
+    if (s.length < 7) return false;
+    for (var r in RECORDS) {
+      if (r.length < 6 || (DICT && own(DICT, r))) continue;
+      var lr = r.toLowerCase();
+      if (lr !== s && s.indexOf(lr) !== -1) return true;
+    }
+    return false;
   }
   function doTextNode(node) {
     if (node.__kaDone === node.textContent) return;

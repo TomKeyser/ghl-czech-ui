@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var VERSION = 'c5';
+  var VERSION = 'c6';
   var KEY = 'ka_collect_v1';
   var MAX_ENTRIES = 6000;
   var MAX_BYTES = 3 * 1024 * 1024;
@@ -91,6 +91,7 @@
   for (var k in store.picks) if (Object.prototype.hasOwnProperty.call(store.picks, k)) entries++;
   var SETTLE_MS = 700;
   var pending = new Map();
+  var RECORD_INSIDE = new Set();
   function looksTruncated(t) {
     if (/\s(\.{3}|…)$/.test(t)) return true;
     var m = /(\S+)(?:\.{3}|…)$/.exec(t);
@@ -118,18 +119,20 @@
         first: new Date().toISOString()
       };
     }
+    if (!rec.suspect && RECORD_INSIDE.has(text)) rec.suspect = 'record';
     rec.seen++;
     if (rec.routes.indexOf(route) === -1 && rec.routes.length < 25) rec.routes.push(route);
     var acc = locationId();
     if (acc && rec.accounts.indexOf(acc) === -1) rec.accounts.push(acc);
     schedule();
   }
-  window.__kaOnMiss = function (raw, node, attr) {
+  window.__kaOnMiss = function (raw, node, attr, info) {
     if (!allowedHere()) return;
     var text = String(raw == null ? '' : raw).trim();
     if (!text) return;
     if (text.length < 2) return;
     if (/^[\s\W\d]+$/.test(text)) return;
+    if (info && info.recordInside) RECORD_INSIDE.add(text);
     if (attr || !node || node.nodeType !== 3) { record(text, node, attr); return; }
     var parent = node.parentElement;
     if (!parent) { record(text, node, null); return; }

@@ -73,7 +73,7 @@
      deploying your edit. After committing, refresh HighLevel and check
      the browser console, or just type   __kaVersion   there.
      If it still shows the old value, the Pages build has not landed yet. */
-  var VERSION = 'v143';
+  var VERSION = 'v144';
 
   if (window.__kaActive) return;
   window.__kaActive = true;
@@ -2416,7 +2416,33 @@
        that was supposed to sort real work to the top. Same root cause as the
        why() bug fixed in v34 -- fixed there, missed here. */
     if (isOurOutput(String(raw).trim())) return;
-    try { h(String(raw), node, attr || null); } catch (e) { /* never break a render */ }
+    var info = recordInside(raw) ? { recordInside: true } : null;
+    try { h(String(raw), node, attr || null, info); } catch (e) { /* never break a render */ }
+  }
+
+  /* A RECORD INSIDE A MISS, v144. An exact mirror of a blocked string never
+     reaches missed() (see isRecordMirror). A miss that CONTAINS one does:
+     "Hi Tom!"-style greetings, "Delete zz test quebec?", or a name glued into
+     a sentence. The collector's suspect detector only knew emails and phone
+     numbers, so a name passed as an ordinary gap.
+
+     This flags the miss and never suppresses it: a sentence with a name in it
+     is still a real gap in our wording, and only a person can split the two.
+     The collector is told THAT a record is inside, never WHICH record, so this
+     adds no copy of customer data to the harvest.
+
+     Guards against interface words, which also end up in RECORDS when they sit
+     inside a zone: at least 6 characters, and never a dictionary key. */
+  function recordInside(raw) {
+    if (!RECORDS_N) return false;
+    var s = String(raw).trim().toLowerCase();
+    if (s.length < 7) return false;
+    for (var r in RECORDS) {
+      if (r.length < 6 || (DICT && own(DICT, r))) continue;
+      var lr = r.toLowerCase();
+      if (lr !== s && s.indexOf(lr) !== -1) return true;
+    }
+    return false;
   }
 
   function doTextNode(node) {
