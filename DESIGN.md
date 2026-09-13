@@ -251,6 +251,8 @@ user, with `?kanotes=1`):
 - Turned off again afterwards with `?kanotes=0` (confirmed: flag cleared, `on: false`).
 
 **On for everyone since v134**, unless a browser has opted out with `?kanotes=0`.
+Confirmed 13 Sep: a browser with no flag at all, running v134, showed the notice on Automation in
+`fit` mode (frame 785 of 827 px).
 
 **Wrapping, verified 13 Sep:** the notice was narrowed to 260 px so its sentence wrapped, and a
 resize event was fired. The notice grew 42 → 58 px, the rule re-measured to `58px`, and the frame
