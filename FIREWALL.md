@@ -506,8 +506,15 @@ its menu is open. Result:
 - The collector stayed at 0 after opening both.
 
 The manual-actions USER picker was missing from the zone list (v145 adds it); its menu was already
-marked by head. GBP on JITOZ lists only "No Data". The campaign picker sits behind the automation-type
-select and was not opened.
+marked by head. GBP on JITOZ lists only "No Data".
+
+**The campaign picker cannot be opened on JITOZ (checked 13 Sep, after the reboot).** HighLevel renders
+both the automation-type select (value "Workflow") and the campaign select inside
+`.hr-select-wrapper` elements set to `display: none`, and the widget shows no control that switches
+them. Campaigns are HighLevel's legacy automation, not offered on this account, so no user can reach
+that menu. It was not forced visible: a menu no user can open is not worth a test. If an account ever
+shows it, the v145 trigger rule already includes `manual-action-campaign-selection`, with its zone and
+phrases, but that path is unverified.
 
 **The lead-scoring rules list** (`settings/scoring`), found 12 Sep. Each saved
 rule renders as one composed sentence — *"if an email is - Opened Add Points
